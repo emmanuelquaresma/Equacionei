@@ -11,18 +11,23 @@ const FoundationLesson = (() => {
         block.append(node('h3', title), node('p', text));
         return block;
     }
-    function salesExperiment(lastSale, dataset) {
+    function salesExperiment(lastSale, dataset, includeLast = true, generalMedian = false) {
         const values = dataset.rows.map(row => row[1]);
         values[values.length - 1] = lastSale;
+        if (!includeLast) values.pop();
         const mean = values.reduce((a, b) => a + b, 0) / values.length;
         const ordered = [...values].sort((a, b) => a - b);
         const middle = Math.floor(ordered.length / 2);
         const median = ordered.length % 2 ? ordered[middle] : (ordered[middle - 1] + ordered[middle]) / 2;
-        return {mean, median, code: `vendas = [${values.join(', ')}]\nmedia = sum(vendas) / len(vendas)\nmediana = sorted(vendas)[3]\nprint(round(media, 2))\nprint(mediana)`};
+        const medianCode = generalMedian || !includeLast
+            ? 'ordenadas = sorted(vendas)\nmeio = len(ordenadas) // 2\nif len(ordenadas) % 2:\n    mediana = ordenadas[meio]\nelse:\n    mediana = (ordenadas[meio - 1] + ordenadas[meio]) / 2'
+            : 'mediana = sorted(vendas)[3]';
+        return {mean, median, count: values.length, code: `vendas = [${values.join(', ')}]\nmedia = sum(vendas) / len(vendas)\n${medianCode}\nprint(round(media, 2))\nprint(mediana)`};
     }
     function render(row, datasets) {
         const content = row.learning;
         if (!content) return;
+        const isMedian = content.experiment === 'median';
         const concept = document.getElementById('lesson-concept');
         concept.before(section('Objetivo', content.objective));
         concept.before(node('h3', 'Conceito'));
@@ -49,7 +54,9 @@ const FoundationLesson = (() => {
             table.append(head, body);
             dataBlock.append(table, node('p', dataset.source, 'ds-course-note'));
             blocks.append(dataBlock, section('Observe os dados', content.observe));
-            const experiment = section('Experimente', 'Mude apenas a venda do sétimo dia. A tabela acima é a amostra original; os resultados e o código abaixo acompanham sua simulação.');
+            const experiment = section('Experimente', isMedian
+                ? 'Compare o relatório de sete dias com o dos primeiros seis dias. A tabela acima permanece como referência; o código e os resultados acompanham o período selecionado.'
+                : 'Mude apenas a venda do sétimo dia. A tabela acima é a amostra original; os resultados e o código abaixo acompanham sua simulação.');
             const label = node('label', 'Venda do dia 7 (R$)');
             label.htmlFor = 'lesson-sale';
             const input = node('input');
@@ -58,26 +65,38 @@ const FoundationLesson = (() => {
             const help = node('p', 'Use um valor inteiro de 0 a 2.000. Comece comparando 900 com 100.', 'ds-course-note'); help.id = 'lesson-sale-help';
             const output = node('p'); output.id = 'lesson-simulation'; output.setAttribute('aria-live', 'polite');
             experiment.append(label, input, help, output);
+            let includeLast;
+            if (isMedian) {
+                const toggleLabel = node('label', undefined, 'ds-learning-toggle');
+                includeLast = node('input'); includeLast.type = 'checkbox'; includeLast.id = 'lesson-include-last'; includeLast.checked = true;
+                toggleLabel.append(includeLast, node('span', 'Incluir o dia 7 no relatório'));
+                experiment.insertBefore(toggleLabel, output);
+            }
             const python = section('Experimente com Python', content.codeExplanation);
             const pre = node('pre'), code = node('code'); code.id = 'lesson-sales-code'; pre.tabIndex = 0; pre.setAttribute('aria-label', 'Código Python da simulação'); pre.append(code);
             const result = node('pre'); result.id = 'lesson-sales-output'; result.tabIndex = 0; result.setAttribute('aria-label', 'Saída esperada: média e mediana');
             python.append(pre, node('h3', 'Resultado esperado: média e mediana'), result,
-                node('p', 'Para executar esta simulação, copie o código para o editor do laboratório. Ela é uma exploração livre; o exercício de conclusão continua sendo a média de 5, 10 e 15.', 'ds-course-note'));
+                node('p', `Para executar esta simulação, copie o código para o editor do laboratório. Ela é uma exploração livre. Exercício de conclusão: ${row.description}`, 'ds-course-note'));
             function update() {
-                if (!input.value || !input.checkValidity()) {
+                const included = includeLast ? includeLast.checked : true;
+                input.disabled = !included;
+                if (included && (!input.value || !input.checkValidity())) {
                     output.textContent = 'Digite um valor inteiro entre 0 e 2.000. O código mantém a última simulação válida.';
                     input.setAttribute('aria-invalid', 'true'); return;
                 }
                 input.removeAttribute('aria-invalid');
-                const sample = salesExperiment(Number(input.value), dataset);
+                const sample = salesExperiment(Number(input.value), dataset, included, isMedian);
                 const money = number => number.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'});
                 output.textContent = `Média: ${money(sample.mean)}. Mediana: ${money(sample.median)}. ` +
-                    (sample.mean > sample.median + 20 ? 'A média está bem acima do centro dos dias: observe a influência da venda maior.' : 'A distância entre os dois resumos é menor. Compare com a venda de R$ 900.');
+                    (isMedian ? `${sample.count} dias: ${included ? 'a mediana é o quarto valor depois de ordenar.' : 'a mediana é a média entre R$ 95 e R$ 100, os dois valores centrais.'}` :
+                    sample.mean > sample.median + 20 ? 'A média está bem acima do centro dos dias: observe a influência da venda maior.' : 'A distância entre os dois resumos é menor. Compare com a venda de R$ 900.');
                 code.textContent = sample.code;
                 const rounded = Number(sample.mean.toFixed(2));
                 result.textContent = (Number.isInteger(rounded) ? rounded.toFixed(1) : String(rounded)) + '\n' + sample.median;
             }
-            input.addEventListener('input', update); update();
+            input.addEventListener('input', update);
+            includeLast?.addEventListener('change', update);
+            update();
             blocks.append(experiment, python);
         }
         blocks.append(section('Interpretação da amostra original', content.interpretation), section('Sua vez: investigue', content.tryIt));

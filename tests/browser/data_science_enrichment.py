@@ -66,12 +66,22 @@ try:
    js("document.getElementById('lesson-title').scrollIntoView({block:'start'})");shot(f'enrichment-{width}-concept')
    js("document.getElementById('lesson-sale').scrollIntoView({block:'center'})");shot(f'enrichment-{width}-experiment')
   click('#lesson-next');assert js("document.getElementById('lesson-title').textContent")=='Mediana'
+  assert js("!!document.getElementById('lesson-include-last')")
+  click('#lesson-include-last')
+  assert '97,50' in js("document.getElementById('lesson-simulation').textContent")
+  assert js("document.getElementById('lesson-sale').disabled")
+  assert js("document.getElementById('lesson-sales-output').textContent")=='96.67\n97.5'
+  assert not js('document.documentElement.scrollWidth>innerWidth')
+  if width in [360,1366]:
+   js("document.getElementById('lesson-include-last').scrollIntoView({block:'center'})");shot(f'mediana-{width}')
+  click('#lesson-next');assert js("document.getElementById('lesson-title').textContent")=='Moda'
   assert not js("!!document.getElementById('lesson-sale')")
+  click('#lesson-prev')
   click('#lesson-prev');assert js("!!document.getElementById('lesson-sale')")
   click('#foundation-lesson .ds-course-back');assert js("document.activeElement.closest('#foundation-topics')!==null")
   ok(f'{width}px: {cols} colunas no mapa; aula, teclado, ida/volta, reload, simulação e overflow OK')
  nav('data-science/fundamentos.html#ds-fund-media')
- experiments=js("[900,100,0,120,2000].map(v=>FoundationLesson.salesExperiment(v,LearningDatasets[0]))")
+ experiments=js("[...[900,100,0,120,2000].map(v=>FoundationLesson.salesExperiment(v,LearningDatasets[0])),FoundationLesson.salesExperiment(900,LearningDatasets[0],false,true),FoundationLesson.salesExperiment(0,LearningDatasets[0],true,true)]")
  js("localStorage.setItem('unrelated-record','preserve');localStorage.setItem('matematica.python.progress.v1',JSON.stringify({version:1,lastExercise:'ds-fund-media',exercises:{print:{completed:true,draft:'print(42)'},'ds-fund-media':{draft:'print(0)',attempts:2,hintsUsed:1,elapsedTime:12,completed:false}}}))")
  click('#lesson-practice');wait("typeof PythonRunner!=='undefined' && !document.getElementById('py-run').disabled")
  assert js("document.getElementById('py-code').value")=='print(0)'
@@ -90,7 +100,7 @@ try:
  for e in experiments:
   result=js('PythonRunner.create().run('+json.dumps(e['code'])+')')
   assert result['status']=='done' and abs(float(result['stdout'].splitlines()[0])-e['mean'])<.006 and float(result['stdout'].splitlines()[1])==e['median'],result
- ok('Cinco cenários da simulação executados no MicroPython: resultados conferem')
+ ok('Sete cenários de Média e Mediana executados no MicroPython: resultados conferem')
  imports=js("(async()=>{const r=PythonRunner.create(),out=[];for(const name of ['numpy','pandas','matplotlib','sklearn']){const result=await r.run('import '+name);out.push({name,error:result.error});}return out;})()")
  assert all('ImportError' in r['error'] for r in imports)
  ok('Ausência de NumPy, pandas, Matplotlib e scikit-learn confirmada no motor atual')
@@ -103,6 +113,14 @@ try:
  click('.ds-trail-card--available');wait("!!document.getElementById('lesson-title')")
  assert js("document.getElementById('lesson-title').textContent")=='Mediana'
  ok('Retorno ao módulo: 1/18; cartão Continuar retoma Mediana')
+ click('#lesson-practice');wait("typeof PythonRunner!=='undefined' && !document.getElementById('py-run').disabled")
+ assert js("document.getElementById('py-title').textContent")=='Mediana'
+ js("document.getElementById('py-code').value='valores = sorted([9, 1, 5])\\nprint(valores[1])';document.getElementById('py-code').dispatchEvent(new Event('input'))")
+ click('#py-run');wait("document.getElementById('py-feedback').textContent.includes('Muito bem')")
+ click('.dev-lab-back');wait("typeof FoundationProgress!=='undefined'")
+ assert js("document.getElementById('foundation-progress').value")==2
+ c.call('Page.reload');wait("document.getElementById('foundation-progress').value===2")
+ ok('Mediana: exercício original concluído, retorno e reload mostram 2/18')
  nav('data-science.html')
  tests=(ROOT/'tests/frontend/data-science.test.js').read_text();source=(ROOT/'app/frontend/js/learning-data.js').read_text()
  ok(js(tests+'\n[testDataScience(DataScience),testDataScienceUI(),testLearningData('+json.dumps(source)+')].join("; ")'))

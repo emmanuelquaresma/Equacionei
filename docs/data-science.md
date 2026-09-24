@@ -67,3 +67,7 @@ Verificação em Chrome: navegação e ausência de overflow em 360, 390, 768 e 
 ## Primeira aula enriquecida
 
 A aula Média agora inclui blocos pedagógicos opcionais, dados sintéticos próprios e comparação interativa de média/mediana. Seus campos originais e exercício foram preservados. O cartão do módulo lê o progresso já existente para começar, continuar ou revisar. Auditoria, IDs, motor Python, arquivos alterados e resultados de testes estão em [data-science-enriquecimento.md](data-science-enriquecimento.md).
+
+### Continuação: Mediana
+
+A segunda aula também utiliza os blocos pedagógicos, com comparação entre períodos de seis e sete dias e cálculo Python para quantidades pares/ímpares. O exercício `ds-fund-mediana` e seu progresso permanecem compatíveis. As demais 16 aulas seguem no formato anterior.

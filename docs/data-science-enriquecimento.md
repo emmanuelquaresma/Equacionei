@@ -174,3 +174,24 @@ Resultados da execução final:
 Durante a criação da suíte, a simulação de storage bloqueado inicialmente não era aplicada ao novo documento: a preparação do protocolo de navegador foi corrigida. A suíte final passou incluindo esse cenário. Não foi uma falha da leitura de progresso da aplicação.
 
 Limites: testes em Chrome headless com emulação de viewport, sem aparelhos físicos, Safari/Edge ou leitor de tela nesta entrega. Backend/Docker não foram alterados nem revalidados por esta suíte de frontend. A versão publicada remotamente não foi modificada nem auditada ao vivo.
+
+## Continuação — aula Mediana
+
+Após autorização para avançar, o checkpoint da primeira etapa foi registrado no commit `7dd6278`. Esta seção atualiza o estado descrito no registro histórico acima.
+
+Mediana (`ds-fund-mediana`) recebeu o mesmo modelo de blocos, preservando integralmente os campos antigos, o exercício de ordenar `[9, 1, 5]`, a saída `5` e o progresso por ID. Média e as outras 16 aulas não tiveram seu conteúdo alterado.
+
+A simulação reutiliza os dados fictícios da semana. Um checkbox permite comparar sete dias (mediana 100) com os seis primeiros (mediana 97,5). Com seis dias, a entrada do dia 7 fica desabilitada. O código exibido ordena a lista e trata quantidades pares e ímpares. A explicação distingue mudar o período do relatório de excluir um extremo por conveniência; também aborda valores repetidos e medianas que não são observações.
+
+O componente compartilhado recebeu somente a opção de período e o cálculo geral de mediana para esta aula. O aviso sobre exploração livre agora usa o enunciado do exercício correspondente, evitando mostrar instruções de Média na aula Mediana.
+
+Validação desta continuação:
+
+- Suíte de navegador completa aprovada em 360, 390, 768 e 1366 px, incluindo o novo checkbox, resultados, navegação Média → Mediana → Moda e retorno.
+- Sete cenários de simulação conferidos no MicroPython; 18 exemplos existentes e 22 verificações do executor aprovados.
+- Exercício de Mediana concluído no laboratório; retorno e reload mostram 2/18 após a conclusão anterior de Média.
+- Regressões de Data Science, teclado, localStorage, storage bloqueado, atualização entre páginas e ausência de overflow aprovadas.
+- 16 testes unitários do backend aprovados.
+- Comparação com o checkpoint confirmou preservação dos exercícios, da aula Média e das 16 aulas restantes; `git diff --check` aprovado.
+
+Próxima aula candidata: Moda, mantendo a sequência de medidas de posição. A publicação no GitHub e a atualização do site são ações distintas: o repositório não tinha GitHub Pages, homepage, deployments registrados ou workflow de deploy implementado no momento desta verificação. O destino do site precisa ser identificado antes de afirmar que um push o atualizou.

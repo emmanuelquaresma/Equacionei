@@ -53,7 +53,25 @@ const DataScienceFundamentals = [
     "validator": "OUTPUT_EQUALS",
     "note": "",
     "context": "Valor central de uma lista",
-    "minutes": 8
+    "minutes": 8,
+    "learning": {
+      "experiment": "median",
+      "objective": "Encontrar a mediana em conjuntos com quantidades ímpares e pares de valores e interpretar o que ela resume.",
+      "concept": "A mediana é o centro dos dados ordenados. Com uma quantidade ímpar de valores, escolha o valor do meio. Com uma quantidade par, calcule a média dos dois valores centrais. Ordenar os dados é indispensável: o meio da lista original pode não representar o centro dos valores.",
+      "intuitiveExample": "Vamos retomar a loja fictícia da aula anterior. Mesmo com uma encomenda de R$ 900, a venda central da semana é R$ 100. Agora imagine que o relatório inclua apenas os primeiros seis dias: qual será o centro?",
+      "datasetId": "eq-vendas-semana-v1",
+      "observe": "Observe os sete valores em ordem crescente. Qual ocupa a quarta posição? Se o dia 7 ficar fora do relatório, quais são os dois valores centrais?",
+      "interpretation": "Na semana completa, o quarto valor é R$ 100: três valores ficam abaixo e três acima. Nos primeiros seis dias, os centrais são R$ 95 e R$ 100; a mediana é (95 + 100) / 2 = R$ 97,50. Ela não precisa ser um valor observado. Essa comparação muda o período do relatório; não é uma justificativa para excluir uma venda grande. Em conjuntos com valores repetidos, pode haver várias observações iguais à mediana.",
+      "codeExplanation": "sorted(vendas) cria uma lista ordenada. len(ordenadas) conta as observações e // 2 encontra o índice central. O teste % 2 verifica se a quantidade é ímpar; no caso par, fazemos a média das posições meio - 1 e meio. O código funciona nos dois cenários da simulação, sem bibliotecas adicionais.",
+      "tryIt": "Desmarque o dia 7 e confirme a mediana de R$ 97,50. Inclua-o novamente e troque sua venda por R$ 0: qual valor passa a ocupar o centro? Explique a mudança antes de olhar o resultado.",
+      "application": "Ao comunicar a venda mediana, informe quais dias entraram no cálculo. Use também o total e a média quando a pergunta exigir volume vendido; a mediana sozinha não revela todas as diferenças entre os dias.",
+      "summary": [
+        "Ordene os dados antes de localizar o centro.",
+        "Quantidade ímpar: escolha o valor central.",
+        "Quantidade par: tire a média dos dois valores centrais.",
+        "A mediana pode não ser um valor observado; informe o período e o contexto."
+      ]
+    }
   },
   {
     "id": "ds-fund-moda",
