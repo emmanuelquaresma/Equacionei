@@ -1,0 +1,61 @@
+/* Apenas páginas de jogos: contexto global e espaço para a interação. */
+.game-page .site-brand > span:last-child { display: block; }
+.game-page .game-header-context { display: block; margin-top: 2px; color: #17659a; font-size: .78rem; font-weight: 600; }
+.game-page .site-brand__sub { display: inline; }
+.game-page .site-header__inner { padding-block: 8px; }
+.game-page main > h1,
+.game-page .checkers-header h1 {
+ position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+ overflow: hidden; clip-path: inset(50%); white-space: nowrap;
+}
+.game-page main { padding-top: 12px; }
+.game-page .game-help { margin: 12px 0; border: 1px solid #dae5ed; border-radius: 12px; padding: 0 12px; background: #fff; }
+.game-page summary { min-height: 44px; padding: 12px 0; cursor: pointer; font-weight: 650; }
+.game-page :is(.rc-stats,.q-stats,.game-stats) { gap: 4px; margin: 0 0 12px; }
+.game-page :is(.rc-stats,.q-stats,.game-stats) > div { padding: 6px; border-radius: 8px; min-width: 0; }
+.game-page :is(.rc-stats,.q-stats,.game-stats) dt { font-size: .72rem; }
+.game-page :is(.rc-stats,.q-stats,.game-stats) dd { margin: 2px 0 0; font-size: .95rem; overflow-wrap: anywhere; }
+.game-page:has(#rc-play:not([hidden])) .game-presentation { display: none; }
+.game-page #rc-description { margin: 0 0 8px; font-size: 1rem; line-height: 1.4; }
+.game-page .rc-stats { grid-template-columns: repeat(4,minmax(0,1fr)); }
+.game-page .rc-stats div:last-child { grid-column: auto; }
+.game-page #rc-record { font-size: .75rem; }
+.game-page .rc-board { margin: 8px auto 12px; }
+.game-page .lightning-game { display: block; margin: 0; padding: 12px; max-width: 760px; margin-inline: auto; }
+.game-page .game-board { padding: 12px; }
+.game-page .game-stats { grid-template-columns: repeat(4,minmax(0,1fr)); }
+.game-page .game-question { margin: 12px 0; }
+.game-page .checkers-header.page-heading { padding: 0; }
+.game-page .checkers-header p { margin: 8px auto; font-size: .9rem; }
+.game-page:has(:is(#local-game,#online-game):not([hidden])) .checkers-header p { display: none; }
+.game-page .checkers-page { padding-top: 8px; }
+.game-page .game-intro { margin-bottom: 8px; }
+.game-page .game-intro .eyebrow { margin: 0; font-size: .8rem; }
+.game-page .game-intro h2 { font-size: 1rem; margin: 4px 0; }
+.game-page .mode-back { margin-bottom: 8px; }
+.game-page #network-message:empty { margin: 0; min-height: 0; }
+.game-page .game-context-status { display: flex; flex-wrap: wrap; gap: 4px 16px; margin-bottom: 8px; padding: 6px 10px; background: #edf5fa; border-radius: 10px; }
+.game-page .game-context-status p { margin: 0; }
+@media (max-width: 1000px) {
+ .game-page .site-brand { font-size: .85rem; gap: 6px; }
+ .game-page .game-header-context { font-size: .73rem; }
+ .game-page .site-header__inner { min-height: 64px; gap: 8px; padding-inline: 12px; }
+ .game-page main { padding-inline: 10px; }
+}
+@media (max-width: 767px) {
+ .game-page.q-running #q-play { position: static; inset: auto; height: calc(100vh - var(--game-header-height,64px) - 24px); height: calc(100dvh - var(--game-header-height,64px) - 24px); padding: 0 0 env(safe-area-inset-bottom,0px); overflow: visible; }
+ .game-page .q-stats { margin-bottom: 4px; }
+ .game-page #q-expression { margin: 4px 0; padding: 6px; }
+ .game-page .q-actions { min-height: 44px; }
+ .game-page .game-stats { grid-template-columns: repeat(4,minmax(0,1fr)); }
+ .game-page .lightning-game { padding: 8px; }
+ .game-page .game-board { padding: 8px; }
+ .game-page .game-layout { gap: 12px; }
+}
+.game-page .game-intro h2,
+.game-page .game-intro .eyebrow { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.game-page .game-intro .game-message { margin: 0 0 8px; }
+@media (min-width: 768px) {
+ .game-page .checkers-board { width: min(100%,calc(100vh - 180px)); width: min(100%,calc(100dvh - 180px)); }
+ .game-page #chess-board { width: min(100%,calc(100vh - 180px)); width: min(100%,calc(100dvh - 180px)); }
+}

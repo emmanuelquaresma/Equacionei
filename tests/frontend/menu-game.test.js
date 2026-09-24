@@ -1,4 +1,5 @@
 function runMenuGameTests(source) {
+    const attempts = [];
     const nodes = new Map(), storage = new Map(), timers = new Map();
     let now = 0, id = 0;
     const get = (key) => {
@@ -9,7 +10,8 @@ function runMenuGameTests(source) {
     };
     const timer = (fn) => { timers.set(++id, fn); return id; };
     const assert = (value, message) => { if (!value) throw Error(message); };
-    new Function('document', 'localStorage', 'performance', 'setTimeout', 'clearTimeout', 'setInterval', 'clearInterval', source)(
+    new Function('window', 'document', 'localStorage', 'performance', 'setTimeout', 'clearTimeout', 'setInterval', 'clearInterval', source)(
+        {LearningData:{newId:()=>String(++id),record:r=>attempts.push(r)}},
         { getElementById: get }, { getItem: k => storage.get(k) ?? null, setItem: (k,v) => storage.set(k,v) },
         { now: () => now }, timer, k => timers.delete(k), timer, k => timers.delete(k));
     const submit = (value) => { get('game-answer').value = String(value); get('game-form').submit({ preventDefault() {} }); };
@@ -27,6 +29,7 @@ function runMenuGameTests(source) {
         if(i<9) for(const fn of [...timers.values()]) fn();
     }
     assert(get('game-correct').textContent === '10 / 10' && get('game-answer').disabled, 'dez acertos encerram');
+    assert(attempts.length === 11 && attempts[0].outcome === 'answer' && attempts[0].responseMs === 5000, 'registra cada tentativa uma única vez');
     assert(storage.get('mathChallengeBestTime') === '25000', 'salva tempo completo');
     now += 10000;
     assert(get('game-time').textContent === '00:25', 'cronômetro parado');

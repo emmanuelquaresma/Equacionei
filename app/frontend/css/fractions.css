@@ -1,0 +1,7 @@
+/* Componente reutilizável: fração vertical e representação SVG. */
+.math-fraction { display:inline-grid;grid-template-rows:1fr 1fr;align-items:center;text-align:center;vertical-align:middle;line-height:1.1;font-variant-numeric:tabular-nums;min-width:1.15em; }
+.math-fraction__numerator { border-bottom:2px solid currentColor;padding:0 .15em .12em; }
+.math-fraction__denominator { padding:.12em .15em 0; }
+.fraction-pizza { --fraction-fill:#b5ddc4;--fraction-empty:#f6fbf7;--fraction-line:#47775b;display:block;width:100%;height:auto; }
+.fraction-pizza path,.fraction-pizza circle { fill:var(--fraction-empty);stroke:var(--fraction-line);stroke-width:1.5;stroke-linejoin:round; }
+.fraction-pizza .is-filled { fill:var(--fraction-fill); }

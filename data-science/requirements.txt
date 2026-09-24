@@ -1,0 +1,3 @@
+# Ambiente educacional separado; não adicionar ao container do site.
+# Os exemplos de Fundamentos usam apenas Python básico.
+jupyter

@@ -1,0 +1,95 @@
+* { box-sizing: border-box; }
+body { margin: 0; min-width: 320px; }
+.ds-page { max-width: 1180px; margin: auto; padding: 32px 20px 60px; }
+.ds-intro { max-width: 850px; margin: 0 auto 26px; text-align: center; }
+.ds-kicker { color: #17659a; font-weight: 700; }
+h1 { font-size: clamp(1.9rem,5vw,3rem); letter-spacing: -.035em; margin: 14px 0; }
+h2 { font-size: 1.5rem; } h3 { font-size: 1.1rem; }
+p,li { line-height: 1.6; }
+.ds-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 18px 0; }
+.ds-cards { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 18px; }
+.ds-cards a { padding: 25px; border: 1px solid #cee0e9; background: #eef7fb; border-radius: 20px; color: #12345b; text-decoration: none; }
+.ds-cards a:nth-child(2) { background: #fff8e4; } .ds-cards a:nth-child(3) { background: #edf7f1; }
+.ds-cards a>span { font-size: 2rem; }
+.ds-panel { margin: 18px 0; padding: 22px; background: #fff; border: 1px solid #d6e4ed; border-radius: 18px; box-shadow: 0 5px 20px #12345b06; }
+.ds-columns { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 18px; }
+.ds-columns>* { min-width: 0; }
+button,select { min-height: 44px; padding: 10px 14px; border: 1px solid #b8cfdf; border-radius: 10px; color: #12345b; background: #fff3c9; font: inherit; }
+button { cursor: pointer; touch-action: manipulation; } button:disabled { opacity: .55; cursor: default; }
+button:hover:not(:disabled) { background: #ffe087; }
+a:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible,summary:focus-visible { outline: 3px solid #17659a; outline-offset: 3px; }
+select { max-width: 100%; } input[type=range] { display: block; width: 100%; min-height: 44px; margin: 8px 0 16px; accent-color: #17659a; }
+.ds-metrics { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 10px; }
+.ds-metrics div { padding: 16px; background: #edf5fb; border-radius: 12px; }
+dt { font-size: .85rem; } dd { margin: 6px 0 0; font-size: 1.5rem; font-weight: 750; }
+.ds-bar-row { margin: 14px 0; }
+.ds-bar-row p { margin: 0 0 4px; }
+.ds-bar { height: 18px; border-radius: 7px; background: #e8eff4; overflow: hidden; }
+.ds-bar span { display: block; height: 100%; background: #377da8; border-radius: 7px; }
+.ds-control { display: grid; grid-template-columns: minmax(0,1fr) 44px 35px 44px; gap: 6px; align-items: center; padding: 8px 0; border-bottom: 1px solid #e4edf3; }
+.ds-control button { padding: 8px; } .ds-control output { text-align: center; font-weight: 750; }
+.ds-badges { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fit,minmax(180px,1fr)); gap: 10px; }
+.ds-badges li { padding: 15px; border: 1px solid #d6e4ed; border-radius: 12px; background: #f7fafc; }
+.ds-badges .earned { background: #fff3c9; border-color: #e7c867; }
+.ds-training-list { max-height: 280px; overflow-y: auto; padding-left: 22px; }
+.ds-training-list li { padding-bottom: 8px; } .ds-training-list button { margin-left: 6px; font-size: .8rem; }
+#training-plot { display: block; width: 100%; max-height: 350px; background: #f7fafc; border-radius: 14px; }
+#storage-note:empty { display: none; }
+#sample-examples { margin-top: 10px; }
+summary { cursor: pointer; min-height: 44px; padding: 10px 0; }
+@media(max-width:800px) { .ds-cards { grid-template-columns: 1fr; } .ds-columns { grid-template-columns: 1fr; gap: 0; } }
+@media(max-width:500px) { .ds-page { padding: 22px 12px; } .ds-panel { padding: 16px; } .ds-metrics { grid-template-columns: repeat(2,minmax(0,1fr)); } }
+
+.ds-control [role="cell"] { min-width: 0; }
+.ds-control output { display: block; }
+
+.ds-intro { max-width: 860px; margin-bottom: 40px; padding: 24px 0 8px; }
+.ds-kicker { font-size: .8rem; text-transform: uppercase; letter-spacing: .12em; }
+.ds-intro > p:not(.ds-kicker) { max-width: 760px; margin: 20px auto; color: #516a7f; font-size: 1.08rem; line-height: 1.8; }
+.ds-concepts { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px 24px; list-style: none; padding: 0; margin-top: 24px; color: #516a7f; }
+.ds-illustration { margin: 24px auto; max-width: 620px; }
+.ds-illustration img { display: block; width: 100%; height: auto; }
+.ds-cards a { display: flex; flex-direction: column; padding: 30px; box-shadow: 0 5px 20px #12345b07; }
+.ds-cards a strong { margin-top: auto; padding-top: 12px; }
+.ds-cards a:hover { border-color: #88afc8; box-shadow: 0 8px 24px #12345b12; }
+.ds-back { display: inline-flex; align-items: center; min-height: 44px; margin-bottom: 10px; color: #17659a; }
+@media(max-width:500px) { .ds-intro { padding-top: 0; margin-bottom: 28px; } .ds-cards a { padding: 24px; } .ds-concepts { gap: 8px 16px; } }
+
+/* Trilha: apresentação apenas; preserva os estilos das experiências existentes. */
+.ds-intro.ds-trail-intro { padding: 0; margin-bottom: 24px; }
+.ds-trail-intro h1 { font-size: clamp(1.8rem, 4vw, 2.5rem); margin: 8px 0; }
+.ds-trail-intro > p:not(.ds-kicker) { margin: 12px auto; font-size: 1rem; line-height: 1.6; }
+.ds-trail-heading { margin-bottom: 16px; }
+.ds-trail-heading h2 { margin: 0 0 8px; font-size: 1.25rem; }
+.ds-trail-heading p { margin: 0; color: #516a7f; }
+.ds-trail-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; align-items: start; }
+.ds-trail-card { min-width: 0; border: 1px solid #cee0e9; border-radius: 20px; background: #eef7fb; box-shadow: 0 5px 20px #12345b07; overflow-wrap: anywhere; }
+.ds-trail-card:nth-child(3n + 2) { background: #fff8e4; }
+.ds-trail-card:nth-child(3n) { background: #edf7f1; }
+.ds-trail-card summary { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; padding: 20px; color: #12345b; border-radius: inherit; list-style: none; touch-action: manipulation; }
+.ds-trail-card summary::-webkit-details-marker { display: none; }
+.ds-trail-card summary:focus-visible { outline-offset: 3px; }
+.ds-trail-card__top { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; font-size: .8rem; font-weight: 700; }
+.ds-trail-card__icon { font-size: 1.6rem; line-height: 1; }
+.ds-trail-card__title { font-size: 1.15rem; font-weight: 750; line-height: 1.3; }
+.ds-trail-card__description { font-size: .95rem; line-height: 1.5; }
+.ds-trail-card__status { font-size: .75rem; color: #516a7f; }
+.ds-trail-card__action { display: flex; justify-content: space-between; align-items: center; font-weight: 700; font-size: .9rem; }
+.ds-trail-card[open] .ds-trail-card__action > span { transform: rotate(45deg); }
+.ds-trail-card__preview { margin: 0 20px; border-top: 1px solid #b8cfdf; font-size: .9rem; }
+.ds-trail-card__preview p { margin: 12px 0 16px; }
+.ds-experiences-heading { margin-top: 32px; }
+@media (hover: hover) { .ds-trail-card:hover { border-color: #88afc8; box-shadow: 0 8px 24px #12345b12; } }
+@media (min-width: 600px) { .ds-trail-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1000px) { .ds-trail-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+
+.ds-trail-card summary > span { min-width: 0; }
+.ds-trail-card__title, .ds-trail-card__description, .ds-trail-card__status { display: block; }
+.ds-trail-card summary::marker { content: ""; }
+@media (max-width: 1200px) {
+    .ds-trail-intro .ds-kicker { font-size: .7rem; letter-spacing: .08em; margin-bottom: 8px; }
+    .ds-trail-intro > p:not(.ds-kicker) { margin: 8px auto; line-height: 1.5; }
+    .ds-trail-heading { margin-bottom: 12px; }
+}
+
+.ds-trail-card--available { display: grid; gap: 10px; padding: 20px; text-decoration: none; color: #12345b; }

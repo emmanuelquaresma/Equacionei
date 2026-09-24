@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>∑quacionei | Xadrez Matemático</title>
+<link rel="stylesheet" href="/static/css/xadrez.css"><link rel="stylesheet" href="/static/css/site.css"><script src="/static/js/site-ui.js" defer></script><link rel="stylesheet" href="/static/css/game-layout.css"></head><body class="game-page" data-game-title="Xadrez Matemático">
+    <header class="site-header">
+        <div class="site-header__inner">
+            <a class="site-brand" href="/" aria-label="Equacionei — Matemática, Exatas e Ciência de Dados — início">
+                <span class="site-brand__identity"><span class="site-brand__name" aria-hidden="true"><span class="site-brand__sum">∑</span>quacionei</span><span class="site-brand__tagline" aria-hidden="true">Matemática • Exatas • Ciência de Dados</span></span>
+            </a>
+            <nav class="site-nav" id="site-navigation" aria-label="Navegação principal">
+                <a href="/">Início</a>
+                <a href="/menu#atividades">Atividades</a>
+                <a href="/menu#jogos">Jogos</a>
+            </nav>
+            <a class="site-enter" href="/menu" aria-label="Entrar nas atividades">
+                <svg aria-hidden="true" viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M15 3h5v18h-5M3 12h12M10 7l5 5-5 5"/></svg>
+                <span>Entrar</span>
+            </a>
+            <button class="site-toggle" type="button" aria-controls="site-navigation" aria-expanded="false" aria-label="Abrir menu de navegação" hidden>
+                <svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+            </button>
+        </div>
+    </header>
+
+
+<main class="chess-page"><h1>Xadrez Matemático</h1>
+<div class="chess-layout"><section aria-label="Tabuleiro e avisos"><div class="game-context-status"><p>Turno: <strong id="chess-turn">Brancas</strong></p><p id="chess-status" role="status">Partida em andamento</p></div><div id="chess-board" role="group" aria-label="Tabuleiro de xadrez. Use as setas para navegar e Enter para selecionar."></div><p id="chess-message" role="status"></p></section>
+<aside class="chess-panel">
+<h2>Capturadas pelas brancas</h2><p id="captured-white" class="chess-captures">Nenhuma</p><h2>Capturadas pelas pretas</h2><p id="captured-black" class="chess-captures">Nenhuma</p>
+<button id="chess-restart" type="button">Reiniciar partida</button><button id="chess-again" type="button" hidden>Jogar novamente</button>
+<h2>Jogadas</h2><ol id="chess-history" aria-label="Histórico de jogadas"></ol>
+<details><summary>Regras desta versão</summary><p>Inclui xeque, xeque-mate, afogamento, promoção com escolha, roque e en passant. Empate automático com apenas reis, ou reis e um único bispo ou cavalo.</p><p>Repetição de posições, regras de 50/75 lances e demais posições mortas ainda não são adjudicadas.</p></details>
+</aside></div><details class="game-help"><summary>ⓘ Como jogar</summary><p>Dois jogadores no mesmo dispositivo. Brancas começam.</p><p>Selecione uma peça e uma casa destacada. Use as setas e Enter ou toque no tabuleiro.</p></details></main>
+<dialog id="promotion" aria-labelledby="promotion-title"><h2 id="promotion-title">Escolha a promoção</h2><div class="promotion-options"><button type="button" data-promote="q">Dama</button><button type="button" data-promote="r">Torre</button><button type="button" data-promote="b">Bispo</button><button type="button" data-promote="n">Cavalo</button></div><p>Esc cancela a escolha e permite selecionar outra jogada.</p></dialog>
+<script src="/static/js/xadrez.js"></script></body></html>

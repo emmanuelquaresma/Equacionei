@@ -33,11 +33,11 @@ h1 { margin-bottom: 14px; color: var(--blue-950); font-size: clamp(2.1rem, 5vw, 
 
 /* A largura fixa por card e o padding simétrico permitem centralizar as extremidades. */
 .activity-carousel { --card-width: min(76vw, 410px); position: relative; scroll-margin-top: 90px; }
-.subject-grid { position: relative; display: flex; gap: 24px; overflow-x: auto; padding: 30px calc((100% - var(--card-width)) / 2) 38px; scroll-snap-type: x mandatory; scrollbar-width: none; overscroll-behavior-x: contain; }
-.subject-grid::-webkit-scrollbar { display: none; }
-.subject-grid:focus-visible { outline: 2px solid var(--blue-700); outline-offset: 4px; border-radius: 20px; }
-.subject-grid.is-dragging { scroll-snap-type: none; cursor: grabbing; }
-.subject-grid.is-dragging .subject-card { cursor: grabbing; }
+.carousel-track { position: relative; display: flex; gap: 24px; overflow-x: auto; padding: 30px calc((100% - var(--card-width)) / 2) 38px; scroll-snap-type: x mandatory; scrollbar-width: none; overscroll-behavior-x: contain; }
+.carousel-track::-webkit-scrollbar { display: none; }
+.carousel-track:focus-visible { outline: 2px solid var(--blue-700); outline-offset: 4px; border-radius: 20px; }
+.carousel-track.is-dragging { scroll-snap-type: none; cursor: grabbing; }
+.carousel-track.is-dragging .subject-card { cursor: grabbing; }
 .carousel-controls { display: flex; align-items: center; justify-content: center; gap: 24px; }
 .carousel-arrow { display: grid; place-items: center; width: 44px; height: 44px; padding: 0; border: 1px solid #c9dae7; border-radius: 50%; background: #fff; color: var(--blue-950); font: inherit; font-size: 1.4rem; cursor: pointer; }
 .carousel-arrow:hover { background: #edf5fa; }
@@ -147,7 +147,7 @@ a.subject-card:focus-visible { outline: 3px solid #17659a; outline-offset: 4px; 
 
 @media (max-width: 580px) {
     .menu-page { padding-inline: 18px; }
-    .subject-grid { gap: 12px; }
+    .carousel-track { gap: 12px; }
     .subject-card { min-height: 320px; padding: 24px; }
     .carousel-controls { gap: 16px; }
     .carousel-arrow { width: 38px; height: 38px; }
@@ -171,3 +171,29 @@ a.subject-card:focus-visible { outline: 3px solid #17659a; outline-offset: 4px; 
 .game-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 #game-start { display: block; margin: 0 auto; }
 @media (max-width: 380px) { .game-form { grid-template-columns: minmax(0, 1fr); } }
+
+/* Componente isolado das antigas grades de atividades. */
+.activity-carousel { max-width: 960px; margin-inline: auto; --card-width: min(76vw, 410px); }
+.activity-carousel .carousel-track { display: flex; flex-wrap: nowrap; }
+.carousel-controls { padding-bottom: 12px; }
+.carousel-arrow { position: absolute; top: 45%; z-index: 2; box-shadow: 0 4px 15px #12345b18; }
+#carousel-prev { left: 4px; }
+#carousel-next { right: 4px; }
+.subject-card { opacity: .7; }
+.subject-card.is-active { opacity: 1; }
+@media (max-width: 580px) {
+    .activity-carousel { --card-width: min(85vw, calc(100vw - 56px)); }
+    .carousel-arrow { width: 32px; height: 36px; }
+}
+
+.subject-card--queda { background: #edf4ff; }
+
+.subject-card--chess { background: #f6f0e7; }
+
+.subject-card--data { background: #edf7f6; }
+
+/* Aplicações de estudo ficam separadas do carrossel de jogos. */
+.activities-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 24px; scroll-margin-top: 92px; }
+.activities-grid .subject-card { transform: none; opacity: 1; user-select: auto; min-height: 0; }
+.activity-example { padding: 18px; border-radius: 14px; background: #ffffffb3; }
+@media(max-width:767px) { .activities-grid { grid-template-columns: 1fr; gap: 18px; } }

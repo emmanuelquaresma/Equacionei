@@ -1,0 +1,56 @@
+* { box-sizing: border-box; }
+body { margin: 0; }
+.rc-page { width: min(100%, 820px); margin: auto; padding: 24px 16px 40px; }
+.rc-page h1 { font-size: clamp(1.5rem, 4vw, 2.3rem); margin-bottom: 8px; }
+.rc-page p { line-height: 1.6; }
+.rc-panel { padding: 20px; border: 1px solid var(--site-line); border-radius: 18px; background: #fff; margin: 18px 0; }
+#rc-setup { display: flex; flex-wrap: wrap; align-items: end; gap: 16px; }
+#rc-setup label { display: grid; gap: 8px; flex: 1 1 150px; }
+#rc-preview-record { flex-basis: 100%; margin: 0; }
+.rc-page button, .rc-page select { min-height: 44px; font: inherit; padding: 10px 14px; border: 1px solid #b7cddd; border-radius: 10px; color: var(--site-ink); background: #fff3c9; }
+.rc-page button { cursor: pointer; touch-action: manipulation; }
+.rc-page :focus-visible { outline: 3px solid #17659a; outline-offset: 3px; }
+.rc-stats { display: grid; grid-template-columns: 1fr 1fr 1fr 2fr; gap: 8px; }
+.rc-stats div { background: #fff; padding: 12px; border-radius: 12px; }
+.rc-stats dt { font-size: .8rem; } .rc-stats dd { margin: 6px 0 0; font-weight: 700; }
+.rc-board { width: min(100%, 520px); aspect-ratio: 1; display: grid; grid-template-columns: repeat(var(--board-size,4),minmax(0,1fr)); grid-template-rows: repeat(var(--board-size,4),minmax(0,1fr)); gap: clamp(4px,1.5vw,10px); padding: clamp(6px,1.5vw,12px); margin: 24px auto; border-radius: 18px; background: #dceaf4; box-shadow: 0 6px 24px #16365312; }
+.rc-page .rc-tile { position: relative; width: 100%; height: 100%; min-width: 0; min-height: 0; padding: 3px 2px 12px; font-size: clamp(1.2rem,5vw,2.2rem); font-weight: 700; background: #fff; border: 2px solid #b7cddd; overflow-wrap: anywhere; transition: background .15s ease; }
+.rc-page .rc-text-board .rc-tile { font-size: clamp(.78rem,2.5vw,1.1rem); line-height: 1.25; }
+.rc-page .rc-movable { border: 3px solid #17659a; background: #fff3c9; box-shadow: 0 3px 0 #bbd1e0; }
+.rc-movable::after { content: '↔'; position: absolute; bottom: 0; right: 4px; font-size: .75rem; }
+.rc-page .rc-empty { background: #cbdde9; border: 2px dashed #738ba0; cursor: default; }
+.rc-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+#rc-message { min-height: 1.6em; }
+#rc-win { border-color: #17659a; }
+.rc-page summary { cursor: pointer; min-height: 44px; padding: 8px 0; font-weight: 700; }
+@media(max-width:480px) { .rc-page { padding: 16px 10px 30px; } .rc-panel { padding: 14px; } .rc-stats div { padding: 8px; } .rc-stats dd { font-size: .85rem; } .rc-actions button { flex: 1 1 130px; } }
+@media(prefers-reduced-motion:reduce) { .rc-page .rc-tile { transition: none; } }
+
+.rc-themes { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 16px; margin: 24px 0; }
+.rc-themes button { display: flex; flex-direction: column; gap: 12px; text-align: left; background: #fff; padding: 20px; min-height: 170px; }
+.rc-themes strong { font-size: 1.1rem; } .rc-themes span { line-height: 1.5; }
+#rc-theme-title { flex-basis: 100%; margin: 0; }
+#rc-math-options { flex: 1 1 160px; }
+#rc-hint-text { min-height: 1.5em; color: #17659a; }
+.rc-tile span { display: block; max-width: 100%; }
+#rc-win button { margin: 8px 8px 0 0; }
+#rc-full-text { margin: 16px 0; padding-left: 12px; border-left: 3px solid #edce77; font-size: 1.2rem; line-height: 1.6; }
+#rc-source { display: block; margin: 12px 0; }
+@media(max-width:600px) { .rc-themes { grid-template-columns: 1fr; } .rc-themes button { min-height: 110px; } .rc-stats { grid-template-columns: repeat(3,minmax(0,1fr)); } .rc-stats div:last-child { grid-column: 1 / -1; } }
+
+/* Contexto e HUD da partida; não afeta os outros jogos. */
+.game-page .rc-page #rc-description {
+ margin: 0 0 8px; font-size: .85rem; font-weight: 500; line-height: 1.35;
+ overflow-wrap: anywhere;
+}
+.game-page .rc-page .rc-stats {
+ grid-template-columns: repeat(4,minmax(0,1fr)); gap: 4px; margin: 0 0 8px;
+}
+.game-page .rc-page .rc-stats > div {
+ min-height: 55px; padding: 6px; min-width: 0;
+}
+.game-page .rc-page .rc-stats div:last-child { grid-column: auto; }
+.game-page .rc-page .rc-stats dt { font-size: .7rem; line-height: 1.25; }
+.rc-stats abbr { text-decoration: none; }
+.game-page .rc-page .rc-stats dd { line-height: 1.3; margin-top: 3px; }
+.game-page .rc-page .rc-board { margin: 8px auto 12px; }

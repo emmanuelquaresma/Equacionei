@@ -82,3 +82,18 @@ logs/
 *.key
 *.p12
 *.pfx
+
+Peças claras
+Peças escuras
+
+# Materiais de referência e dados privados (nunca colocar em app/frontend)
+private/
+materiais-privados/
+referencias-privadas/
+.spyproject/
+.ipynb_checkpoints/
+.env.*
+!.env.example
+!.env.test.example
+credentials*.json
+secrets*.json

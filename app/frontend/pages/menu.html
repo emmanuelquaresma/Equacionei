@@ -3,22 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Escolha um tema | Matemática pra Todos</title>
+    <title>∑quacionei | Aplicações Matemáticas</title>
     <link rel="stylesheet" href="/static/css/menu.css">
-    <link rel="stylesheet" href="/static/css/site.css">
+    <link rel="stylesheet" href="/static/css/site.css"><link rel="stylesheet" href="/static/css/carousel.css">
     <script src="/static/js/site-ui.js" defer></script>
 </head>
 <body>
     <header class="site-header">
         <div class="site-header__inner">
-            <a class="site-brand" href="/" aria-label="Matemática pra Todos — início">
-                <span class="site-brand__symbol" aria-hidden="true">Σ</span>
-                <span>Matemática <span class="site-brand__sub">pra Todos</span></span>
+            <a class="site-brand" href="/" aria-label="Equacionei — Matemática, Exatas e Ciência de Dados — início">
+                <span class="site-brand__identity"><span class="site-brand__name" aria-hidden="true"><span class="site-brand__sum">∑</span>quacionei</span><span class="site-brand__tagline" aria-hidden="true">Matemática • Exatas • Ciência de Dados</span></span>
             </a>
             <nav class="site-nav" id="site-navigation" aria-label="Navegação principal">
                 <a href="/">Início</a>
-                <a href="/menu#atividades">Atividades</a>
+                <a href="/menu#atividades">Aplicações Matemáticas</a>
                 <a href="/menu#jogos">Jogos</a>
+                <a href="/static/data-science.html">Data Science</a>
+                <a href="/static/desenvolvimento.html">Desenvolvimento</a>
+                <a href="/static/sobre.html">Sobre</a>
             </nav>
             <a class="site-enter" href="/menu" aria-label="Entrar nas atividades">
                 <svg aria-hidden="true" viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M15 3h5v18h-5M3 12h12M10 7l5 5-5 5"/></svg>
@@ -30,86 +32,87 @@
         </div>
     </header>
 
-    <main class="menu-page">
-        <header class="menu-header">
+    <main class="menu-page section-landing">
+        <header class="menu-header section-intro">
             <p class="menu-kicker">Seu próximo passo</p>
-            <h1>O que você quer aprender hoje?</h1>
-            <p>Escolha um tema e explore no seu ritmo.</p>
+            <h1 id="menu-title" class="section-title-accessible">Aplicações matemáticas</h1>
+            <p id="menu-description">Entenda o conceito, veja um exemplo e experimente as funções.</p>
         </header>
 
-        <section class="activity-carousel" id="atividades" aria-label="Escolha uma atividade" aria-roledescription="carrossel">
-            <div class="subject-grid" id="activity-track" tabindex="0" aria-label="Atividades; use as setas para navegar">
+        <section id="atividades" class="activity-carousel" aria-label="Aplicações matemáticas" aria-roledescription="carrossel"><div class="carousel-track" id="math-track" tabindex="0" aria-label="Aplicações matemáticas; use as setas para navegar">
             <a class="subject-card subject-card--linear" href="/static/primeiro-grau.html">
                 <span class="subject-card__number">1º</span>
                 <h2>Função do 1º Grau</h2>
-                <p>Entenda retas, coeficientes e raízes de forma visual.</p>
-                <span class="subject-card__link">Começar <span aria-hidden="true">→</span></span>
+                <p>Uma função do tipo f(x) = ax + b, com a ≠ 0, tem gráfico em forma de reta. Explore como os coeficientes mudam sua inclinação e sua posição.</p><p class="activity-example"><strong>Exemplo: f(x) = 2x + 3</strong><br>Para x = 4: f(4) = 2 × 4 + 3 = 11. A cada unidade a mais em x, o resultado aumenta 2.</p>
+                <span class="subject-card__link">Ver explicação e explorar <span aria-hidden="true">→</span></span>
             </a>
 
             <a class="subject-card subject-card--quadratic" href="/static/segundo-grau.html">
                 <span class="subject-card__number">2º</span>
                 <h2>Função do 2º Grau</h2>
-                <p>Explore parábolas, vértices e raízes passo a passo.</p>
-                <span class="subject-card__link">Começar <span aria-hidden="true">→</span></span>
+                <p>Uma função do tipo f(x) = ax² + bx + c, com a ≠ 0, tem gráfico em forma de parábola. Investigue suas raízes, seu vértice e sua concavidade.</p><p class="activity-example"><strong>Exemplo: f(x) = x² − 4</strong><br>Para x = 3: f(3) = 9 − 4 = 5. O gráfico cruza o eixo x em −2 e 2, onde f(x) = 0.</p>
+                <span class="subject-card__link">Ver explicação e explorar <span aria-hidden="true">→</span></span>
             </a>
 
-            <a id="jogos" class="subject-card subject-card--checkers" href="/static/dama.html">
+</div><div class="carousel-controls" hidden><button class="carousel-arrow" data-prev type="button" aria-label="Cartão anterior" aria-controls="math-track">‹</button><div class="carousel-dots" aria-label="Selecionar cartão"></div><button class="carousel-arrow" data-next type="button" aria-label="Próximo cartão" aria-controls="math-track">›</button></div><p class="carousel-status" role="status" aria-live="polite"></p>
+        </section>
+
+        <section class="activity-carousel" id="jogos" hidden aria-label="Escolha um jogo" aria-roledescription="carrossel">
+            <div class="carousel-track" id="activity-track" tabindex="0" aria-label="Jogos; use as setas para navegar">
+            <a class="subject-card subject-card--checkers" href="/static/dama.html">
                 <span class="subject-card__number">♟</span>
                 <h2>Dama Matemática</h2>
                 <p>Desafie sua estratégia em um clássico jogo de tabuleiro.</p>
                 <span class="subject-card__link">Jogar agora <span aria-hidden="true">→</span></span>
             </a>
 
-            <a class="subject-card subject-card--lightning" href="#desafio">
+            <a class="subject-card subject-card--lightning" href="/static/desafio-relampago.html">
                 <span class="subject-card__number" aria-hidden="true">⚡</span>
                 <h2>Desafio Relâmpago</h2>
                 <p>Uma conta por vez. Pratique e supere sua sequência de acertos.</p>
                 <span class="subject-card__link">Aceitar o desafio <span aria-hidden="true">→</span></span>
             </a>
+            <a class="subject-card subject-card--queda" href="/static/queda-matematica.html">
+                <span class="subject-card__number" aria-hidden="true">↓</span>
+                <h2>Queda Matemática</h2>
+                <p>Encontre o resultado correto antes que os blocos cheguem ao fim.</p>
+                <span class="subject-card__link">Jogar agora →</span>
+            </a>
+            <a class="subject-card subject-card--chess" href="/static/xadrez.html">
+                <span class="subject-card__number" aria-hidden="true">♔</span>
+                <h2>Xadrez</h2>
+                <p>Planeje suas jogadas, proteja seu rei e desafie sua estratégia.</p>
+                <span class="subject-card__link">Jogar agora →</span>
+            </a>
+            <a class="subject-card" href="/static/labirinto-matematico.html">
+                <span class="subject-card__number" aria-hidden="true">🔢</span>
+                <h2>Labirinto Matemático</h2>
+                <p>Encontre os múltiplos corretos e escape dos Operadores!</p>
+                <span class="subject-card__link">Jogar agora →</span>
+            </a>
+            <a class="subject-card" href="/static/racha-cuca.html">
+                <span class="subject-card__number" aria-hidden="true">🧩</span>
+                <h2>Racha-Cuca</h2>
+                <p>Organize as peças, descubra sequências e desafie seu raciocínio.</p>
+                <span class="subject-card__link">Jogar agora →</span>
+            </a>
+
+            <a class="subject-card" href="/static/jogo-dos-pares.html">
+                <span class="subject-card__number" aria-hidden="true">½</span>
+                <h2>Jogo dos Pares</h2>
+                <p>Combine frações com suas representações.</p>
+                <span class="subject-card__link">Jogar agora →</span>
+            </a>
             </div>
             <div class="carousel-controls" hidden>
-                <button class="carousel-arrow" id="carousel-prev" type="button" aria-label="Atividade anterior" aria-controls="activity-track">←</button>
-                <div class="carousel-dots" aria-label="Selecionar atividade"></div>
-                <button class="carousel-arrow" id="carousel-next" type="button" aria-label="Próxima atividade" aria-controls="activity-track">→</button>
+                <button class="carousel-arrow" data-prev type="button" aria-label="Jogo anterior" aria-controls="activity-track">‹</button>
+                <div class="carousel-dots" aria-label="Selecionar jogo"></div>
+                <button class="carousel-arrow" data-next type="button" aria-label="Próximo jogo" aria-controls="activity-track">›</button>
             </div>
-            <p class="sr-only" id="carousel-status" role="status" aria-live="polite"></p>
+            <p class="carousel-status" role="status" aria-live="polite"></p>
         </section>
 
-        <details class="practice-disclosure" id="desafio">
-            <summary>⚡ Praticar com o Desafio Relâmpago <span aria-hidden="true">＋</span></summary>
-        <section class="lightning-game" aria-labelledby="game-title">
-            <div class="lightning-game__intro">
-                <p class="game-kicker">⚡ Hora de praticar</p>
-                <h2 id="game-title">Desafio Relâmpago</h2>
-                <p>Complete 10 cálculos corretos no menor tempo. Erros não encerram a rodada.</p>
-            </div>
-
-            <div class="game-board">
-                <p class="game-question" id="game-question" aria-live="polite">Pronto para começar?</p>
-                <button id="game-start" class="game-button game-button--confirm" type="button">Iniciar desafio</button>
-
-                <form class="game-form" id="game-form">
-                    <label class="sr-only" for="game-answer">Sua resposta</label>
-                    <input id="game-answer" name="answer" type="number" inputmode="numeric" autocomplete="off" placeholder="Sua resposta">
-                    <button class="game-button game-button--confirm" type="submit">Confirmar</button>
-                </form>
-
-                <p class="game-feedback" id="game-feedback" role="status" aria-live="polite"></p>
-
-                <dl class="game-stats" aria-label="Seu desempenho no desafio">
-                    <div><dt>Tempo</dt><dd id="game-time">00:00</dd></div>
-                    <div><dt>Erros</dt><dd id="game-errors">0</dd></div>
-                    <div><dt>Recorde pessoal</dt><dd id="game-record">—</dd></div>
-                    <div><dt>Pontos</dt><dd id="game-score">0</dd></div>
-                    <div><dt>Acertos</dt><dd id="game-correct">0</dd></div>
-                    <div><dt>Sequência</dt><dd id="game-streak">0</dd></div>
-                    <div><dt>Melhor sequência</dt><dd id="game-best-streak">0</dd></div>
-                </dl>
-            </div>
-        </section>
-        </details>
     </main>
-    <script src="/static/js/menu-game.js"></script>
     <script src="/static/js/menu-carousel.js"></script>
 </body>
 </html>

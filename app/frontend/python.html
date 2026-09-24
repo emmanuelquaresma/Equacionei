@@ -1,0 +1,27 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"><title>∑quacionei | Python</title><link rel="stylesheet" href="/static/css/site.css"><link rel="stylesheet" href="/static/css/desenvolvimento.css"><script src="/static/js/site-ui.js" defer></script></head><body><header class="site-header">
+        <div class="site-header__inner">
+            <a class="site-brand" href="/" aria-label="Equacionei — Matemática, Exatas e Ciência de Dados — início">
+                <span class="site-brand__identity"><span class="site-brand__name" aria-hidden="true"><span class="site-brand__sum">∑</span>quacionei</span><span class="site-brand__tagline" aria-hidden="true">Matemática • Exatas • Ciência de Dados</span></span>
+            </a>
+            <nav class="site-nav" id="site-navigation" aria-label="Navegação principal">
+                <a href="/">Início</a>
+                <a href="/menu#atividades">Atividades</a>
+                <a href="/menu#jogos">Jogos</a>
+            </nav>
+            <a class="site-enter" href="/menu" aria-label="Entrar nas atividades">
+                <svg aria-hidden="true" viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M15 3h5v18h-5M3 12h12M10 7l5 5-5 5"/></svg>
+                <span>Entrar</span>
+            </a>
+            <button class="site-toggle" type="button" aria-controls="site-navigation" aria-expanded="false" aria-label="Abrir menu de navegação" hidden>
+                <svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+            </button>
+        </div>
+    </header><main class="dev-page"><h1 class="dev-sr">Trilha Python</h1>
+<div class="dev-context"><span>Python • Fácil</span><span id="py-count"></span></div>
+
+<div class="dev-workspace"><section class="dev-challenge" aria-labelledby="py-title"><h2 id="py-title"></h2><p id="py-description"></p><div class="dev-expected"><span>Esperado:</span><pre id="py-expected"></pre></div>
+</section>
+<section class="dev-editor"><label for="py-code">Seu código Python</label><textarea id="py-code" rows="8" maxlength="16000" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" aria-describedby="py-editor-help"></textarea><p id="py-editor-help">Use espaços para indentar. Ctrl + Enter executa.</p><div class="dev-actions"><p id="py-runtime" role="status">Preparando ambiente Python…</p><button id="py-retry" type="button" hidden>Tentar preparar novamente</button><button id="py-run" disabled type="button">▶ Executar</button><button id="py-stop" type="button" hidden>■ Parar</button><button id="py-restore" type="button">↺ Restaurar</button><button id="py-indent" type="button" aria-label="Inserir quatro espaços no código">+ 4 espaços</button></div></section><section class="dev-support"><details><summary>Explicação e exemplo</summary><p id="py-explanation"></p><pre id="py-example"></pre></details><button id="py-hint" type="button">💡 Dica</button><p id="py-hint-text" hidden role="status"></p></section></div>
+<section class="dev-result" aria-labelledby="py-result-title"><h2 id="py-result-title">Resultado</h2><p id="py-feedback" role="status" aria-live="polite">Escreva seu código e execute.</p><pre id="py-output" tabindex="0" aria-label="Saída do programa"></pre><pre id="py-error" tabindex="0" aria-label="Erro do programa" hidden></pre><button id="py-next" type="button" hidden>Próximo desafio →</button></section>
+<details class="dev-trail"><summary id="py-progress">Sua trilha</summary><ol id="py-trail"></ol></details><p id="py-storage" role="status">Progresso e código ficam somente neste navegador.</p><details><summary>Sobre este ambiente Python</summary><p>MicroPython no navegador. Cada execução começa em um ambiente novo, com limite de 3 segundos e saída de 16 KB. Não inclui bibliotecas externas, arquivos pessoais ou acesso à rede. input() não é interativo nesta versão: sem entrada disponível, pode produzir EOFError.</p><p>A validação inicial compara a saída, não comprova o uso de uma variável ou de if. Experimente soluções diferentes e pratique a construção solicitada.</p></details>
+<dialog id="py-confirm" aria-labelledby="py-confirm-title"><h2 id="py-confirm-title">Restaurar o código inicial?</h2><p>O rascunho deste exercício será substituído.</p><form method="dialog"><button value="cancel">Cancelar</button><button value="restore">Restaurar código</button></form></dialog></main><script src="/static/data/python-exercises.js"></script><script src="/static/js/python-core.js"></script><script src="/static/js/python-runner.js"></script><script src="/static/data/data-science/fundamentos.js"></script><script src="/static/js/python-learning.js"></script></body></html>

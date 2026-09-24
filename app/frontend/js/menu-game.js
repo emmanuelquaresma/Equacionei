@@ -7,6 +7,7 @@
     let answer = 0, correct = 0, errors = 0, streak = 0, bestStreak = 0;
     let active = false, answered = true, startedAt = 0, elapsed = 0, ticker, next;
     let best = null;
+    let questionId, questionAt=0, questionOperations=[];
     try {
         const saved = Number(localStorage.getItem(BEST_KEY));
         if (Number.isFinite(saved) && saved > 0) best = saved;
@@ -55,6 +56,8 @@
             symbol = "÷";
         }
 
+        questionId=window.LearningData?.newId(); questionAt=performance.now();
+        questionOperations=[['+','-','*','/'][operation]];
         questionElement.textContent = `${firstNumber} ${symbol} ${secondNumber} = ?`;
         answerInput.value = "";
         answered = false;
@@ -80,6 +83,9 @@
         // Uma pergunta é encerrada na primeira tentativa, inclusive após erro.
         answered = true; lock(true);
         const hit = Number(answerInput.value) === answer;
+        window.LearningData?.record({game:'lightning',level:'standard',questionId,operations:questionOperations,
+            question:questionElement.textContent,answer:Number(answerInput.value),expected:answer,outcome:'answer',
+            responseMs:performance.now()-questionAt});
         if (hit) { correct++; streak++; bestStreak = Math.max(bestStreak, streak); }
         else { errors++; streak = 0; }
         elapsed = performance.now() - startedAt;

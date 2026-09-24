@@ -1,0 +1,28 @@
+* { box-sizing: border-box; }
+body { margin: 0; min-width: 320px; }
+.chess-page { max-width: 1120px; margin: auto; padding: 28px 20px; }
+h1 { margin: 0 0 10px; } p { line-height: 1.5; }
+.chess-layout { display: grid; grid-template-columns: minmax(0,1fr) minmax(240px,310px); gap: 28px; align-items: start; }
+#chess-board { display: grid; grid-template-columns: repeat(8,minmax(0,1fr)); grid-template-rows: repeat(8,minmax(0,1fr)); aspect-ratio: 1; width: 100%; max-width: 700px; margin: auto; border: clamp(6px,1.4vw,12px) solid #775133; border-radius: 8px; overflow: hidden; box-shadow: 0 12px 26px #37201625; container-type: inline-size; }
+.chess-square { position: relative; display: grid; place-items: center; min-width: 0; min-height: 0; width: 100%; height: 100%; padding: 0; border: 0; border-radius: 0; cursor: pointer; touch-action: manipulation; }
+.chess-light { background: linear-gradient(110deg,#ebd6b0,#dfc396); }
+.chess-dark { background: linear-gradient(110deg,#79563c,#503624); }
+.chess-piece { font-family: 'DejaVu Sans','Segoe UI Symbol','Apple Symbols',serif; font-size: clamp(24px,8cqw,62px); line-height: 1; pointer-events: none; }
+.chess-white { color: #fff9e9; text-shadow: 0 1px 2px #28180f,1px 0 #68472b,-1px 0 #68472b; }
+.chess-black { color: #191613; text-shadow: 0 1px 1px #f1d6a3; }
+.chess-selected { box-shadow: inset 0 0 0 4px #f2c14e; }
+.chess-target::after { content: ''; position: absolute; width: 22%; aspect-ratio: 1; border-radius: 50%; background: #f2c14e; border: 2px solid #624717; pointer-events: none; }
+.chess-target:has(.chess-piece)::after { width: 88%; border-radius: 8px; background: transparent; border: 3px dashed #ffdf73; }
+.chess-check { box-shadow: inset 0 0 0 4px #b51f35; }
+.chess-square:focus-visible { outline: 3px solid #0874c9; outline-offset: -4px; z-index: 1; }
+.chess-panel { padding: 22px; border: 1px solid #dae5ed; border-radius: 18px; background: #fff; }
+.chess-panel h2 { font-size: 1rem; margin: 20px 0 8px; }
+.chess-captures { margin: 0; font-size: 1.15rem; overflow-wrap: anywhere; }
+.chess-panel button,.promotion-options button { min-height: 44px; padding: 10px 16px; margin: 5px 0; background: #fff1b8; color: #12345b; border: 1px solid #d6bd75; border-radius: 10px; font: inherit; cursor: pointer; }
+.chess-panel button:focus-visible,.promotion-options button:focus-visible { outline: 3px solid #17659a; outline-offset: 2px; }
+#chess-history { max-height: 240px; overflow-y: auto; padding-left: 26px; font-size: .9rem; }
+#chess-message { min-height: 1.5em; }
+#promotion { max-width: min(460px,90vw); border: 1px solid #b8cedf; border-radius: 20px; color: #12345b; }
+#promotion::backdrop { background: #12345b88; }
+.promotion-options { display: flex; flex-wrap: wrap; gap: 10px; }
+@media(max-width:767px) { .chess-layout { grid-template-columns: 1fr; gap: 14px; } .chess-page { padding: 22px 12px; } .chess-panel { padding: 18px; } }

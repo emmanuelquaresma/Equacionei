@@ -1,0 +1,59 @@
+/* Estilos exclusivos das aulas; o cabeçalho usa site.css. */
+body { margin: 0; }
+.ds-course, .ds-course * { box-sizing: border-box; }
+.ds-course { max-width: 1120px; margin: auto; padding: 12px 16px 40px; line-height: 1.6; }
+.ds-course h1 { font-size: clamp(1.6rem, 4vw, 2.2rem); margin: 4px 0; }
+.ds-course h2 { font-size: 1.25rem; margin: 0 0 8px; }
+.ds-course h3 { font-size: 1rem; margin: 0 0 8px; }
+.ds-course p { margin: 8px 0 16px; }
+.ds-course-kicker { color: var(--site-blue); font-size: .8rem; font-weight: 700; }
+.ds-course a { color: var(--site-blue); }
+.ds-course-back, .ds-course-navigation a { display: inline-flex; align-items: center; min-height: 44px; }
+.ds-course-note { color: var(--site-muted); font-size: .9rem; }
+ .ds-course-progress { padding: 24px 0; border-bottom: 1px solid var(--site-line); }
+.ds-course-progress h2 { font-size: 1rem; }
+.ds-course-progress-line { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.ds-course-progress progress { width: min(100%, 300px); height: 12px; border: 0; border-radius: 20px; overflow: hidden; appearance: none; background: #e4edf3; accent-color: var(--site-blue); }
+.ds-course-progress progress::-webkit-progress-bar { background: #e4edf3; border-radius: 20px; }
+.ds-course-progress progress::-webkit-progress-value { background: var(--site-blue); border-radius: 20px; }
+.ds-course-progress progress::-moz-progress-bar { background: var(--site-blue); border-radius: 20px; }
+.ds-course-progress .ds-course-note { margin-bottom: 0; }
+.ds-course-topics ol { list-style: none; margin: 0; padding: 0; }
+.ds-course-topics li { border-bottom: 1px solid var(--site-line); }
+.ds-course-topics a { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 16px; padding: 24px 12px; text-decoration: none; border-radius: 10px; }
+.ds-course-topics a:hover, .ds-course-topics [aria-current] { background: #eef7fb; }
+.ds-lesson-number { font-size: 1.1rem; font-weight: 700; padding-top: 2px; color: var(--site-muted); }
+.ds-lesson-content { display: grid; gap: 4px; color: var(--site-ink, #223344); overflow-wrap: anywhere; }
+.ds-lesson-content strong { color: var(--site-blue); font-size: 1.15rem; }
+.ds-lesson-example, .ds-lesson-meta { font-size: .9rem; color: var(--site-muted); }
+.ds-lesson-meta { margin-top: 8px; }
+.ds-lesson-state { font-size: .8rem; color: var(--site-muted); }
+.ds-lesson-state.is-complete { color: #246946; font-weight: 700; }
+#foundation-lesson { min-width: 0; background: white; padding: 20px; border: 1px solid var(--site-line); border-radius: 16px; }
+.ds-course-bridge { padding: 12px; background: #eef7fb; border-radius: 12px; margin: 16px 0; }
+.ds-course-example > section { min-width: 0; }
+.ds-course pre { max-width: 100%; overflow-x: auto; padding: 12px; background: #f7fafc; border: 1px solid var(--site-line); border-radius: 10px; font: .9rem/1.6 ui-monospace, Consolas, monospace; white-space: pre; }
+.ds-course-exercise { border-top: 1px solid var(--site-line); padding-top: 16px; }
+.ds-course-button { display: inline-flex; min-height: 44px; align-items: center; padding: 8px 14px; background: #fff3c9; border: 1px solid var(--site-line); border-radius: 10px; font-weight: 700; text-decoration: none; }
+.ds-course summary { min-height: 44px; padding: 10px 0; cursor: pointer; }
+.ds-course-navigation { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; margin-top: 16px; }
+.ds-course :focus-visible { outline: 3px solid var(--site-blue); outline-offset: 3px; }
+@media (min-width: 900px) {
+ .ds-course { max-width: 900px; padding: 24px 32px 64px; }
+}
+@media (max-width: 599px) {
+ .ds-course-topics a { grid-template-columns: 28px minmax(0, 1fr); gap: 10px; padding: 20px 4px; }
+ #foundation-lesson { padding: 16px; }
+}
+
+/* Blocos opcionais da primeira aula enriquecida. */
+.ds-learning-block { margin: 24px 0; }
+.ds-learning-block table { width: 100%; border-collapse: collapse; margin: 12px 0; }
+.ds-learning-block caption { text-align: left; font-weight: 600; margin-bottom: 8px; }
+.ds-learning-block th, .ds-learning-block td { padding: 8px 12px; border-bottom: 1px solid var(--site-line); text-align: left; }
+.ds-learning-block label { display: block; font-weight: 600; }
+.ds-learning-block input { display: block; width: 100%; max-width: 240px; min-height: 44px; padding: 8px 12px; border: 1px solid var(--site-muted); border-radius: 8px; font: inherit; color: inherit; background: white; }
+.ds-learning-block input[aria-invalid] { border-color: #a12424; }
+.ds-learning-review { margin: 20px 0; }
+.ds-learning-review summary { font-weight: 600; }
+.ds-learning-block li { margin-bottom: 8px; }

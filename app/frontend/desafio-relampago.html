@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>∑quacionei | Desafio Relâmpago</title><link rel="stylesheet" href="/static/css/menu.css"><link rel="stylesheet" href="/static/css/site.css"><script src="/static/js/site-ui.js" defer></script><link rel="stylesheet" href="/static/css/game-layout.css"></head><body class="game-page" data-game-title="Desafio Relâmpago">
+    <header class="site-header">
+        <div class="site-header__inner">
+            <a class="site-brand" href="/" aria-label="Equacionei — Matemática, Exatas e Ciência de Dados — início">
+                <span class="site-brand__identity"><span class="site-brand__name" aria-hidden="true"><span class="site-brand__sum">∑</span>quacionei</span><span class="site-brand__tagline" aria-hidden="true">Matemática • Exatas • Ciência de Dados</span></span>
+            </a>
+            <nav class="site-nav" id="site-navigation" aria-label="Navegação principal">
+                <a href="/">Início</a>
+                <a href="/menu#atividades">Atividades</a>
+                <a href="/menu#jogos">Jogos</a>
+            </nav>
+            <a class="site-enter" href="/menu" aria-label="Entrar nas atividades">
+                <svg aria-hidden="true" viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M15 3h5v18h-5M3 12h12M10 7l5 5-5 5"/></svg>
+                <span>Entrar</span>
+            </a>
+            <button class="site-toggle" type="button" aria-controls="site-navigation" aria-expanded="false" aria-label="Abrir menu de navegação" hidden>
+                <svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+            </button>
+        </div>
+    </header>
+
+<main class="menu-page"><h1 id="game-title">Desafio Relâmpago</h1>        <section class="lightning-game" aria-labelledby="game-title">
+
+
+            <div class="game-board">                <dl class="game-stats" aria-label="Seu desempenho no desafio">
+                    <div><dt>Tempo</dt><dd id="game-time">00:00</dd></div>
+                    <div><dt>Erros</dt><dd id="game-errors">0</dd></div>
+                    <div><dt>Recorde pessoal</dt><dd id="game-record">—</dd></div>
+                    <div><dt>Pontos</dt><dd id="game-score">0</dd></div>
+                    <div><dt>Acertos</dt><dd id="game-correct">0</dd></div>
+                    <div><dt>Sequência</dt><dd id="game-streak">0</dd></div>
+                    <div><dt>Melhor sequência</dt><dd id="game-best-streak">0</dd></div>
+                </dl>
+                <p class="game-question" id="game-question" aria-live="polite">Pronto para começar?</p>
+                <button id="game-start" class="game-button game-button--confirm" type="button">Iniciar desafio</button>
+
+                <form class="game-form" id="game-form">
+                    <label class="sr-only" for="game-answer">Sua resposta</label>
+                    <input id="game-answer" name="answer" type="number" inputmode="numeric" autocomplete="off" placeholder="Sua resposta">
+                    <button class="game-button game-button--confirm" type="submit">Confirmar</button>
+                </form>
+
+                <p class="game-feedback" id="game-feedback" role="status" aria-live="polite"></p>
+
+
+            </div>
+        </section>
+<p>Suas respostas geram um histórico neste navegador. <a href="/static/data-science.html#dados">Explore em Meus Dados →</a></p><details class="game-help"><summary>ⓘ Como jogar</summary>            <div class="lightning-game__intro">
+
+
+                <p>Complete 10 cálculos corretos no menor tempo. Erros não encerram a rodada.</p>
+            </div></details></main><script src="/static/js/learning-data.js"></script><script src="/static/js/menu-game.js"></script></body></html>

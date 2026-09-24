@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Matemática pra Todos</title>
+    <title>∑quacionei | Matemática • Exatas • Ciência de Dados</title>
     <link rel="stylesheet" href="/static/css/home.css">
     <link rel="stylesheet" href="/static/css/site.css">
     <script src="/static/js/site-ui.js" defer></script>
@@ -11,14 +11,16 @@
 <body>
     <header class="site-header">
         <div class="site-header__inner">
-            <a class="site-brand" href="/" aria-label="Matemática pra Todos — início">
-                <span class="site-brand__symbol" aria-hidden="true">Σ</span>
-                <span>Matemática <span class="site-brand__sub">pra Todos</span></span>
+            <a class="site-brand" href="/" aria-label="Equacionei — Matemática, Exatas e Ciência de Dados — início">
+                <span class="site-brand__identity"><span class="site-brand__name" aria-hidden="true"><span class="site-brand__sum">∑</span>quacionei</span><span class="site-brand__tagline" aria-hidden="true">Matemática • Exatas • Ciência de Dados</span></span>
             </a>
             <nav class="site-nav" id="site-navigation" aria-label="Navegação principal">
                 <a href="/">Início</a>
-                <a href="/menu#atividades">Atividades</a>
+                <a href="/menu#atividades">Aplicações Matemáticas</a>
                 <a href="/menu#jogos">Jogos</a>
+                <a href="/static/data-science.html">Data Science</a>
+                <a href="/static/desenvolvimento.html">Desenvolvimento</a>
+                <a href="/static/sobre.html">Sobre</a>
             </nav>
             <a class="site-enter" href="/menu" aria-label="Entrar nas atividades">
                 <svg aria-hidden="true" viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M15 3h5v18h-5M3 12h12M10 7l5 5-5 5"/></svg>
@@ -31,15 +33,19 @@
     </header>
 
     <main class="home">
-        <h1 class="sr-only">Matemática pra Todos</h1>
-        <section class="opening" aria-label="Boas-vindas ao projeto Matemática pra Todos">
-            <img
+
+        <section class="opening" aria-label="Boas-vindas ao Equacionei">
+            <h1 class="sr-only">Equacionei</h1>
+            <div class="opening__illustration"><img
                 class="opening__banner"
                 src="/static/img/banner/banner-matematica-pra-todos.webp"
-                alt="Matemática pra Todos: família estudando matemática"
-            >
-            <a class="opening__button" href="/menu">Entrar <span aria-hidden="true">→</span></a>
+                alt="Família estudando matemática"
+            ><span class="opening__watermark" aria-hidden="true">∑quacionei</span></div>
+
         </section>
+        <section class="home-intro" aria-labelledby="home-about"><h2 id="home-about">Aprender exatas pode ser diferente.</h2><p>O ∑quacionei é um ambiente de aprendizagem criado para explorar Matemática, Exatas e Ciência de Dados de forma prática e interativa.</p><p>Aqui, conceitos deixam de ser apenas fórmulas e passam a ser experimentados por meio de aplicações, desafios, jogos e programação.</p></section>
+        <section class="home-practice" aria-labelledby="home-do"><h2 id="home-do">Aprenda fazendo</h2><p>Explore conceitos, teste soluções, resolva desafios e acompanhe os resultados na prática.</p><p>A proposta do ∑quacionei é transformar o aprendizado em experimentação.</p><ul class="home-concepts"><li><span aria-hidden="true">π</span> Matemática</li><li><span aria-hidden="true">√</span> Exatas</li><li><span aria-hidden="true">{ }</span> Ciência de Dados</li></ul></section>
+        <section class="home-process" aria-labelledby="home-path"><h2 id="home-path">Do conceito à prática</h2><ol><li>Aprenda</li><li>Experimente</li><li>Resolva</li><li>Evolua</li></ol></section>
     </main>
 </body>
 </html>

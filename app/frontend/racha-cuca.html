@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>∑quacionei | Racha-Cuca</title><link rel="stylesheet" href="/static/css/racha-cuca.css"><link rel="stylesheet" href="/static/css/site.css"><script src="/static/js/site-ui.js" defer></script><link rel="stylesheet" href="/static/css/game-layout.css"></head><body class="game-page" data-game-title="Racha-Cuca">
+    <header class="site-header">
+        <div class="site-header__inner">
+            <a class="site-brand" href="/" aria-label="Equacionei — Matemática, Exatas e Ciência de Dados — início">
+                <span class="site-brand__identity"><span class="site-brand__name" aria-hidden="true"><span class="site-brand__sum">∑</span>quacionei</span><span class="site-brand__tagline" aria-hidden="true">Matemática • Exatas • Ciência de Dados</span></span>
+            </a>
+            <nav class="site-nav" id="site-navigation" aria-label="Navegação principal">
+                <a href="/">Início</a>
+                <a href="/menu#atividades">Atividades</a>
+                <a href="/menu#jogos">Jogos</a>
+            </nav>
+            <a class="site-enter" href="/menu" aria-label="Entrar nas atividades">
+                <svg aria-hidden="true" viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M15 3h5v18h-5M3 12h12M10 7l5 5-5 5"/></svg>
+                <span>Entrar</span>
+            </a>
+            <button class="site-toggle" type="button" aria-controls="site-navigation" aria-expanded="false" aria-label="Abrir menu de navegação" hidden>
+                <svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+            </button>
+        </div>
+    </header>
+<main class="rc-page"><h1>🧩 Racha-Cuca</h1>
+<section id="rc-themes" aria-labelledby="rc-choose"><p class="game-presentation">Organize as peças, descubra sequências e desafie seu raciocínio.</p><h2 id="rc-choose">Escolha seu desafio</h2><div class="rc-themes">
+<button type="button" data-rc-theme="math"><strong>🔢 Matemática</strong><span>Organize números, tabuadas, operações e equações.</span></button>
+<button type="button" data-rc-theme="texts"><strong>📝 Textos</strong><span>Coloque palavras ou trechos na ordem correta.</span></button>
+<button type="button" data-rc-theme="verses"><strong>📖 Versículos Bíblicos</strong><span>Organize as partes de um versículo bíblico.</span></button>
+</div></section>
+<form id="rc-setup" class="rc-panel" hidden><h2 id="rc-theme-title" tabindex="-1"></h2><div id="rc-math-options">
+<label>Modalidade<select id="rc-mode"><option value="sequence">Sequência</option><option value="multiplication">Tabuada</option><option value="operations">Operações</option><option value="equations">Equações</option></select></label>
+</div><label>Dificuldade<select id="rc-level"><option value="easy">Fácil</option><option value="medium">Médio</option><option value="hard">Difícil</option></select></label>
+<label id="rc-table-label" hidden>Escolha a tabuada<select id="rc-table"><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select></label>
+<label id="rc-content-label" hidden>Desafio<select id="rc-content"></select></label><button type="submit">Iniciar jogo</button><button id="rc-back-themes" type="button">Escolher outro tema</button><p id="rc-preview-record"></p></form>
+<section id="rc-play" hidden aria-label="Partida"><p id="rc-description" aria-label="Desafio atual"></p>
+<dl class="rc-stats"><div><dt>Tempo</dt><dd id="rc-time">00:00</dd></div><div><dt><abbr title="Movimentos">Mov.</abbr></dt><dd id="rc-moves">0</dd></div><div><dt>Dicas</dt><dd id="rc-hints">0</dd></div><div><dt><abbr title="Melhor resultado">Melhor</abbr></dt><dd id="rc-record">—</dd></div></dl>
+<div id="rc-board" class="rc-board" tabindex="0" aria-label="Quebra-cabeça. Setas deslocam o espaço vazio."></div>
+<p id="rc-message" role="status"></p><p id="rc-hint-text" role="status"></p>
+<div class="rc-actions"><button id="rc-hint" type="button">💡 Dica</button><button id="rc-reset" type="button">Reiniciar</button><button id="rc-new" type="button">Embaralhar / Nova partida</button><button id="rc-config" type="button">Escolher tema</button></div>
+<section id="rc-win" class="rc-panel" hidden><h2 tabindex="-1">🎉 Parabéns!</h2><p id="rc-summary"></p><blockquote id="rc-full-text"></blockquote><p id="rc-reference"></p><a id="rc-source" hidden rel="noopener noreferrer" target="_blank"></a><button id="rc-next" type="button" hidden>Próximo desafio</button><button id="rc-again" type="button">Jogar novamente</button></section></section>
+<details class="rc-panel"><summary>ⓘ Como jogar</summary><p id="rc-goal"></p><p>Toque em uma peça ao lado do espaço vazio para deslizá-la. As peças móveis têm contorno e o símbolo ↔. Diagonais não são permitidas.</p><p>Organize da esquerda para a direita, de cima para baixo, deixando o vazio no canto inferior direito. Em Operações, organize pelos resultados de 1 a 15; em Equações, pelo valor de x de 1 a 15. Na Tabuada, organize os múltiplos escolhidos. Nos Textos e Versículos, reconstrua a ordem de leitura. O texto completo aparece após a vitória.</p><p>Com foco no tabuleiro, as setas deslocam o espaço vazio na direção indicada. Tab e Enter também funcionam. Reiniciar repete o desafio inicial; nova partida embaralha novamente.</p><p>As dicas revelam por oito segundos a posição final de um trecho e são contabilizadas. O recorde prioriza menos movimentos e depois menos tempo; também exibe as dicas usadas. A dificuldade aumenta o embaralhamento e a complexidade dos cálculos; a quantidade mínima de movimentos para resolver varia entre partidas.</p></details>
+<p id="rc-storage" role="status">Recordes e histórico das últimas 100 partidas ficam somente neste navegador.</p><a href="/menu#jogos">Voltar aos jogos</a>
+</main><script src="/static/data/racha-cuca-matematica.js"></script><script src="/static/data/racha-cuca-textos.js"></script><script src="/static/data/racha-cuca-versiculos.js"></script><script src="/static/js/racha-cuca-engine.js"></script><script src="/static/js/racha-cuca.js"></script></body></html>

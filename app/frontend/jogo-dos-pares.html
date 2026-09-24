@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>∑quacionei | Jogo dos Pares</title>
+<link rel="stylesheet" href="/static/css/site.css"><link rel="stylesheet" href="/static/css/game-layout.css"><link rel="stylesheet" href="/static/css/fractions.css"><link rel="stylesheet" href="/static/css/jogo-dos-pares.css"><script src="/static/js/site-ui.js" defer></script>
+</head><body class="game-page" data-game-title="Jogo dos Pares">
+    <header class="site-header">
+        <div class="site-header__inner">
+            <a class="site-brand" href="/" aria-label="Equacionei — Matemática, Exatas e Ciência de Dados — início">
+                <span class="site-brand__identity"><span class="site-brand__name" aria-hidden="true"><span class="site-brand__sum">∑</span>quacionei</span><span class="site-brand__tagline" aria-hidden="true">Matemática • Exatas • Ciência de Dados</span></span>
+            </a>
+            <nav class="site-nav" id="site-navigation" aria-label="Navegação principal">
+                <a href="/">Início</a>
+                <a href="/menu#atividades">Aplicações Matemáticas</a>
+                <a href="/menu#jogos">Jogos</a>
+                <a href="/static/data-science.html">Data Science</a>
+                <a href="/static/desenvolvimento.html">Desenvolvimento</a>
+                <a href="/static/sobre.html">Sobre</a>
+            </nav>
+            <a class="site-enter" href="/menu" aria-label="Entrar nas atividades">
+                <svg aria-hidden="true" viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M15 3h5v18h-5M3 12h12M10 7l5 5-5 5"/></svg>
+                <span>Entrar</span>
+            </a>
+            <button class="site-toggle" type="button" aria-controls="site-navigation" aria-expanded="false" aria-label="Abrir menu de navegação" hidden>
+                <svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+            </button>
+        </div>
+    </header>
+<main class="pair-page"><h1>Jogo dos Pares — Frações</h1>
+<div class="pair-context"><label for="pair-level">Frações · Escolha o nível</label><select id="pair-level"></select></div>
+<div class="pair-hud"><span id="pair-round"></span><span id="pair-count"></span><progress id="pair-progress" max="5" value="0" aria-label="Rodadas concluídas"></progress></div>
+<section aria-label="Desafio de frações"><p id="pair-instruction"></p><div class="pair-column-headings"><h2 id="pair-left-heading">Representação</h2><h2 id="pair-right-heading">Fração</h2></div><div id="pair-board" class="pair-board" aria-label="Três pares em duas colunas"></div></section>
+<p id="pair-message" role="status" aria-live="polite"></p>
+<div class="pair-actions"><button id="pair-next" type="button" hidden>Próxima rodada →</button><button id="pair-restart" type="button">Reiniciar</button></div>
+<section id="pair-win" class="pair-win" hidden><h2 tabindex="-1">Parabéns! Você concluiu o desafio.</h2><p>Você completou as cinco rodadas deste nível.</p><button id="pair-again" type="button">Jogar novamente</button><button id="pair-next-level" type="button">Próximo nível →</button><a href="/menu#jogos">Voltar aos jogos</a></section>
+<details class="game-help"><summary>ⓘ Como jogar</summary><p>Selecione um cartão da esquerda e um da direita, em qualquer ordem. No nível 1, combine o gráfico com a fração. No nível 2, combine frações equivalentes escritas de formas diferentes. Tocar em outro cartão da mesma coluna apenas troca sua seleção.</p><p>Uma pizza inteira tem partes iguais. Conte as partes preenchidas e compare com o total. Frações equivalentes representam a mesma quantidade: metade também pode ser três partes de um total de seis.</p><p>No nível 3, some os numeradores e mantenha o denominador: as partes continuam do mesmo tamanho. Combine cada operação da esquerda com seu resultado na direita.</p><p>Use toque, clique ou Tab e Enter. Um erro libera os cartões após um breve intervalo. Reiniciar começa cinco novas rodadas do nível escolhido.</p></details>
+<a class="pair-back" href="/menu#jogos">Voltar aos jogos</a>
+<noscript>Ative o JavaScript do navegador para jogar.</noscript></main>
+<script src="/static/data/jogo-dos-pares.js"></script><script src="/static/js/fractions.js"></script><script src="/static/js/jogo-dos-pares-engine.js"></script><script src="/static/js/jogo-dos-pares.js"></script></body></html>

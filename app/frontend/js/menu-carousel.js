@@ -1,12 +1,11 @@
 (() => {
-    const root = document.querySelector('.activity-carousel');
-    if (!root) return;
-    const track = root.querySelector('.subject-grid');
+    function initialize(root) {
+    const track = root.querySelector('.carousel-track');
     const cards = [...track.querySelectorAll('.subject-card')];
-    const prev = document.getElementById('carousel-prev');
-    const next = document.getElementById('carousel-next');
+    const prev = root.querySelector('[data-prev]');
+    const next = root.querySelector('[data-next]');
     const dots = root.querySelector('.carousel-dots');
-    const status = document.getElementById('carousel-status');
+    const status = root.querySelector('.carousel-status');
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     let active = 0;
     let frame = 0;
@@ -17,7 +16,7 @@
         button.type = 'button';
         button.className = 'carousel-dot';
         button.setAttribute('aria-label', `Mostrar ${card.querySelector('h2').textContent}`);
-        button.setAttribute('aria-controls', 'activity-track');
+        button.setAttribute('aria-controls', track.id);
         button.addEventListener('click', () => go(index));
         dots.append(button);
         card.draggable = false;
@@ -32,6 +31,7 @@
         status.textContent = `${active + 1} de ${cards.length}: ${cards[active].querySelector('h2').textContent}`;
     }
     function go(index, instant = false) {
+        if (!root.getClientRects().length) return;
         const i = Math.max(0, Math.min(cards.length - 1, index));
         // offsetWidth independe da escala visual aplicada ao card.
         const left = cards[i].offsetLeft + cards[i].offsetWidth / 2 - track.clientWidth / 2;
@@ -40,6 +40,7 @@
     }
     function sync() {
         frame = 0;
+        if (!root.getClientRects().length) return;
         const center = track.scrollLeft + track.clientWidth / 2;
         let closest = 0;
         cards.forEach((card, i) => {
@@ -90,21 +91,25 @@
     track.addEventListener('click', (event) => {
         if (dragged) { event.preventDefault(); event.stopPropagation(); dragged = false; }
     }, true);
-    const practice = document.getElementById('desafio');
-    function followHash() {
-        if (window.location.hash === '#desafio') {
-            practice.open = true;
-            requestAnimationFrame(() => practice.scrollIntoView({ block: 'start', behavior: reducedMotion.matches ? 'instant' : 'smooth' }));
-        } else if (window.location.hash === '#jogos') {
-            go(cards.findIndex((card) => card.id === 'jogos'), true);
-        }
-    }
-    cards.forEach((card) => {
-        if (card.getAttribute('href') === '#desafio') card.addEventListener('click', () => { practice.open = true; });
-    });
-    window.addEventListener('hashchange', followHash);
     new ResizeObserver(() => go(active, true)).observe(track);
     root.querySelector('.carousel-controls').hidden = false;
     mark(0);
+    return () => go(active, true);
+    }
+    const refresh = [...document.querySelectorAll('.activity-carousel')].map(initialize);
+    function followHash() {
+        const title = document.getElementById('menu-title');
+        if (title) {
+            const games = location.hash === '#jogos';
+            document.getElementById('jogos').hidden = !games;
+            document.getElementById('atividades').hidden = games;
+            title.textContent = games ? 'Jogos educativos' : 'Aplicações matemáticas';
+            document.getElementById('menu-description').textContent = games ? 'Escolha um jogo e desafie seu raciocínio.' : 'Entenda o conceito, veja um exemplo e experimente as funções.';
+            document.title = `∑quacionei | ${games ? 'Jogos' : 'Aplicações Matemáticas'}`;
+            if (location.hash === '#desafio') location.replace('/static/desafio-relampago.html');
+        }
+        requestAnimationFrame(() => refresh.forEach(update => update()));
+    }
+    window.addEventListener('hashchange', followHash);
     followHash();
 })();

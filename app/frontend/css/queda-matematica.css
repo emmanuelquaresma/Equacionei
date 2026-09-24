@@ -1,0 +1,29 @@
+* { box-sizing: border-box; }
+body { margin: 0; min-width: 320px; }
+.queda-page { max-width: 1050px; margin: auto; padding: 24px 18px; }
+h1 { margin-bottom: 10px; } p { line-height: 1.5; }
+.q-panel { background: #fff; border: 1px solid #dae5ed; padding: 20px; border-radius: 18px; }
+button,select { font: inherit; min-height: 44px; padding: 10px 14px; border: 1px solid #b7cddd; border-radius: 10px; color: #12345b; background: #fff1b8; }
+button { cursor: pointer; touch-action: manipulation; }
+button:focus-visible,select:focus-visible { outline: 3px solid #17659a; outline-offset: 2px; }
+button:disabled { opacity: .5; cursor: default; }
+.q-stats { display: grid; grid-template-columns: repeat(8,minmax(0,1fr)); gap: 6px; margin: 12px 0; }
+.q-stats div { padding: 8px; border-radius: 10px; background: #fff; }
+dt { font-size: .75rem; } dd { margin: 4px 0 0; font-weight: 750; }
+#q-expression { margin: 8px 0; padding: 14px 8px; text-align: center; font-size: clamp(1.1rem,3vw,1.8rem); font-weight: 750; background: #fff1b8; border-radius: 14px; }
+#q-arena { position: relative; height: clamp(240px,45svh,440px); overflow: hidden; border: 2px solid #c6deef; border-radius: 16px; background: #eaf5ff; }
+.q-option { position: absolute; top: 0; width: 22%; min-height: 48px; padding: 10px 2px; font-size: clamp(.85rem,2.5vw,1.25rem); font-weight: 750; background: #fff; box-shadow: 0 4px 10px #12345b15; will-change: transform; }
+.q-floor { position: absolute; bottom: 0; width: 100%; text-align: center; font-size: .7rem; background: #d1e6f6; }
+#q-overlay { position: absolute; inset: 0; z-index: 2; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #f6faffef; }
+.q-actions { display: flex; gap: 10px; }
+#q-feedback { min-height: 1.5em; margin: 8px 0; }
+#q-result { margin-top: 18px; } #q-result button,#q-result a { display: inline-block; margin: 5px; }
+@media(max-width:767px) {
+    .q-stats { grid-template-columns: repeat(4,minmax(0,1fr)); gap: 3px; }
+    .q-stats div { padding: 3px 5px; } dt { font-size: .65rem; } dd { font-size: .8rem; margin-top: 1px; }
+    body.q-running #q-play { position: fixed; z-index: 30; inset: 0; height: 100dvh; padding: 8px 10px max(8px,env(safe-area-inset-bottom)); display: flex; flex-direction: column; background: #f7fafc; overflow: auto; }
+    .q-stats { flex: none; margin: 0; }
+    #q-arena { flex: 1; min-height: 100px; height: auto; }
+    #q-expression { flex: none; padding: 10px 4px; }
+    .q-actions { flex: none; }
+}

@@ -3,17 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dama Matemática | Matemática pra Todos</title>
+    <title>∑quacionei | Dama Matemática</title>
     <link rel="stylesheet" href="/static/css/dama.css">
     <link rel="stylesheet" href="/static/css/site.css">
     <script src="/static/js/site-ui.js" defer></script>
-</head>
-<body class="internal-page">
+<link rel="stylesheet" href="/static/css/game-layout.css"></head>
+<body class="internal-page game-page" data-game-title="Dama Matemática">
     <header class="site-header">
         <div class="site-header__inner">
-            <a class="site-brand" href="/" aria-label="Matemática pra Todos — início">
-                <span class="site-brand__symbol" aria-hidden="true">Σ</span>
-                <span>Matemática <span class="site-brand__sub">pra Todos</span></span>
+            <a class="site-brand" href="/" aria-label="Equacionei — Matemática, Exatas e Ciência de Dados — início">
+                <span class="site-brand__identity"><span class="site-brand__name" aria-hidden="true"><span class="site-brand__sum">∑</span>quacionei</span><span class="site-brand__tagline" aria-hidden="true">Matemática • Exatas • Ciência de Dados</span></span>
             </a>
             <nav class="site-nav" id="site-navigation" aria-label="Navegação principal">
                 <a href="/">Início</a>
@@ -83,7 +82,7 @@
             </div>
         </section>
         <div id="local-game" hidden>
-        <button id="local-back" class="restart-button mode-back" type="button">Escolher modo</button>
+
         <section class="game-layout" aria-labelledby="game-heading">
             <div class="board-area">
                 <div class="game-intro">
@@ -106,6 +105,7 @@
             </aside>
         </section>
 
+        <button id="local-back" class="restart-button mode-back" type="button">Escolher modo</button>
         <section id="winner-card" class="winner-card" hidden aria-live="assertive">
             <h2 id="winner-message"></h2>
             <button id="play-again" class="play-again-button" type="button">Jogar novamente</button>
