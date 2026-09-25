@@ -90,7 +90,25 @@ const DataScienceFundamentals = [
     "validator": "OUTPUT_EQUALS",
     "note": "",
     "context": "Contagem de valores repetidos",
-    "minutes": 8
+    "minutes": 8,
+    "learning": {
+      "experiment": "mode",
+      "objective": "Contar categorias e identificar uma ou mais modas, distinguindo frequência de valor numérico.",
+      "concept": "A moda é o valor ou a categoria que aparece com maior frequência. Pode haver uma moda, mais de uma moda em caso de empate ou nenhuma moda única quando todas as frequências são iguais. Para categorias nominais, a moda pode resumir os dados sem transformar nomes em números.",
+      "intuitiveExample": "Uma cafeteria quer saber qual produto apareceu mais nos pedidos observados. Essa contagem descreve os pedidos desta lista; sozinha, não explica por que as pessoas escolheram cada produto nem prevê o próximo pedido.",
+      "datasetId": "eq-pedidos-cafeteria-v1",
+      "observe": "Conte os pedidos antes de olhar o resultado. Qual produto aparece mais? Se café receber mais um pedido, ele passa a ser o único mais frequente ou empata com pão?",
+      "interpretation": "Na amostra inicial, pão aparece três vezes e é a moda. Com mais um pedido de café, café e pão aparecem três vezes cada: há duas modas. A frequência conta ocorrências; a moda identifica as categorias com a maior contagem. Como estes dados são fictícios e pequenos, eles servem para aprender a contagem, não para orientar decisões reais de estoque.",
+      "codeExplanation": "O dicionário frequencias guarda cada produto como chave e sua contagem como valor. O laço percorre todos os pedidos; get(produto, 0) começa a contagem em zero. Depois, max encontra a maior frequência e a compreensão de lista reúne todos os produtos empatados nessa frequência.",
+      "tryIt": "Inclua o pedido adicional de café e observe o empate. Depois altere a lista no código para que suco apareça quatro vezes. Quais categorias são moda agora?",
+      "application": "Uma equipe pode usar a moda para resumir a categoria mais comum, como o produto mais pedido em um período. Antes de agir, confira o tamanho e o período da amostra, os empates e também outras medidas relevantes, como o total vendido.",
+      "summary": [
+        "Moda é o valor ou categoria de maior frequência.",
+        "Pode haver empate e, portanto, mais de uma moda.",
+        "Uma lista sem repetição não tem moda única nesta convenção.",
+        "A frequência descreve a amostra; contexto e período importam."
+      ]
+    }
   },
   {
     "id": "ds-fund-variancia",

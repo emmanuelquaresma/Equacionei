@@ -55,7 +55,13 @@ function testFundamentalsEnrichment(rows, Progress, Lesson, datasets) {
     const six = Lesson.salesExperiment(900, dataset, false, true);
     assert(six.count === 6 && six.median === 97.5, 'mediana com quantidade par');
     assert(Lesson.salesExperiment(0, dataset, true, true).median === 95, 'ordenar antes de encontrar centro');
-    assert(rows.filter(row => row.learning).map(row => row.id).join() === 'ds-fund-media,ds-fund-mediana', 'somente Média e Mediana enriquecidas');
+    const modeDataset = datasets.find(d => d.id === rows[2].learning.datasetId);
+    assert(modeDataset.rowCount === modeDataset.rows.length && modeDataset.columnCount === modeDataset.variables.length, 'dataset de categorias tem metadados coerentes');
+    const mode = Lesson.modeExperiment(modeDataset), tie = Lesson.modeExperiment(modeDataset, true);
+    assert(mode.modes.join() === 'pão' && mode.maximum === 3, 'moda única na lista inicial');
+    assert(tie.modes.join() === 'café,pão' && tie.maximum === 3, 'empate entre duas modas');
+    assert(modeDataset.rows.length === 8, 'experimento não altera os dados de referência');
+    assert(rows.filter(row => row.learning).map(row => row.id).join() === 'ds-fund-media,ds-fund-mediana,ds-fund-moda', 'Média, Mediana e Moda enriquecidas');
     assert(rows[0].id === 'ds-fund-media' && rows[0].expectedOutput === '10.0', 'contrato do exercício preservado');
     return 'Progresso compatível, retomada, falhas de storage e simulação: OK';
 }

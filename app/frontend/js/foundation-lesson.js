@@ -24,10 +24,21 @@ const FoundationLesson = (() => {
             : 'mediana = sorted(vendas)[3]';
         return {mean, median, count: values.length, code: `vendas = [${values.join(', ')}]\nmedia = sum(vendas) / len(vendas)\n${medianCode}\nprint(round(media, 2))\nprint(mediana)`};
     }
+    function modeExperiment(dataset, addCafe = false) {
+        const values = dataset.rows.map(row => row[0]);
+        if (addCafe) values.push('café');
+        const counts = new Map();
+        values.forEach(value => counts.set(value, (counts.get(value) || 0) + 1));
+        const maximum = Math.max(...counts.values());
+        const modes = [...counts].filter(([, count]) => count === maximum).map(([value]) => value).sort();
+        const code = `produtos = ${JSON.stringify(values)}\nfrequencias = {}\nfor produto in produtos:\n    frequencias[produto] = frequencias.get(produto, 0) + 1\nmaior = max(frequencias.values())\nmodas = sorted([produto for produto in frequencias if frequencias[produto] == maior])\nprint(modas)`;
+        return {counts, modes, maximum, code, values};
+    }
     function render(row, datasets) {
         const content = row.learning;
         if (!content) return;
         const isMedian = content.experiment === 'median';
+        const isMode = content.experiment === 'mode';
         const concept = document.getElementById('lesson-concept');
         concept.before(section('Objetivo', content.objective));
         concept.before(node('h3', 'Conceito'));
@@ -54,18 +65,28 @@ const FoundationLesson = (() => {
             table.append(head, body);
             dataBlock.append(table, node('p', dataset.source, 'ds-course-note'));
             blocks.append(dataBlock, section('Observe os dados', content.observe));
-            const experiment = section('Experimente', isMedian
+            const experiment = section('Experimente', isMode
+                ? 'Observe qual produto aparece mais vezes. Depois inclua mais um pedido de café e veja se a moda muda ou se há empate.'
+                : isMedian
                 ? 'Compare o relatório de sete dias com o dos primeiros seis dias. A tabela acima permanece como referência; o código e os resultados acompanham o período selecionado.'
                 : 'Mude apenas a venda do sétimo dia. A tabela acima é a amostra original; os resultados e o código abaixo acompanham sua simulação.');
-            const label = node('label', 'Venda do dia 7 (R$)');
-            label.htmlFor = 'lesson-sale';
-            const input = node('input');
-            input.type = 'number'; input.id = 'lesson-sale'; input.min = '0'; input.max = '2000'; input.step = '1'; input.value = '900';
-            input.setAttribute('aria-describedby', 'lesson-sale-help');
-            const help = node('p', 'Use um valor inteiro de 0 a 2.000. Comece comparando 900 com 100.', 'ds-course-note'); help.id = 'lesson-sale-help';
+            let input, includeLast;
+            if (isMode) {
+                const toggleLabel = node('label', undefined, 'ds-learning-toggle');
+                input = node('input'); input.type = 'checkbox'; input.id = 'lesson-add-cafe';
+                toggleLabel.append(input, node('span', 'Adicionar mais um pedido de café'));
+                experiment.append(toggleLabel);
+            } else {
+                const label = node('label', 'Venda do dia 7 (R$)');
+                label.htmlFor = 'lesson-sale';
+                input = node('input');
+                input.type = 'number'; input.id = 'lesson-sale'; input.min = '0'; input.max = '2000'; input.step = '1'; input.value = '900';
+                input.setAttribute('aria-describedby', 'lesson-sale-help');
+                const help = node('p', 'Use um valor inteiro de 0 a 2.000. Comece comparando 900 com 100.', 'ds-course-note'); help.id = 'lesson-sale-help';
+                experiment.append(label, input, help);
+            }
             const output = node('p'); output.id = 'lesson-simulation'; output.setAttribute('aria-live', 'polite');
-            experiment.append(label, input, help, output);
-            let includeLast;
+            experiment.append(output);
             if (isMedian) {
                 const toggleLabel = node('label', undefined, 'ds-learning-toggle');
                 includeLast = node('input'); includeLast.type = 'checkbox'; includeLast.id = 'lesson-include-last'; includeLast.checked = true;
@@ -75,9 +96,17 @@ const FoundationLesson = (() => {
             const python = section('Experimente com Python', content.codeExplanation);
             const pre = node('pre'), code = node('code'); code.id = 'lesson-sales-code'; pre.tabIndex = 0; pre.setAttribute('aria-label', 'Código Python da simulação'); pre.append(code);
             const result = node('pre'); result.id = 'lesson-sales-output'; result.tabIndex = 0; result.setAttribute('aria-label', 'Saída esperada: média e mediana');
-            python.append(pre, node('h3', 'Resultado esperado: média e mediana'), result,
+            python.append(pre, node('h3', isMode ? 'Resultado esperado: moda' : 'Resultado esperado: média e mediana'), result,
                 node('p', `Para executar esta simulação, copie o código para o editor do laboratório. Ela é uma exploração livre. Exercício de conclusão: ${row.description}`, 'ds-course-note'));
             function update() {
+                if (isMode) {
+                    const sample = modeExperiment(dataset, input.checked);
+                    const frequencies = [...sample.counts].map(([value, count]) => `${value}: ${count}`).join(' · ');
+                    output.textContent = `Frequências: ${frequencies}. Moda${sample.modes.length > 1 ? 's' : ''}: ${sample.modes.join(' e ')} (${sample.maximum} pedidos${sample.modes.length > 1 ? ' cada' : ''}).`;
+                    code.textContent = sample.code;
+                    result.textContent = JSON.stringify(sample.modes);
+                    return;
+                }
                 const included = includeLast ? includeLast.checked : true;
                 input.disabled = !included;
                 if (included && (!input.value || !input.checkValidity())) {
@@ -113,5 +142,5 @@ const FoundationLesson = (() => {
         const list = node('ul'); content.summary.forEach(text => list.append(node('li', text))); summary.append(list);
         document.querySelector('.ds-course-navigation').before(ending, summary);
     }
-    return {render, salesExperiment};
+    return {render, salesExperiment, modeExperiment};
 })();

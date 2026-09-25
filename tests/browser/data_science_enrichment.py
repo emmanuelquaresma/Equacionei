@@ -76,12 +76,18 @@ try:
    js("document.getElementById('lesson-include-last').scrollIntoView({block:'center'})");shot(f'mediana-{width}')
   click('#lesson-next');assert js("document.getElementById('lesson-title').textContent")=='Moda'
   assert not js("!!document.getElementById('lesson-sale')")
+  assert js("!!document.getElementById('lesson-add-cafe')")
+  assert 'Moda: pão (3 pedidos)' in js("document.getElementById('lesson-simulation').textContent")
+  click('#lesson-add-cafe')
+  assert 'Modas: café e pão (3 pedidos cada)' in js("document.getElementById('lesson-simulation').textContent")
+  assert 'café' in js("document.getElementById('lesson-sales-code').textContent")
   click('#lesson-prev')
   click('#lesson-prev');assert js("!!document.getElementById('lesson-sale')")
   click('#foundation-lesson .ds-course-back');assert js("document.activeElement.closest('#foundation-topics')!==null")
   ok(f'{width}px: {cols} colunas no mapa; aula, teclado, ida/volta, reload, simulação e overflow OK')
  nav('data-science/fundamentos.html#ds-fund-media')
  experiments=js("[...[900,100,0,120,2000].map(v=>FoundationLesson.salesExperiment(v,LearningDatasets[0])),FoundationLesson.salesExperiment(900,LearningDatasets[0],false,true),FoundationLesson.salesExperiment(0,LearningDatasets[0],true,true)]")
+ mode_experiments=js("[FoundationLesson.modeExperiment(LearningDatasets.find(d=>d.id==='eq-pedidos-cafeteria-v1')),FoundationLesson.modeExperiment(LearningDatasets.find(d=>d.id==='eq-pedidos-cafeteria-v1'),true)]")
  js("localStorage.setItem('unrelated-record','preserve');localStorage.setItem('matematica.python.progress.v1',JSON.stringify({version:1,lastExercise:'ds-fund-media',exercises:{print:{completed:true,draft:'print(42)'},'ds-fund-media':{draft:'print(0)',attempts:2,hintsUsed:1,elapsedTime:12,completed:false}}}))")
  click('#lesson-practice');wait("typeof PythonRunner!=='undefined' && !document.getElementById('py-run').disabled")
  assert js("document.getElementById('py-code').value")=='print(0)'
@@ -101,6 +107,11 @@ try:
   result=js('PythonRunner.create().run('+json.dumps(e['code'])+')')
   assert result['status']=='done' and abs(float(result['stdout'].splitlines()[0])-e['mean'])<.006 and float(result['stdout'].splitlines()[1])==e['median'],result
  ok('Sete cenários de Média e Mediana executados no MicroPython: resultados conferem')
+ for e in mode_experiments:
+  result=js('PythonRunner.create().run('+json.dumps(e['code'])+')')
+  expected="["+", ".join("'"+value.encode('ascii','backslashreplace').decode()+"'" for value in e['modes'])+"]"
+  assert result['status']=='done' and result['stdout'].strip()==expected,result
+ ok('Dois cenários de Moda executados no MicroPython: moda única e empate conferem')
  imports=js("(async()=>{const r=PythonRunner.create(),out=[];for(const name of ['numpy','pandas','matplotlib','sklearn']){const result=await r.run('import '+name);out.push({name,error:result.error});}return out;})()")
  assert all('ImportError' in r['error'] for r in imports)
  ok('Ausência de NumPy, pandas, Matplotlib e scikit-learn confirmada no motor atual')
