@@ -19,13 +19,24 @@
         const landscape = matchMedia('(max-width: 1000px) and (orientation: landscape)').matches;
         const spacing = parseFloat(style.paddingTop) + parseFloat(style.paddingBottom)
             + parseFloat(getComputedStyle(hud).marginBottom) + parseFloat(layoutStyle.rowGap);
-        // Inclui feedback e legenda: mensagens maiores também cabem na reserva.
+        // Acima de 430px, preserva o ajuste existente à altura disponível.
         const reservedControls = landscape ? 0 : controls.getBoundingClientRect().height;
         const availableHeight = viewport - header.offsetHeight - hud.offsetHeight - spacing - reservedControls;
         const availableWidth = landscape ? (layout.clientWidth - parseFloat(layoutStyle.columnGap)) / 2 : layout.clientWidth;
         const rows = state.grid.length, columns = state.grid[0].length;
-        const cell = Math.max(1, Math.min(availableWidth / columns, availableHeight / rows, 650 / columns));
-        page.style.setProperty('--maze-board-width', `${Math.floor(cell * columns)}px`);
+        const narrow = matchMedia('(max-width: 430px)').matches;
+        // No celular estreito, os controles e textos seguem abaixo no fluxo da página.
+        // Não reduz o mapa para reservar espaço vertical à legenda ou ao feedback.
+        const cell = Math.max(1, Math.min(availableWidth / columns, narrow ? Infinity : availableHeight / rows, 650 / columns));
+        const boardWidth = Math.floor(cell * columns);
+        page.style.setProperty('--maze-board-width', `${boardWidth}px`);
+        // Retina: aumenta apenas o bitmap; desenho, colisões e gestos mantêm suas coordenadas.
+        // Fora do breakpoint, inclusive após rotação, mantém o bitmap original de 650px.
+        const bitmap = narrow ? Math.max(650, Math.ceil(boardWidth * (window.devicePixelRatio || 1))) : 650;
+        if (canvas.width !== bitmap || canvas.height !== bitmap) {
+            canvas.width = bitmap;
+            canvas.height = bitmap;
+        }
     }
     window.addEventListener('resize', resizeGameBoard);
     window.addEventListener('orientationchange', resizeGameBoard);
@@ -45,7 +56,9 @@
         return {row:v.from.row+(v.to.row-v.from.row)*t,col:v.from.col+(v.to.col-v.from.col)*t};
     }
     function render(now) {
-        const cell=canvas.width/state.grid.length;
+        // Sistema lógico original de 650×650, independente da resolução física do Canvas.
+        ctx.setTransform(canvas.width/650,0,0,canvas.height/650,0,0);
+        const cell=650/state.grid.length;
         ctx.fillStyle='#f5f9fc';ctx.fillRect(0,0,650,650);
         state.grid.forEach((line,row)=>line.forEach((wall,col)=>{if(wall){ctx.fillStyle='#b7d4e8';ctx.fillRect(col*cell+2,row*cell+2,cell-4,cell-4);ctx.fillStyle='#d4e7f4';ctx.fillRect(col*cell+4,row*cell+4,cell-8,4);}}));
         ctx.textAlign='center';ctx.textBaseline='middle';ctx.font='700 25px system-ui';

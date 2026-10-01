@@ -62,3 +62,34 @@ body { min-width: 320px; margin: 0; color: var(--ink); font-family: "Nunito", "S
 #online-board .square:disabled { cursor: default; opacity: 1; }
 #network-message:not(:empty) { margin-bottom: 20px; }
 .mode-panel button:disabled { opacity: 0.6; cursor: wait; }
+
+/* Controles locais compactos; os estilos e o fluxo da sala online são preservados. */
+.dama-controls { display: flex; flex-wrap: wrap; align-items: end; gap: 8px 12px; margin-bottom: 6px; }
+.dama-controls label { display: grid; gap: 3px; font-size: .8rem; font-weight: 650; }
+.dama-controls select { min-height: 44px; max-width: 100%; padding: 6px 8px; border: 1px solid #a6bdce; border-radius: 8px; background: white; color: var(--ink); font: inherit; font-size: 16px; }
+.dama-matchup { margin: 4px 0; font-size: .85rem; font-weight: 650; }
+#checkers-board .square:disabled { cursor: default; opacity: 1; }
+#bot-notice:empty { display: none; }
+#bot-notice { margin: 8px 0; font-size: .85rem; }
+.game-page #local-game .checkers-board { width: min(100%, calc(100vh - 230px)); width: min(100%, calc(100dvh - 230px)); }
+#local-game .game-layout { gap: 12px; }
+@media(max-width: 760px) {
+    #local-game .game-panel { padding: 12px; }
+    #local-game .game-status { grid-template-columns: 1fr 1fr; gap: 4px 12px; margin-bottom: 8px; }
+    #local-game .game-status div { padding: 4px 0; align-items: center; }
+    #local-game .game-status dt { font-size: .75rem; }
+    #local-game .turn-indicator { margin-bottom: 6px; padding: 6px; }
+    #local-game .mode-back { margin-top: 8px; }
+}
+/* Em paisagem baixa, controles ao lado liberam altura para o tabuleiro. */
+@media (orientation: landscape) and (max-height: 500px) and (min-width: 580px) {
+    #local-game { display: grid; grid-template-columns: minmax(230px, 1fr) minmax(240px, 1fr); gap: 4px 16px; align-items: start; }
+    #local-game .game-layout { display: contents; }
+    #local-game .board-area { grid-column: 2; grid-row: 1 / span 5; }
+    #local-game > .dama-controls, #local-game > .dama-matchup, #local-game .game-panel, #local-back, #bot-notice { grid-column: 1; }
+    .game-page #local-game .checkers-board { width: min(100%, calc(100dvh - 130px)); border-width: 9px; }
+    #local-game .game-panel { padding: 8px; }
+    #local-game .turn-indicator { display: none; }
+    #local-game .game-status { margin-bottom: 4px; }
+    #local-game #winner-card { grid-column: 1 / -1; }
+}

@@ -18,3 +18,7 @@
 .carousel-track:focus-visible,.carousel-controls button:focus-visible { outline: 3px solid #17659a; outline-offset: 3px; }
 @media(max-width:580px) { .activity-carousel { --card-width: min(85vw,calc(100vw - 56px)); } .activity-carousel .carousel-arrow { width: 32px; } }
 @media(prefers-reduced-motion:reduce) { .activity-carousel .subject-card { transition: none; } }
+
+/* Altura por card, habilitada somente no carrossel de aplicações matemáticas. */
+.activity-carousel[data-fit-active] .carousel-track { align-items: flex-start; box-sizing: border-box; overflow-y: hidden; }
+.activity-carousel[data-fit-active] .carousel-arrow { top: var(--carousel-arrow-top, 45%); }

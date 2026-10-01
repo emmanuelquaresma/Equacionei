@@ -38,9 +38,10 @@
 
     <main class="checkers-page">
         <section id="mode-choice" class="game-panel mode-panel" aria-labelledby="mode-title">
-            <h2 id="mode-title">Como você quer jogar?</h2>
+            <h2 id="mode-title">Modo de jogo</h2>
             <div class="mode-actions">
-                <button id="choose-local" class="restart-button" type="button">Jogar local</button>
+                <button id="choose-local" class="restart-button" type="button">2 Jogadores</button>
+                <button id="choose-computer" class="restart-button" type="button">Contra o computador</button>
                 <button id="choose-online" class="restart-button" type="button">Jogar online</button>
             </div>
         </section>
@@ -82,6 +83,11 @@
             </div>
         </section>
         <div id="local-game" hidden>
+        <div class="dama-controls">
+            <label>Modo de jogo <select id="local-mode"><option value="pvp">2 Jogadores</option><option value="bot">Contra o computador</option></select></label>
+            <label id="difficulty-control" hidden>Dificuldade <select id="bot-difficulty"><option value="easy">Fácil · Regressão</option><option value="medium">Médio · Monte Carlo</option><option value="hard">Difícil · TD + Minimax</option></select></label>
+        </div>
+        <p id="local-matchup" class="dama-matchup">Jogador × Jogador</p>
 
         <section class="game-layout" aria-labelledby="game-heading">
             <div class="board-area">
@@ -101,10 +107,12 @@
                     <div><dt>Capturadas pelas brancas</dt><dd id="player-one-captures">0</dd></div>
                     <div><dt>Capturadas pelas pretas</dt><dd id="player-two-captures">0</dd></div>
                 </dl>
-                <button id="restart-game" class="restart-button" type="button">Reiniciar partida</button>
+                <button id="restart-game" class="restart-button" type="button">Nova partida</button>
             </aside>
         </section>
 
+        <details id="bot-explanation" hidden><summary>Como o computador joga</summary><p id="bot-algorithm"></p><p>Variante do site: damas curtas, pedras capturam para a frente, captura obrigatória sem lei da maioria e promoção imediata. Os modelos foram treinados nessas regras. Os níveis indicam métodos e orçamento de busca; não garantem uma ordem de força. As probabilidades são estimativas experimentais.</p></details>
+        <p id="bot-notice" class="game-message" role="status"></p>
         <button id="local-back" class="restart-button mode-back" type="button">Escolher modo</button>
         <section id="winner-card" class="winner-card" hidden aria-live="assertive">
             <h2 id="winner-message"></h2>
@@ -112,6 +120,7 @@
         </section>
         </div>
     </main>
+    <script src="/static/js/dama-rules.js"></script>
     <script src="/static/js/dama.js"></script>
     <script src="/static/js/dama-multiplayer.js"></script>
 </body>

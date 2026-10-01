@@ -1,0 +1,44 @@
+/* Escopo exclusivo do laboratório; reutiliza painéis e identidade de Data Science. */
+.ml-lab { max-width: 1100px; }
+.ml-lab [hidden] { display: none !important; }
+.ml-lab *, .ml-lab *::before, .ml-lab *::after { min-width: 0; }
+.ml-breadcrumb { font-size: .85rem; line-height: 1.8; overflow-wrap: anywhere; }
+.ml-intro { max-width: 760px; margin-block: 24px; }
+.ml-intro h1 { font-size: clamp(1.65rem,5vw,2.7rem); }
+.ml-steps { display: flex; flex-wrap: wrap; gap: 6px; }
+.ml-steps a { padding: 12px; border-radius: 12px; background: #e8f2f8; color: #163653; text-decoration: none; min-height: 44px; }
+.ml-lab section { scroll-margin-top: 100px; }
+.ml-lab fieldset { border: 0; margin: 0; padding: 0; }
+.ml-lab legend { font-weight: 700; margin: 12px 0; }
+.ml-lab label { display: block; font-weight: 650; margin-bottom: 6px; overflow-wrap: anywhere; }
+.ml-lab input:not([type=checkbox]), .ml-lab select { width: 100%; min-height: 44px; padding: 10px; border: 1px solid #adc9db; border-radius: 9px; font: inherit; font-size: 16px; background: #fff; color: #163653; }
+.ml-lab input[type=file] { padding: 8px 0; border: 0; font-size: .85rem; }
+.ml-lab small { display: block; margin-top: 7px; line-height: 1.5; color: #516a7f; }
+.ml-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 20px; margin: 16px 0; }
+.ml-lab button { margin-top: 12px; max-width: 100%; }
+.ml-lab .ml-primary { background: #17659a; color: #fff; border-color: #17659a; font-weight: 700; }
+.ml-lab .ml-primary:hover:not(:disabled) { background: #12345b; }
+.ml-features { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 6px; max-height: 300px; overflow-y: auto; padding: 4px; }
+.ml-features label { display: flex; align-items: center; min-height: 44px; gap: 8px; padding: 6px; border-radius: 8px; background: #f1f7fb; margin: 0; font-size: .9rem; }
+.ml-features input { flex: 0 0 20px; width: 20px; height: 20px; accent-color: #17659a; }
+.ml-table-scroll { overflow-x: auto; max-width: 100%; margin-block: 12px; border: 1px solid #d6e4ed; border-radius: 10px; }
+.ml-lab table { border-collapse: collapse; width: 100%; font-size: .85rem; }
+.ml-lab caption { text-align: left; padding: 10px; font-weight: 650; }
+.ml-lab th,.ml-lab td { padding: 10px; border-bottom: 1px solid #d6e4ed; text-align: left; min-width: 70px; max-width: 220px; overflow-wrap: anywhere; }
+.ml-lab th { background: #eff6fb; }
+.ml-metrics { display: grid; grid-template-columns: repeat(auto-fit,minmax(160px,1fr)); gap: 10px; }
+.ml-metric { padding: 14px; background: #edf5fb; border-radius: 12px; }
+.ml-metric h3 { margin: 0; font-size: .95rem; }
+.ml-metric strong { overflow-wrap: anywhere; display: block; margin: 8px 0; font-size: 1.55rem; }
+.ml-metric summary { font-size: .8rem; }
+.ml-metric p { margin: 0; font-size: .85rem; }
+.ml-lab svg { display: block; width: 100%; max-width: 740px; height: auto; background: #f6f9fc; border-radius: 12px; }
+.ml-lab p, .ml-lab dd, .ml-lab dt { overflow-wrap: anywhere; }
+.ml-summary { display: grid; grid-template-columns: minmax(90px,1fr) minmax(0,2fr); gap: 8px 12px; }
+.ml-summary dd { margin: 0; font-size: .9rem; font-weight: 500; }
+.ml-summary dt { font-weight: 650; }
+#ml-error { padding: 12px; border-left: 4px solid #a3402a; background: #fff1e9; overflow-wrap: anywhere; }
+#ml-status:empty { display: none; }
+.ml-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+@media(max-width:600px) { .ml-grid { grid-template-columns: 1fr; gap: 16px; } .ml-features { grid-template-columns: repeat(2,minmax(0,1fr)); } .ml-metrics { grid-template-columns: repeat(2,minmax(0,1fr)); } .ml-metric { padding: 10px; } .ml-steps { font-size: .85rem; } .ml-lab .ds-panel { padding: 14px; } .ml-intro { margin-block: 16px; } }
+@media(max-width:360px) { .ml-features { grid-template-columns: 1fr; } }

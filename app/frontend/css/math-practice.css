@@ -1,0 +1,34 @@
+/* Escopo exclusivo da prática; menu, carrossel e atividades anteriores mantêm seus estilos. */
+.math-practice { width: min(100%, 760px); margin: 0 auto; padding: 16px 20px 32px; }
+.math-back { display: inline-block; padding: 6px 0; margin-bottom: 6px; color: var(--site-blue); font-size: .9rem; }
+.math-practice h1 { margin: 0 0 16px; font-size: clamp(1.45rem, 5vw, 2rem); line-height: 1.2; }
+.math-practice .card { padding: clamp(16px, 4vw, 28px); }
+.math-practice h2 { margin: 8px 0 12px; font-size: 1.2rem; line-height: 1.35; }
+.math-meta { margin: 0 0 8px; color: var(--site-muted); font-size: .85rem; line-height: 1.5; }
+.math-question { padding: 16px; margin: 12px 0 18px; border-radius: 12px; background: #edf5fa; font-size: clamp(1.5rem, 6vw, 2rem); font-weight: 700; text-align: center; overflow-wrap: anywhere; }
+.math-practice #answer-form { display: grid; gap: 12px; }
+.math-practice label, .math-practice legend { font-weight: 650; }
+.math-practice #answer { display: block; width: 100%; min-height: 44px; padding: 10px 12px; border: 1px solid #8ba9bf; border-radius: 10px; color: var(--site-ink); font: inherit; font-size: 16px; background: white; }
+.math-practice fieldset { min-width: 0; margin: 0; padding: 0; border: 0; }
+.math-practice legend { margin-bottom: 8px; }
+#choice-options { display: grid; gap: 8px; }
+#choice-options label { display: flex; align-items: center; gap: 10px; min-height: 44px; padding: 10px 12px; border: 1px solid var(--site-line); border-radius: 10px; cursor: pointer; }
+#choice-options label:has(input:checked) { border-color: var(--site-blue); background: #edf5fa; }
+#choice-options input { flex: 0 0 auto; width: 18px; height: 18px; accent-color: var(--site-blue); }
+.math-feedback { min-height: 1.5em; margin: 12px 0; line-height: 1.5; font-weight: 650; }
+.math-feedback.is-correct { color: #187143; }
+.math-feedback.is-wrong { color: #a84218; }
+.math-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.math-practice .game-button { min-height: 44px; text-align: center; text-decoration: none; }
+.math-help { margin: 16px 0 0; padding: 16px; line-height: 1.65; border-radius: 12px; background: #edf5fa; overflow-wrap: anywhere; }
+.math-help ol { margin: 0; padding: 0; list-style: none; }
+.math-help li + li { margin-top: 12px; }
+#solution-answer { margin: 16px 0 0; font-weight: 700; }
+.math-navigation { justify-content: space-between; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--site-line); }
+.math-practice :focus-visible { outline: 3px solid var(--site-blue); outline-offset: 3px; }
+@media (max-width: 580px) {
+    .math-practice { padding: 10px 12px 24px; }
+    .math-practice h1 { margin-bottom: 12px; }
+    .math-practice .game-button { padding: 10px 12px; }
+    .math-navigation .game-button { flex: 1 1 120px; }
+}

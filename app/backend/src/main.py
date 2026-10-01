@@ -6,6 +6,7 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
 from routes.dama import router as dama_router
+from routes.ml import router as ml_router
 
 
 APP_ENV = os.getenv("APP_ENV", "development")
@@ -13,9 +14,12 @@ APP_ENV = os.getenv("APP_ENV", "development")
 
 app = FastAPI(title="Matemática pra Todos")
 app.include_router(dama_router)
+app.include_router(ml_router)
 
 BACKEND_DIR = Path(__file__).resolve().parent.parent
 FRONTEND_DIR = BACKEND_DIR / "frontend"
+if not FRONTEND_DIR.is_dir():
+    FRONTEND_DIR = BACKEND_DIR.parent / "frontend"
 
 app.mount("/static", StaticFiles(directory=FRONTEND_DIR), name="static")
 

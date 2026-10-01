@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>∑quacionei | Data Science</title>
-<link rel="stylesheet" href="/static/css/data-science.css"><link rel="stylesheet" href="/static/css/site.css"><link rel="stylesheet" href="/static/css/carousel.css"><script src="/static/js/site-ui.js" defer></script></head><body>
+<link rel="stylesheet" href="/static/css/data-science.css"><link rel="stylesheet" href="/static/css/site.css"><link rel="stylesheet" href="/static/css/carousel.css"><link rel="stylesheet" href="/static/css/data-science-hub.css"><script src="/static/js/site-ui.js" defer></script></head><body>
     <header class="site-header">
         <div class="site-header__inner">
             <a class="site-brand" href="/" aria-label="Equacionei — Matemática, Exatas e Ciência de Dados — início">
@@ -22,47 +22,72 @@
     </header>
 
 
-<main class="ds-page section-landing">
-<header class="ds-intro ds-trail-intro section-intro"><p class="ds-kicker">Uma trilha do conceito à prática</p><h1 class="section-title-accessible">Data Science</h1>
-<p>Do SQL ao Python e Machine Learning, com foco na prática e no negócio.</p></header>
+<main class="ds-page section-landing ds-hub-page">
+<header class="ds-intro ds-trail-intro section-intro ds-hub-intro"><p class="ds-kicker">Uma trilha do conceito à prática</p><h1 class="ds-hub-title">DATA SCIENCE</h1>
+<p>Do SQL ao Python e Machine Learning, com foco na prática e no negócio.</p>
+<ol class="ds-learning-cycle" aria-label="Ciclo de aprendizagem"><li>Aprender</li><li>Visualizar</li><li>Experimentar</li><li>Avaliar</li><li>Aplicar</li></ol></header>
 <p id="storage-note" role="status"></p>
-<section id="inicio" class="ds-section">
-<section class="ds-trail" aria-labelledby="trail-title">
-<div class="ds-trail-heading"><h2 id="trail-title">Seu percurso de aprendizagem</h2><p>Comece por Fundamentos. Os próximos módulos estão em preparação.</p></div>
-<div class="ds-trail-grid">
-<a class="ds-trail-card ds-trail-card--available" href="/static/data-science/fundamentos.html">
-<span class="ds-trail-card__top"><span class="ds-trail-card__icon" aria-hidden="true">∑</span><span>Módulo 01</span></span>
+<section id="inicio" class="ds-section" aria-label="Hub de aprendizagem Data Science">
+<section id="continue-learning" class="ds-panel ds-continue" aria-labelledby="continue-title">
+<div class="ds-continue-copy"><p class="ds-kicker">SEU PRÓXIMO PASSO</p><h2 id="continue-title">Novo por aqui?</h2><p id="continue-detail">Comece pela Etapa 01 e avance no seu ritmo.</p></div>
+<div class="ds-continue-progress" hidden><label for="hub-progress">Progresso de Fundamentos</label><progress id="hub-progress" max="18" value="0"></progress><span id="hub-progress-label"></span></div>
+<a id="continue-link" class="ds-hub-action" href="/static/data-science/fundamentos.html">Comece pela Etapa 01 <span aria-hidden="true">→</span></a>
+</section>
+<section id="percurso" class="ds-trail" aria-labelledby="trail-title">
+<div class="ds-trail-heading"><h2 id="trail-title">Seu percurso</h2><p>Uma sequência recomendada, sem pré-requisitos. Acesse qualquer etapa a qualquer momento.</p></div>
+<nav class="ds-stage-map" aria-label="Atalhos para etapas do percurso"><ol>
+<li><a href="#etapa-01"><span>(01)</span><span>Fund.</span></a></li><li><a href="#etapa-02"><span>(02)</span><span>Análise</span></a></li>
+<li><a href="#etapa-03"><span>(03)</span><span>Preparação</span></a></li><li><a href="#etapa-04"><span>(04)</span><span>ML</span></a></li>
+<li><a href="#etapa-05"><span>(05)</span><span>Avaliação</span></a></li><li><a href="#etapa-06"><span>(06)</span><span>Comunicação</span></a></li>
+<li><a href="#etapa-07"><span>(07)</span><span>Deploy</span></a></li><li><a href="#etapa-projeto"><span>★</span><span>Projeto</span></a></li>
+</ol></nav>
+<div class="ds-trail-grid ds-stage-grid">
+<a id="etapa-01" class="ds-trail-card ds-trail-card--available" href="/static/data-science/fundamentos.html">
+<span class="ds-trail-card__top"><span class="ds-trail-card__icon" aria-hidden="true">∑</span><span>Etapa 01</span></span>
 <span class="ds-trail-card__title">Fundamentos</span><span class="ds-trail-card__description">Construa a base de estatística e Python, usando SQL como ponte.</span>
-<span class="ds-trail-card__status">18 aulas • 18 exercícios</span><span id="foundation-card-progress" class="ds-trail-card__description"></span><span class="ds-trail-card__action">Começar módulo <span aria-hidden="true">→</span></span></a>
-<details class="ds-trail-card">
-<summary><span class="ds-trail-card__top"><span class="ds-trail-card__icon" aria-hidden="true">▥</span><span>Módulo 02</span></span>
-<span class="ds-trail-card__title">Manipulação e Visualização de Dados</span><span class="ds-trail-card__description">Explore, organize e visualize dados para responder perguntas.</span>
-<span class="ds-trail-card__status">Em preparação</span><span class="ds-trail-card__action">Ver assuntos <span aria-hidden="true">＋</span></span></summary>
-<div class="ds-trail-card__preview"><p>Pandas, NumPy, SQL avançado e gráficos com matplotlib, seaborn e Plotly. Do conceito ao exercício prático.</p><p>As aulas deste módulo serão disponibilizadas em uma próxima etapa.</p></div></details>
-<details class="ds-trail-card">
-<summary><span class="ds-trail-card__top"><span class="ds-trail-card__icon" aria-hidden="true">⚙</span><span>Módulo 03</span></span>
-<span class="ds-trail-card__title">Machine Learning</span><span class="ds-trail-card__description">Entenda como os modelos aprendem e faça suas primeiras previsões.</span>
-<span class="ds-trail-card__status">Em preparação</span><span class="ds-trail-card__action">Ver assuntos <span aria-hidden="true">＋</span></span></summary>
-<div class="ds-trail-card__preview"><p>Aprendizado supervisionado e não supervisionado, algoritmos e separação de treino e teste. Primeiro projeto: cancelamento de clientes com regressão logística.</p><p>As aulas deste módulo serão disponibilizadas em uma próxima etapa.</p></div></details>
-<details class="ds-trail-card">
-<summary><span class="ds-trail-card__top"><span class="ds-trail-card__icon" aria-hidden="true">◎</span><span>Módulo 04</span></span>
-<span class="ds-trail-card__title">Avaliação de Modelos</span><span class="ds-trail-card__description">Compare resultados e compreenda o impacto dos erros no negócio.</span>
-<span class="ds-trail-card__status">Em preparação</span><span class="ds-trail-card__action">Ver assuntos <span aria-hidden="true">＋</span></span></summary>
-<div class="ds-trail-card__preview"><p>Matriz de confusão, precision, recall, F1, ROC/AUC e métricas de regressão. Validação, desbalanceamento e interpretação dos modelos.</p><p>As aulas deste módulo serão disponibilizadas em uma próxima etapa.</p></div></details>
-<details class="ds-trail-card">
-<summary><span class="ds-trail-card__top"><span class="ds-trail-card__icon" aria-hidden="true">↗</span><span>Módulo 05</span></span>
-<span class="ds-trail-card__title">Storytelling e Negócio</span><span class="ds-trail-card__description">Transforme análises em explicações claras para apoiar decisões.</span>
-<span class="ds-trail-card__status">Em preparação</span><span class="ds-trail-card__action">Ver assuntos <span aria-hidden="true">＋</span></span></summary>
-<div class="ds-trail-card__preview"><p>Escolha de gráficos, dashboards, Streamlit e apresentação executiva. Comunique resultados sem prometer o que os dados não sustentam.</p><p>As aulas deste módulo serão disponibilizadas em uma próxima etapa.</p></div></details>
-<details class="ds-trail-card">
-<summary><span class="ds-trail-card__top"><span class="ds-trail-card__icon" aria-hidden="true">{ }</span><span>Módulo 06</span></span>
-<span class="ds-trail-card__title">Tópicos Complementares</span><span class="ds-trail-card__description">Conheça os próximos caminhos para aplicar e publicar modelos.</span>
-<span class="ds-trail-card__status">Em preparação</span><span class="ds-trail-card__action">Ver assuntos <span aria-hidden="true">＋</span></span></summary>
-<div class="ds-trail-card__preview"><p>Séries temporais, NLP, APIs, FastAPI, deploy, MLflow e versionamento de experimentos.</p><p>As aulas deste módulo serão disponibilizadas em uma próxima etapa.</p></div></details>
+<span class="ds-trail-card__status">Disponível · 18 aulas e exercícios</span><span id="foundation-card-progress" class="ds-trail-card__description">0 de 18 aulas concluídas</span>
+<span class="ds-trail-card__action">Começar módulo <span aria-hidden="true">→</span></span></a>
+<details id="etapa-02" class="ds-trail-card"><summary><span class="ds-trail-card__top"><span class="ds-trail-card__icon" aria-hidden="true">▥</span><span>Etapa 02</span></span>
+<span class="ds-trail-card__title">Análise de Dados</span><span class="ds-trail-card__description">Explore, transforme e visualize dados.</span>
+<span class="ds-trail-card__status">Em breve</span><span class="ds-trail-card__action">Prévia <span aria-hidden="true">＋</span></span></summary>
+<div class="ds-trail-card__preview"><p>Pandas, SQL e visualização para descobrir padrões nos dados. Conteúdo em preparação.</p></div></details>
+<details id="etapa-03" class="ds-trail-card"><summary><span class="ds-trail-card__top"><span class="ds-trail-card__icon" aria-hidden="true">⌁</span><span>Etapa 03</span></span>
+<span class="ds-trail-card__title">Preparação de Dados</span><span class="ds-trail-card__description">Limpe, transforme e prepare dados para os modelos.</span>
+<span class="ds-trail-card__status">Em breve</span><span class="ds-trail-card__action">Prévia <span aria-hidden="true">＋</span></span></summary>
+<div class="ds-trail-card__preview"><p>Valores ausentes, tipos e transformações para deixar os dados prontos para análise.</p></div></details>
+<details id="etapa-04" class="ds-trail-card"><summary><span class="ds-trail-card__top"><span class="ds-trail-card__icon" aria-hidden="true">⚙</span><span>Etapa 04</span></span>
+<span class="ds-trail-card__title">Machine Learning</span><span class="ds-trail-card__description">Modelos que aprendem padrões nos dados.</span>
+<span class="ds-trail-card__status">Disponível · 1 laboratório</span><span class="ds-trail-card__action">Ver laboratório <span aria-hidden="true">＋</span></span></summary>
+<div class="ds-trail-card__preview"><p>Aplique modelos supervisionados em classificação e regressão.</p><p><a href="/static/data-science/machine-learning/xgboost.html">Abrir o Laboratório XGBoost →</a></p></div></details>
+<details id="etapa-05" class="ds-trail-card"><summary><span class="ds-trail-card__top"><span class="ds-trail-card__icon" aria-hidden="true">◎</span><span>Etapa 05</span></span>
+<span class="ds-trail-card__title">Avaliação de Modelos</span><span class="ds-trail-card__description">Entenda se o modelo realmente está funcionando.</span>
+<span class="ds-trail-card__status">Em breve</span><span class="ds-trail-card__action">Prévia <span aria-hidden="true">＋</span></span></summary>
+<div class="ds-trail-card__preview"><p>Métricas, conjuntos de teste e interpretação de erros.</p></div></details>
+<details id="etapa-06" class="ds-trail-card"><summary><span class="ds-trail-card__top"><span class="ds-trail-card__icon" aria-hidden="true">↗</span><span>Etapa 06</span></span>
+<span class="ds-trail-card__title">Comunicação e Negócio</span><span class="ds-trail-card__description">Transforme resultados em decisões e histórias compreensíveis.</span>
+<span class="ds-trail-card__status">Em breve</span><span class="ds-trail-card__action">Prévia <span aria-hidden="true">＋</span></span></summary>
+<div class="ds-trail-card__preview"><p>Comunique conclusões, limites e impactos de uma análise.</p></div></details>
+<details id="etapa-07" class="ds-trail-card"><summary><span class="ds-trail-card__top"><span class="ds-trail-card__icon" aria-hidden="true">⇧</span><span>Etapa 07</span></span>
+<span class="ds-trail-card__title">Produção e Deploy</span><span class="ds-trail-card__description">Leve modelos para APIs, aplicações e produção.</span>
+<span class="ds-trail-card__status">Em breve</span><span class="ds-trail-card__action">Prévia <span aria-hidden="true">＋</span></span></summary>
+<div class="ds-trail-card__preview"><p>APIs, aplicações e práticas para disponibilizar modelos.</p></div></details>
+<details id="etapa-projeto" class="ds-trail-card"><summary><span class="ds-trail-card__top"><span class="ds-trail-card__icon" aria-hidden="true">★</span><span>Projeto de Data Science</span></span>
+<span class="ds-trail-card__title">Projeto completo</span><span class="ds-trail-card__description">Aplique a trilha completa em um projeto.</span>
+<span class="ds-trail-card__status">Em breve</span><span class="ds-trail-card__action">Prévia <span aria-hidden="true">＋</span></span></summary>
+<div class="ds-trail-card__preview"><p>Parta de uma pergunta e percorra o processo de análise e Machine Learning.</p></div></details>
 </div></section>
-<div class="ds-trail-heading ds-experiences-heading"><h2>Experimente agora</h2><p>Explore também estas atividades interativas.</p></div>
-<div class="activity-carousel" aria-label="Experiências de Data Science" aria-roledescription="carrossel"><div class="ds-cards carousel-track" id="data-track" tabindex="0" aria-label="Experiências; use as setas para navegar"><a class="subject-card" href="#dados"><span aria-hidden="true">📊</span><h2>Meus Dados</h2><p>Descubra o que suas respostas nos jogos podem contar.</p><strong>Explorar meus resultados →</strong></a><a class="subject-card" href="#laboratorio"><span aria-hidden="true">🧪</span><h2>Laboratório de Dados</h2><p>Mude os valores, observe os gráficos e resolva desafios.</p><strong>Começar um experimento →</strong></a><a class="subject-card" href="#ia"><span aria-hidden="true">🤖</span><h2>Treine sua IA</h2><p>Ensine com exemplos. Veja previsões, erros e mudanças.</p><strong>Construir meu modelo →</strong></a></div><div class="carousel-controls" hidden><button class="carousel-arrow" data-prev type="button" aria-label="Cartão anterior" aria-controls="data-track">‹</button><div class="carousel-dots" aria-label="Selecionar cartão"></div><button class="carousel-arrow" data-next type="button" aria-label="Próximo cartão" aria-controls="data-track">›</button></div><p class="carousel-status" role="status" aria-live="polite"></p></div>
-<div class="ds-panel"><h2>Suas conquistas</h2><p id="progress-summary"></p><ul id="badges" class="ds-badges"></ul><p>Progresso salvo neste navegador. Sem conta ou sincronização entre aparelhos nesta versão.</p></div></section>
+<section id="laboratorios" class="ds-hub-section" aria-labelledby="labs-title"><div class="ds-trail-heading"><p class="ds-kicker">PRÁTICA COM MODELOS</p><h2 id="labs-title">Laboratórios</h2><p>Experimente com dados reais.</p></div>
+<div class="activity-carousel ds-lab-carousel" data-fit-active aria-label="Laboratórios de Machine Learning" aria-roledescription="carrossel"><div class="carousel-track" id="labs-track" tabindex="0" aria-label="Laboratórios; use as setas para navegar">
+<a class="subject-card ds-lab-card ds-lab-card--available" href="/static/data-science/machine-learning/xgboost.html"><span aria-hidden="true">⚙</span><p class="ds-kicker">DISPONÍVEL · MACHINE LEARNING</p><h2>Laboratório XGBoost</h2><p class="ds-lab-desktop">Treine modelos XGBoost, analise métricas, descubra a importância das variáveis e faça previsões.</p><p class="ds-lab-mobile">Treine modelos, veja métricas e faça previsões.</p><ul aria-label="Tipos de problema"><li>Classificação</li><li>Regressão</li></ul><strong>Abrir laboratório <span aria-hidden="true">→</span></strong></a>
+<div class="subject-card ds-lab-card ds-lab-card--soon" role="group" aria-label="Laboratório Decision Tree, em breve"><span aria-hidden="true">⑂</span><p class="ds-kicker">EM BREVE</p><h2>Laboratório Decision Tree</h2><p>Veja uma árvore aprender regras a partir dos dados.</p><details class="ds-lab-preview"><summary>O que você vai explorar</summary><p>Como cada divisão separa exemplos até formar uma decisão.</p></details></div>
+<div class="subject-card ds-lab-card ds-lab-card--soon" role="group" aria-label="Comparador de Modelos, em breve"><span aria-hidden="true">⇄</span><p class="ds-kicker">EM BREVE</p><h2>Comparador de Modelos</h2><p>Use o mesmo dataset para comparar diferentes modelos.</p><details class="ds-lab-preview"><summary>O que você vai explorar</summary><p>Compare métricas em problemas de classificação e regressão.</p></details></div>
+</div><div class="carousel-controls" hidden><button class="carousel-arrow" data-prev type="button" aria-label="Laboratório anterior" aria-controls="labs-track">‹</button><div class="carousel-dots" aria-label="Selecionar laboratório"></div><button class="carousel-arrow" data-next type="button" aria-label="Próximo laboratório" aria-controls="labs-track">›</button></div><p class="carousel-status" role="status" aria-live="polite"></p></div></section>
+<section id="experimentos-rapidos" class="ds-hub-section" aria-labelledby="quick-title"><div class="ds-trail-heading"><p class="ds-kicker">APRENDER FAZENDO</p><h2 id="quick-title">Experimentos rápidos</h2><p>Explore dados e modelos em atividades curtas.</p></div>
+<div class="activity-carousel" aria-label="Experimentos rápidos de Data Science" aria-roledescription="carrossel"><div class="ds-cards carousel-track" id="data-track" tabindex="0" aria-label="Experimentos rápidos; use as setas para navegar"><a class="subject-card" href="#dados"><span aria-hidden="true">📊</span><h2>Meus Dados</h2><p>Descubra o que suas respostas nos jogos podem contar.</p><strong>Explorar meus resultados →</strong></a><a class="subject-card" href="#laboratorio"><span aria-hidden="true">🧪</span><h2>Laboratório de Dados</h2><p>Mude os valores, observe os gráficos e resolva desafios.</p><strong>Começar um experimento →</strong></a><a class="subject-card" href="#ia"><span aria-hidden="true">🤖</span><h2>Treine sua IA</h2><p>Ensine com exemplos. Veja previsões, erros e mudanças.</p><strong>Construir meu modelo →</strong></a></div><div class="carousel-controls" hidden><button class="carousel-arrow" data-prev type="button" aria-label="Experimento anterior" aria-controls="data-track">‹</button><div class="carousel-dots" aria-label="Selecionar experimento"></div><button class="carousel-arrow" data-next type="button" aria-label="Próximo experimento" aria-controls="data-track">›</button></div><p class="carousel-status" role="status" aria-live="polite"></p></div></section>
+<section id="my-dataset" class="ds-panel ds-my-dataset" hidden aria-labelledby="my-dataset-title"><div><p class="ds-kicker">DADOS ATIVOS</p><h2 id="my-dataset-title">Meu dataset</h2><p id="my-dataset-summary"></p></div><div><button type="button" id="my-dataset-change">Trocar</button><button type="button" id="my-dataset-remove">Remover</button></div></section>
+<section id="conquistas" class="ds-panel ds-achievements" aria-labelledby="achievements-title"><h2 id="achievements-title">Suas conquistas</h2><p id="progress-summary"></p><ul id="badges" class="ds-badges"></ul><p>Progresso salvo neste navegador. Sem conta ou sincronização entre aparelhos nesta versão.</p></section>
+<section id="explorar-mais" class="ds-hub-section ds-explore-more" aria-labelledby="explore-title"><div class="ds-trail-heading"><h2 id="explore-title">Explorar mais</h2><p>Tópicos para continuar descobrindo.</p></div><div class="ds-explore-grid"><article class="ds-explore-card"><h3>Séries temporais</h3><p>Investigue padrões e mudanças ao longo do tempo.</p><span>Em breve</span></article><article class="ds-explore-card"><h3>NLP</h3><p>Explore como computadores analisam linguagem.</p><span>Em breve</span></article></div></section>
+</section>
 <section id="dados" class="ds-section" hidden><a class="ds-back" href="#inicio">← Explorar Data Science</a><h2>📈 Meus Dados</h2><p>Aluno deste navegador. Resultados reais das novas partidas do Desafio Relâmpago e Queda Matemática.</p>
 <p>Os recordes antigos não guardavam cada resposta e não podem ser convertidos em histórico. Em aparelhos compartilhados, os resultados de todas as pessoas aparecem juntos.</p>
 <div class="ds-toolbar"><label for="data-game">Jogo</label><select id="data-game"><option value="all">Todos</option><option value="lightning">Desafio Relâmpago</option><option value="queda">Queda Matemática</option></select><button id="refresh-data" type="button">Atualizar dados</button></div>
@@ -86,4 +111,4 @@
 <div class="ds-panel"><h3>3. Faça uma previsão</h3><p>Os controles de altura e peso também descrevem o animal que você quer testar. Ajuste-os e clique abaixo, sem adicionar o exemplo ao treino.</p><button id="predict-model" type="button" disabled>Prever este animal</button><p id="prediction" role="status"></p></div>
 <details class="ds-panel"><summary>Treino e teste: qual é a diferença?</summary><p>Seus exemplos ensinam o modelo. Dez exemplos fictícios separados verificam o que ele aprendeu. Eles não são inseridos automaticamente no treinamento.</p><p>Repetir experimentos olhando sempre o mesmo teste pode influenciar suas escolhas. Esta é uma demonstração didática, não uma avaliação científica final.</p><div id="test-results"></div></details>
 <div class="ds-panel"><h3>Histórico de treinamentos</h3><ul id="training-history"></ul><p>Comparamos resultados medidos no mesmo conjunto de teste; a melhora não é garantida.</p></div></section>
-</main><script src="/static/data/data-science/fundamentos.js"></script><script src="/static/js/foundation-progress.js"></script><script src="/static/js/data-science-module-progress.js"></script><script src="/static/js/learning-data.js"></script><script src="/static/js/data-science-core.js"></script><script src="/static/js/data-science.js"></script><script src="/static/js/menu-carousel.js"></script></body></html>
+</main><script src="/static/data/data-science/fundamentos.js"></script><script src="/static/js/foundation-progress.js"></script><script src="/static/js/data-science-hub.js"></script><script src="/static/js/data-science-module-progress.js"></script><script src="/static/js/learning-data.js"></script><script src="/static/js/data-science-core.js"></script><script src="/static/js/data-science.js"></script><script src="/static/js/menu-carousel.js"></script></body></html>

@@ -31,6 +31,7 @@
     function connection(text) { $("online-connection").textContent = text; }
     function show(next) {
         mode = next;
+        window.DamaLocal?.setActive(next === "local");
         Object.entries(panels).forEach(([name, id]) => { $(id).hidden = name !== next; });
     }
     function stop() {
@@ -367,7 +368,8 @@
             }
         }
     }
-    $("choose-local").addEventListener("click", () => { stop(); show("local"); message(""); });
+    $("choose-local").addEventListener("click", () => { stop(); window.DamaLocal?.setMode("pvp"); show("local"); message(""); });
+    $("choose-computer").addEventListener("click", () => { stop(); window.DamaLocal?.setMode("bot"); show("local"); message(""); });
     $("choose-online").addEventListener("click", () => { show(session ? "online" : "entry"); message(""); if (session) connect(); });
     $("entry-back").addEventListener("click", () => { show("choice"); message(""); });
     $("local-back").addEventListener("click", () => show("choice"));

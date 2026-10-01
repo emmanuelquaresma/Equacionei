@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>∑quacionei | Fundamentos Matemáticos</title>
+    <link rel="stylesheet" href="/static/css/menu.css">
+    <link rel="stylesheet" href="/static/css/site.css">
+    <link rel="stylesheet" href="/static/css/math-practice.css">
+    <script src="/static/js/site-ui.js" defer></script>
+</head>
+<body class="internal-page">
+    <header class="site-header">
+        <div class="site-header__inner">
+            <a class="site-brand" href="/" aria-label="Equacionei — Matemática, Exatas e Ciência de Dados — início">
+                <span class="site-brand__identity"><span class="site-brand__name" aria-hidden="true"><span class="site-brand__sum">∑</span>quacionei</span><span class="site-brand__tagline" aria-hidden="true">Matemática • Exatas • Ciência de Dados</span></span>
+            </a>
+            <nav class="site-nav" id="site-navigation" aria-label="Navegação principal">
+                <a href="/">Início</a>
+                <a href="/menu#atividades">Aplicações Matemáticas</a>
+                <a href="/menu#jogos">Jogos</a>
+                <a href="/static/data-science.html">Data Science</a>
+                <a href="/static/desenvolvimento.html">Desenvolvimento</a>
+                <a href="/static/sobre.html">Sobre</a>
+            </nav>
+            <a class="site-enter" href="/menu" aria-label="Entrar nas atividades">
+                <svg aria-hidden="true" viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M15 3h5v18h-5M3 12h12M10 7l5 5-5 5"/></svg>
+                <span>Entrar</span>
+            </a>
+            <button class="site-toggle" type="button" aria-controls="site-navigation" aria-expanded="false" aria-label="Abrir menu de navegação" hidden>
+                <svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+            </button>
+        </div>
+    </header>
+
+    <main class="math-practice">
+        <a class="math-back" href="/menu#atividades">← Aplicações Matemáticas</a>
+        <h1 id="subject-title">Fundamentos Matemáticos</h1>
+        <p id="subject-error" role="status" hidden>Assunto não encontrado. Volte às aplicações e escolha um card.</p>
+        <noscript>Ative o JavaScript para responder aos exercícios.</noscript>
+        <section id="practice" class="card" aria-labelledby="exercise-title" hidden>
+            <p id="exercise-position" class="math-meta"></p>
+            <h2 id="exercise-title" tabindex="-1"></h2>
+            <p id="exercise-question" class="math-question"></p>
+            <form id="answer-form" novalidate>
+                <div id="text-answer">
+                    <label for="answer">Sua resposta</label>
+                    <p id="answer-format" class="math-meta"></p>
+                    <input id="answer" type="text" maxlength="80" autocomplete="off" spellcheck="false" aria-describedby="answer-format feedback">
+                </div>
+                <fieldset id="choices" hidden><legend>Escolha uma resposta</legend><div id="choice-options"></div></fieldset>
+                <button class="game-button game-button--confirm" type="submit">Verificar</button>
+            </form>
+            <p id="feedback" class="math-feedback" role="status" aria-live="polite" aria-atomic="true"></p>
+            <div class="math-actions">
+                <button id="hint-toggle" class="game-button game-button--new" type="button" aria-expanded="false" aria-controls="hint">Dica</button>
+                <button id="solution-toggle" class="game-button game-button--new" type="button" aria-expanded="false" aria-controls="solution">Ver resolução</button>
+            </div>
+            <p id="hint" class="math-help" hidden></p>
+            <section id="solution" class="math-help" aria-label="Resolução passo a passo" hidden><ol id="solution-steps"></ol><p id="solution-answer"></p></section>
+            <nav class="math-actions math-navigation" aria-label="Navegação dos exercícios">
+                <button id="previous" class="game-button game-button--new" type="button">← Anterior</button>
+                <button id="next" class="game-button game-button--confirm" type="button">Próximo exercício →</button>
+            </nav>
+        </section>
+        <section id="summary" class="card" hidden aria-labelledby="summary-title">
+            <h2 id="summary-title" tabindex="-1">Prática finalizada</h2>
+            <p id="summary-text"></p>
+            <div class="math-actions"><button id="restart" class="game-button game-button--new" type="button">Revisar exercícios</button><a id="next-subject" class="game-button game-button--confirm"></a></div>
+        </section>
+    </main>
+    <script src="/static/data/math-subjects.js"></script>
+    <script src="/static/js/math-practice.js"></script>
+</body>
+</html>

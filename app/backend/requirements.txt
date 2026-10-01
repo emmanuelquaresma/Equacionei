@@ -1,3 +1,8 @@
 fastapi
 uvicorn
 websockets
+# Laboratório ML: CPU, sem dependências de CUDA.
+numpy>=1.26,<3
+pandas>=2.2,<3
+scikit-learn>=1.5,<1.8
+xgboost-cpu>=3.0,<3.2

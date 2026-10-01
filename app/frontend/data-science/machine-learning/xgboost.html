@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Laboratório XGBoost | Equacionei</title>
+<link rel="stylesheet" href="/static/css/data-science.css"><link rel="stylesheet" href="/static/css/site.css"><link rel="stylesheet" href="/static/css/ml-lab.css">
+<script src="/static/js/site-ui.js" defer></script><script src="/static/js/ml-lab.js" defer></script></head><body>
+<header class="site-header">
+        <div class="site-header__inner">
+            <a class="site-brand" href="/" aria-label="Equacionei — Matemática, Exatas e Ciência de Dados — início">
+                <span class="site-brand__identity"><span class="site-brand__name" aria-hidden="true"><span class="site-brand__sum">∑</span>quacionei</span><span class="site-brand__tagline" aria-hidden="true">Matemática • Exatas • Ciência de Dados</span></span>
+            </a>
+            <nav class="site-nav" id="site-navigation" aria-label="Navegação principal">
+                <a href="/">Início</a>
+                <a href="/menu#atividades">Atividades</a>
+                <a href="/menu#jogos">Jogos</a>
+            </nav>
+            <a class="site-enter" href="/menu" aria-label="Entrar nas atividades">
+                <svg aria-hidden="true" viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M15 3h5v18h-5M3 12h12M10 7l5 5-5 5"/></svg>
+                <span>Entrar</span>
+            </a>
+            <button class="site-toggle" type="button" aria-controls="site-navigation" aria-expanded="false" aria-label="Abrir menu de navegação" hidden>
+                <svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+            </button>
+        </div>
+    </header>
+<main class="ds-page ml-lab">
+<nav class="ml-breadcrumb" aria-label="Você está aqui"><a href="/static/data-science.html">Data Science</a><span> / </span><a href="/static/data-science.html#machine-learning">Machine Learning</a><span> / XGBoost</span></nav>
+<header class="ml-intro"><p class="ds-kicker">Machine Learning na prática</p><h1>Laboratório XGBoost</h1><p>Dos dados à primeira previsão. Experimente árvores que aprendem a corrigir os erros das anteriores.</p></header>
+<nav class="ml-steps" aria-label="Etapas do laboratório"><a href="#dataset">1 Dataset</a><a href="#configuration">2 Configuração</a><a href="#model">3 Modelo</a><a href="#results">4 Resultados</a><a href="#prediction">5 Previsão</a></nav>
+<p id="ml-status" role="status" aria-live="polite">Carregando datasets disponíveis...</p><p id="ml-error" role="alert" hidden></p>
+<section id="dataset" class="ds-panel"><h2>1. Escolha os dados</h2><p>Comece com uma demonstração ou traga sua própria pergunta em um CSV.</p>
+<fieldset id="dataset-controls" class="ml-grid"><legend class="ml-sr">Origem do dataset</legend>
+<div><label for="demo">Dataset de demonstração</label><select id="demo" disabled></select><button id="load-demo" type="button" disabled>Carregar demonstração</button></div>
+<div><label for="csv">Seu arquivo CSV</label><input id="csv" type="file" disabled accept=".csv,text/csv"><button id="upload" type="button" disabled>Enviar CSV</button><small id="upload-limits">CSV com cabeçalho em UTF-8; separador vírgula, ponto e vírgula ou tabulação.</small></div>
+</fieldset>
+<p>Os dados são enviados ao servidor para este experimento temporário. Dados e modelos expiram; nada é salvo como histórico.</p>
+<div id="dataset-preview" hidden><h3 id="dataset-title"></h3><p id="dataset-summary"></p>
+<details><summary>Colunas, tipos e valores ausentes</summary><div id="column-table" class="ml-table-scroll" tabindex="0" role="region" aria-label="Descrição das colunas"></div></details>
+<div id="preview-table" class="ml-table-scroll" tabindex="0" role="region" aria-label="Amostra inicial do dataset"></div></div>
+</section>
+<form id="train-form" hidden>
+<fieldset id="training-controls">
+<section id="configuration" class="ds-panel"><h2>2. Defina a pergunta</h2>
+<div class="ml-grid"><div><label for="target">Target — o que queremos prever?</label><select id="target" required></select></div>
+<div><label for="model-type">Tipo de problema</label><select id="model-type"><option value="classification">Classificação</option><option value="regression">Regressão</option></select><small id="task-suggestion"></small></div></div>
+<details><summary>Classificação ou regressão?</summary><p>Classificação prevê categorias, como “compra / não compra”. Regressão prevê valores numéricos, como o preço de venda. A sugestão automática é um ponto de partida; você pode alterá-la.</p></details>
+<fieldset><legend>Features — quais variáveis ajudam a responder?</legend><p>O target fica fora das entradas. Evite também identificadores e colunas que só ficam disponíveis depois do resultado.</p><div id="features" class="ml-features"></div></fieldset>
+<details><summary>Como os dados serão preparados?</summary><p>Primeiro separamos treino e teste. Usamos a mediana do treino para números ausentes e uma categoria própria para textos ausentes. Categorias viram indicadores numéricos (one-hot). O teste e as novas previsões usam essa mesma preparação, sem reaprendê-la. Target ausente precisa ser corrigido no CSV.</p></details>
+<div class="ml-grid"><div><label for="train-percent">Treino (%)</label><input id="train-percent" type="number" min="60" max="90" step="1" value="80" required><small id="test-percent">Teste: 20%. Dados que não participam do treinamento.</small></div><div><label for="random_state">random_state</label><input id="random_state" type="number" min="0" max="2147483647" step="1" value="42" required><small>Uma semente fixa permite repetir a divisão dos dados e o treino.</small></div></div>
+</section>
+<section id="model" class="ds-panel"><h2>3. Configure o XGBoost</h2><p>Cada nova árvore busca corrigir erros das anteriores. Comece com os valores sugeridos e observe os resultados.</p>
+<div id="parameters" class="ml-grid"></div>
+<button id="train" type="submit" class="ml-primary">Treinar modelo</button>
+<p id="training-state" role="status"></p>
+</section></fieldset></form>
+<section id="results" class="ds-panel" hidden><h2 tabindex="-1">4. Avalie e interprete</h2><p id="split-summary"></p><p id="preparation-summary"></p>
+<div id="metrics" class="ml-metrics"></div><p id="metric-note"></p>
+<h3 id="evaluation-title"></h3><p id="evaluation-help"></p><div id="evaluation-chart"></div>
+<h3>Importância das Variáveis</h3><p>A importância indica a participação de cada variável no ganho total das árvores. Ela não significa necessariamente causalidade.</p><div id="importance"></div>
+<details><summary>Como interpretar com cuidado</summary><p>Importâncias são normalizadas pelo ganho total nas divisões das árvores; categorias da mesma feature são somadas. Valores correlacionados podem dividir importância. Uma métrica boa no teste não garante boas previsões fora desses dados. Evite ajustar repetidamente os parâmetros para melhorar sempre o mesmo teste.</p></details>
+<details><summary>Resumo do experimento</summary><dl id="experiment-summary" class="ml-summary"></dl></details>
+</section>
+<section id="prediction" class="ds-panel" hidden><h2>5. Testar uma previsão</h2><p>Preencha as features usadas no treino. Campos vazios utilizam a preparação aprendida. Os exemplos iniciais vêm somente do conjunto de treino.</p>
+<form id="predict-form"><fieldset id="prediction-controls"><div id="prediction-fields" class="ml-grid"></div><button id="predict" type="submit" class="ml-primary">Prever</button></fieldset></form><div id="prediction-result" role="status" aria-live="polite"></div></section>
+<button id="clear-experiment" type="button" hidden>Limpar experimento</button>
+</main></body></html>

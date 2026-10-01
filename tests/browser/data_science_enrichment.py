@@ -37,10 +37,10 @@ try:
  nav('data-science/fundamentos.html')
  code=(ROOT/'tests/frontend/data-science-fundamentos.test.js').read_text()
  ok(js(code+'\ntestFundamentalsEnrichment(DataScienceFundamentals,FoundationProgress,FoundationLesson,LearningDatasets)'))
- for width,height,cols in [(360,800,1),(390,844,1),(768,1024,2),(1366,900,3)]:
+ for width,height,cols in [(360,800,1),(390,844,1),(768,1024,2),(1366,900,4)]:
   c.call('Emulation.setDeviceMetricsOverride',{'width':width,'height':height,'deviceScaleFactor':1,'mobile':width<500})
   nav('data-science.html')
-  assert js("document.querySelectorAll('.ds-trail-card').length")==6
+  assert js("document.querySelectorAll('.ds-trail-card').length")==8
   assert js("getComputedStyle(document.querySelector('.ds-trail-grid')).gridTemplateColumns.split(' ').length")==cols
   assert not js('document.documentElement.scrollWidth>innerWidth')
   assert not js("performance.getEntriesByType('resource').some(r=>/micropython|datasets.js/.test(r.name))")

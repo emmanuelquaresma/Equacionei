@@ -1,107 +1,140 @@
 (() => {
     "use strict";
-
-    // Variante adotada: dama curta. Peças comuns e damas andam uma diagonal por vez;
-    // a dama pode usar os quatro sentidos. Capturas pulam uma peça adjacente e são obrigatórias.
-    const gameState = { board: [], currentPlayer: 1, selectedPiece: null, forcedPiece: null, winner: null, message: "", captures: { 1: 0, 2: 0 } };
-    const boardElement = document.querySelector("#checkers-board");
-    const messageElement = document.querySelector("#game-message");
-    const turnElement = document.querySelector("#turn-indicator");
-    const winnerCard = document.querySelector("#winner-card");
-    const winnerMessage = document.querySelector("#winner-message");
-    const counts = { 1: document.querySelector("#player-one-pieces"), 2: document.querySelector("#player-two-pieces") };
-    const captureCounts = { 1: document.querySelector("#player-one-captures"), 2: document.querySelector("#player-two-captures") };
-    const insideBoard = (row, col) => row >= 0 && row < 8 && col >= 0 && col < 8;
+    let gameState = DamaRules.initialState();
+    let mode = 'pvp', active = false, thinking = false, generation = 0;
+    let worker = null, delayTimer = null, watchdog = null, animationTimer = null;
+    let suspended = false, botNotice = '';
+    const BOT_DELAY = 450, JUMP_DELAY = 150, WORKER_LIMIT = 1600;
+    const $ = id => document.getElementById(id);
+    const boardElement = $('checkers-board'), messageElement = $('game-message');
+    const turnElement = $('turn-indicator'), winnerCard = $('winner-card'), winnerMessage = $('winner-message');
+    const counts = { 1: $('player-one-pieces'), 2: $('player-two-pieces') };
+    const captureCounts = { 1: $('player-one-captures'), 2: $('player-two-captures') };
     const isPlayable = (row, col) => (row + col) % 2 === 1;
-    const copyPosition = (row, col) => ({ row, col });
-    const nomeDasPecas = (player) => player === 1 ? "peças brancas" : "peças pretas";
-
-    function initializarPecas() {
-        gameState.board = Array.from({ length: 8 }, () => Array(8).fill(null));
-        for (let row = 0; row < 3; row += 1) for (let col = 0; col < 8; col += 1) if (isPlayable(row, col)) gameState.board[row][col] = { player: 2, king: false };
-        for (let row = 5; row < 8; row += 1) for (let col = 0; col < 8; col += 1) if (isPlayable(row, col)) gameState.board[row][col] = { player: 1, king: false };
+    const nomeDasPecas = player => player === 1 ? 'peças brancas' : 'peças pretas';
+    const isBotTurn = () => mode === 'bot' && gameState.currentPlayer === 2 && !gameState.winner;
+    function cancelBot() {
+        generation++;
+        clearTimeout(delayTimer); clearTimeout(watchdog); clearTimeout(animationTimer);
+        delayTimer = watchdog = animationTimer = null;
+        if (worker) { worker.terminate(); worker = null; }
+        thinking = false;
     }
-
-    function directionsFor(piece) { return piece.king ? [[-1, -1], [-1, 1], [1, -1], [1, 1]] : [[piece.player === 1 ? -1 : 1, -1], [piece.player === 1 ? -1 : 1, 1]]; }
-    function obterMovimentosValidos(row, col, capturesOnly = false) {
-        const piece = gameState.board[row][col];
-        if (!piece) return [];
-        const moves = [];
-        directionsFor(piece).forEach(([rowStep, colStep]) => {
-            const nextRow = row + rowStep; const nextCol = col + colStep;
-            if (!insideBoard(nextRow, nextCol)) return;
-            const neighbour = gameState.board[nextRow][nextCol];
-            if (!neighbour && !capturesOnly) moves.push({ row: nextRow, col: nextCol, capture: null });
-            if (neighbour && neighbour.player !== piece.player) {
-                const landingRow = nextRow + rowStep; const landingCol = nextCol + colStep;
-                if (insideBoard(landingRow, landingCol) && !gameState.board[landingRow][landingCol]) moves.push({ row: landingRow, col: landingCol, capture: copyPosition(nextRow, nextCol) });
+    function scheduleBot() {
+        if (!active || suspended || document.hidden || !isBotTurn() || thinking) return;
+        DamaRules.finish(gameState);
+        if (gameState.winner) { renderizar(); return; }
+        thinking = true;
+        const ticket = ++generation, snapshot = DamaRules.clone(gameState), started = performance.now();
+        const current = () => ticket === generation && active && !suspended && isBotTurn();
+        let settled = false;
+        function deliver(moves, fallback = false, info = null) {
+            if (settled || !current()) return;
+            settled = true;
+            clearTimeout(watchdog);
+            if (worker) { worker.terminate(); worker = null; }
+            // Valida a sequência inteira no motor antes de animar qualquer movimento.
+            try {
+                let check = snapshot;
+                if (!Array.isArray(moves) || !moves.length) throw new Error('Sem jogada');
+                for (const move of moves) check = DamaRules.applyMove(check, move, 2);
+                if (check.forcedPiece || check.currentPlayer === 2) throw new Error('Turno incompleto');
+            } catch (_) { moves = DamaRules.firstTurn(snapshot); fallback = true; }
+            botNotice = fallback ? 'Busca indisponível; o computador usou uma jogada legal simplificada.' : info ? `${info.algorithm} · ${info.simulations ? info.simulations + ' simulações' : 'profundidade ' + info.depth + ' · ' + info.nodes + ' posições'} · ${Math.round(info.elapsed)} ms${info.estimate != null ? ' · estimativa do modelo: ' + Math.round(info.estimate * 100) + '%' : ''}` : '';
+            let index = 0;
+            function step() {
+                if (!current()) return;
+                if (!moves.length) { DamaRules.finish(gameState); thinking = false; renderizar(); return; }
+                gameState = DamaRules.applyMove(gameState, moves[index++], 2);
+                gameState.selectedPiece = gameState.forcedPiece;
+                if (index < moves.length) animationTimer = setTimeout(step, JUMP_DELAY);
+                else thinking = false;
+                renderizar();
             }
-        });
-        return moves;
-    }
-    function movimentosDoJogador(player, capturesOnly = false) {
-        const moves = [];
-        gameState.board.forEach((line, row) => line.forEach((piece, col) => { if (piece?.player === player) obterMovimentosValidos(row, col, capturesOnly).forEach((move) => moves.push({ from: copyPosition(row, col), ...move })); }));
-        return moves;
-    }
-    function jogadorTemCaptura(player) { return movimentosDoJogador(player, true).length > 0; }
-    function selecionarPeca(row, col) {
-        const piece = gameState.board[row][col];
-        if (!piece || piece.player !== gameState.currentPlayer || gameState.winner) return false;
-        if (gameState.forcedPiece && (row !== gameState.forcedPiece.row || col !== gameState.forcedPiece.col)) return false;
-        const moves = obterMovimentosValidos(row, col, jogadorTemCaptura(gameState.currentPlayer));
-        if (!moves.length) return false;
-        gameState.selectedPiece = copyPosition(row, col);
-        gameState.message = "Peça selecionada. Escolha uma casa destacada.";
-        return true;
-    }
-    function verificarPromocao(row, piece) { if ((piece.player === 1 && row === 0) || (piece.player === 2 && row === 7)) piece.king = true; }
-    function executarCaptura(capture) { gameState.board[capture.row][capture.col] = null; gameState.captures[gameState.currentPlayer] += 1; }
-    function alternarTurno() { gameState.currentPlayer = gameState.currentPlayer === 1 ? 2 : 1; gameState.selectedPiece = null; gameState.forcedPiece = null; gameState.message = `Vez das ${nomeDasPecas(gameState.currentPlayer)}.`; }
-    function verificarFimDeJogo() {
-        const pieces = contarPecas();
-        if (pieces[gameState.currentPlayer] === 0 || movimentosDoJogador(gameState.currentPlayer).length === 0) {
-            gameState.winner = gameState.currentPlayer === 1 ? 2 : 1;
-            gameState.message = `As ${nomeDasPecas(gameState.winner)} venceram!`;
+            delayTimer = setTimeout(step, Math.max(0, BOT_DELAY - (performance.now() - started)));
         }
-    }
-    function moverPeca(move) {
-        const from = gameState.selectedPiece; const piece = gameState.board[from.row][from.col];
-        gameState.board[move.row][move.col] = piece; gameState.board[from.row][from.col] = null;
-        if (move.capture) executarCaptura(move.capture);
-        verificarPromocao(move.row, piece);
-        if (move.capture && obterMovimentosValidos(move.row, move.col, true).length) { gameState.selectedPiece = copyPosition(move.row, move.col); gameState.forcedPiece = copyPosition(move.row, move.col); gameState.message = "Capture novamente com a mesma peça."; }
-        else { alternarTurno(); verificarFimDeJogo(); }
+        renderizar();
+        try {
+            worker = new Worker('/static/js/dama-ai-worker.js');
+            worker.onmessage = ({ data }) => {
+                if (data.ticket !== ticket || !current()) return;
+                deliver(data.error ? DamaRules.firstTurn(snapshot) : data.moves, !!data.error, data);
+            };
+            worker.onerror = event => { event.preventDefault(); deliver(DamaRules.firstTurn(snapshot), true); };
+            watchdog = setTimeout(() => deliver(DamaRules.firstTurn(snapshot), true), WORKER_LIMIT);
+            worker.postMessage({ ticket, state: snapshot, difficulty: $('bot-difficulty').value });
+        } catch (_) { deliver(DamaRules.firstTurn(snapshot), true); }
     }
     function onSquareClick(row, col) {
-        if (gameState.winner) return;
-        const selected = gameState.selectedPiece;
-        if (selected) {
-            const possibleMoves = obterMovimentosValidos(selected.row, selected.col, jogadorTemCaptura(gameState.currentPlayer));
-            const move = possibleMoves.find((item) => item.row === row && item.col === col);
-            if (move) { moverPeca(move); renderizar(); return; }
-        }
-        if (!selecionarPeca(row, col)) gameState.message = gameState.forcedPiece ? "Você precisa continuar a sequência de capturas." : "Escolha uma peça sua que tenha um movimento válido.";
-        renderizar();
+        if (!active || gameState.winner || isBotTurn()) return;
+        botNotice = '';
+        const legal = DamaRules.legalMoves(gameState);
+        const move = legal.find(item => DamaRules.same(item.from, gameState.selectedPiece) && item.to.row === row && item.to.col === col);
+        if (move) {
+            gameState = DamaRules.applyMove(gameState, move);
+            gameState.selectedPiece = gameState.forcedPiece;
+            gameState.message = gameState.forcedPiece ? 'Capture novamente com a mesma peça.' : '';
+        } else if (legal.some(item => item.from.row === row && item.from.col === col)) {
+            gameState.selectedPiece = { row, col };
+            gameState.message = 'Peça selecionada. Escolha uma casa destacada.';
+        } else gameState.message = gameState.forcedPiece ? 'Você precisa continuar a sequência de capturas.' : 'Escolha uma peça sua que tenha um movimento válido.';
+        renderizar(); scheduleBot();
     }
-    function contarPecas() { const total = { 1: 0, 2: 0 }; gameState.board.flat().forEach((piece) => { if (piece) total[piece.player] += 1; }); return total; }
     function criarTabuleiro() {
         boardElement.replaceChildren();
-        const targets = gameState.selectedPiece ? obterMovimentosValidos(gameState.selectedPiece.row, gameState.selectedPiece.col, jogadorTemCaptura(gameState.currentPlayer)) : [];
+        const targets = gameState.selectedPiece && !isBotTurn() ? DamaRules.legalMoves(gameState).filter(move => DamaRules.same(move.from, gameState.selectedPiece)) : [];
         gameState.board.forEach((line, row) => line.forEach((piece, col) => {
             const square = document.createElement("button"); square.type = "button"; square.className = `square ${isPlayable(row, col) ? "square--dark" : "square--light"}`; square.setAttribute("role", "gridcell");
-            const isTarget = targets.some((move) => move.row === row && move.col === col);
+            const isTarget = targets.some((move) => move.to.row === row && move.to.col === col);
             if (isTarget) square.classList.add("square--target");
             square.setAttribute("aria-label", piece ? `Linha ${row + 1}, coluna ${col + 1}: ${piece.player === 1 ? "peça branca" : "peça preta"}${piece.king ? ", dama" : ""}` : `Linha ${row + 1}, coluna ${col + 1}${isTarget ? ", destino possível" : ""}`);
             if (piece) { const token = document.createElement("span"); token.className = `piece piece--${piece.player}${piece.king ? " piece--king" : ""}${gameState.selectedPiece?.row === row && gameState.selectedPiece?.col === col ? " piece--selected" : ""}`; token.setAttribute("aria-hidden", "true"); square.append(token); }
+            square.disabled = !!gameState.winner || isBotTurn();
             square.addEventListener("click", () => onSquareClick(row, col)); boardElement.append(square);
         }));
     }
     function renderizar() {
-        criarTabuleiro(); const pieces = contarPecas(); counts[1].textContent = pieces[1]; counts[2].textContent = pieces[2]; captureCounts[1].textContent = gameState.captures[1]; captureCounts[2].textContent = gameState.captures[2];
-        turnElement.textContent = gameState.winner ? "Partida finalizada" : `Vez das ${nomeDasPecas(gameState.currentPlayer)}`; turnElement.classList.toggle("turn-indicator--two", gameState.currentPlayer === 2 && !gameState.winner); messageElement.textContent = gameState.message;
-        winnerCard.hidden = !gameState.winner; if (gameState.winner) winnerMessage.textContent = `As ${nomeDasPecas(gameState.winner)} venceram!`;
+        criarTabuleiro();
+        const pieces = DamaRules.counts(gameState);
+        for (const player of [1, 2]) { counts[player].textContent = pieces[player]; captureCounts[player].textContent = gameState.captures[player]; }
+        const turn = gameState.winner ? 'Partida finalizada' : isBotTurn() ? 'Computador pensando...' : mode === 'bot' ? 'Sua vez' : `Vez das ${nomeDasPecas(gameState.currentPlayer)}`;
+        turnElement.textContent = turn;
+        turnElement.classList.toggle('turn-indicator--two', gameState.currentPlayer === 2 && !gameState.winner);
+        const won = mode === 'bot' ? (gameState.winner === 1 ? 'Você venceu!' : 'O computador venceu!') : `As ${nomeDasPecas(gameState.winner)} venceram!`;
+        messageElement.textContent = gameState.winner ? won : isBotTurn() ? turn : gameState.message || turn;
+        $('bot-notice').textContent = botNotice;
+        $('local-matchup').textContent = mode === 'bot' ? 'Jogador × Computador' : 'Jogador × Jogador';
+        $('difficulty-control').hidden = mode !== 'bot';
+        $('bot-explanation').hidden = mode !== 'bot';
+        const descriptions = { easy: 'Regressão logística: avalia um turno à frente com pesos treinados em partidas simuladas.', medium: 'MCTS: simula partidas e usa UCB1 para equilibrar exploração e aproveitamento. O número de simulações depende do tempo disponível.', hard: 'TD + Minimax: avaliação aprendida por autojogo, com busca e poda alfa-beta até 6 turnos à frente.' };
+        $('bot-algorithm').textContent = descriptions[$('bot-difficulty').value];
+        $('local-mode').value = mode;
+        boardElement.setAttribute('aria-busy', String(thinking));
+        winnerCard.hidden = !gameState.winner;
+        if (gameState.winner) winnerMessage.textContent = won;
     }
-    function reiniciarPartida() { initializarPecas(); gameState.currentPlayer = 1; gameState.selectedPiece = null; gameState.forcedPiece = null; gameState.winner = null; gameState.message = "Vez das peças brancas."; gameState.captures = { 1: 0, 2: 0 }; renderizar(); }
-    document.querySelector("#restart-game").addEventListener("click", reiniciarPartida); document.querySelector("#play-again").addEventListener("click", reiniciarPartida); reiniciarPartida();
+    function reiniciarPartida() {
+        cancelBot(); botNotice = ''; gameState = DamaRules.initialState();
+        renderizar(); scheduleBot();
+    }
+    function setMode(value) {
+        const next = value === 'bot' ? 'bot' : 'pvp';
+        if (mode !== next) { mode = next; reiniciarPartida(); }
+        else { renderizar(); scheduleBot(); }
+    }
+    function setActive(value) {
+        active = value;
+        if (!active) cancelBot();
+        else { renderizar(); scheduleBot(); }
+    }
+    // Ponte apenas para o seletor de modos existente; não altera sessões online.
+    window.DamaLocal = { setMode, setActive, getState: () => DamaRules.clone(gameState) };
+    $('local-mode').addEventListener('change', event => setMode(event.target.value));
+    $('bot-difficulty').addEventListener('change', () => { cancelBot(); scheduleBot(); renderizar(); });
+    $('restart-game').addEventListener('click', reiniciarPartida);
+    $('play-again').addEventListener('click', reiniciarPartida);
+    window.addEventListener('pagehide', () => { suspended = true; cancelBot(); });
+    window.addEventListener('pageshow', () => { suspended = false; scheduleBot(); });
+    document.addEventListener('visibilitychange', () => { if (document.hidden) cancelBot(); else scheduleBot(); });
+    reiniciarPartida();
 })();

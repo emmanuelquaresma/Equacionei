@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "equacionei-dama-lab"
+version = "0.1.0"
+description = "Laboratório reproduzível de decisão e aprendizado para a Dama do Equacionei"
+requires-python = ">=3.9"
+dependencies = ["numpy>=1.24,<3"]
+
+[project.scripts]
+dama-lab = "equacionei_dama.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

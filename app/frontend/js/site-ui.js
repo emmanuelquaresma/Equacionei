@@ -53,7 +53,7 @@
         else if (path.endsWith('/data-science.html')) active = 'data';
         else if (path.endsWith('/sobre.html')) active = 'about';
         else if (path === '/menu' || path.endsWith('/pages/menu.html')) active = hash === '#jogos' ? 'games' : 'activities';
-        else if (/\/(primeiro|segundo)-grau\.html$/.test(path)) active = 'activities';
+        else if (path.endsWith('/fundamentos-matematicos.html') || /\/(primeiro|segundo)-grau\.html$/.test(path)) active = 'activities';
         else if (/\/(dama|xadrez|queda-matematica|desafio-relampago|racha-cuca|labirinto-matematico|jogo-dos-pares)\.html$/.test(path)) active = 'games';
         else if (path === '/' || path.endsWith('/index.html')) active = 'home';
         nav.querySelectorAll('a').forEach(link => {

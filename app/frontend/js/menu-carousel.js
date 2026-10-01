@@ -29,6 +29,15 @@
         prev.disabled = active === 0;
         next.disabled = active === cards.length - 1;
         status.textContent = `${active + 1} de ${cards.length}: ${cards[active].querySelector('h2').textContent}`;
+        // Opt-in para assuntos com descrições de comprimentos diferentes.
+        // A altura natural do card ativo mantém o acesso visível no celular.
+        if (root.hasAttribute('data-fit-active') && root.getClientRects().length) {
+            const style = getComputedStyle(track);
+            const top = parseFloat(style.paddingTop);
+            const height = cards[active].offsetHeight;
+            track.style.height = `${top + height + parseFloat(style.paddingBottom)}px`;
+            root.style.setProperty('--carousel-arrow-top', `${top + height / 2 - 22}px`);
+        }
     }
     function go(index, instant = false) {
         if (!root.getClientRects().length) return;
