@@ -1,6 +1,6 @@
 # Fundamentos Matemáticos
 
-A página `/static/fundamentos-matematicos.html?assunto=fracoes` serve os quatro assuntos novos. O carrossel existente em `app/frontend/pages/menu.html` mantém as duas aplicações de funções e seus links. Os quatro novos cards usam as mesmas classes e o mesmo controlador de carrossel. O atributo opcional `data-fit-active` ajusta a altura ao card ativo em `menu-carousel.js` e `carousel.css`, evitando que os cards novos herdem espaços vazios dos antigos. Os carrosséis de jogos e Data Science mantêm o comportamento anterior.
+A página `/static/fundamentos-matematicos.html?assunto=fracoes` serve quatro assuntos de prática matemática e 12 exercícios no total. No baseline de 2026-10-01, quatro assuntos da lista planejada ainda não existem: Números Inteiros, Razão e Proporção, Equação do 1º Grau e Equação do 2º Grau. O carrossel existente em `app/frontend/pages/menu.html` mantém as duas páginas independentes de funções e seus links. Os quatro cards matemáticos usam as mesmas classes e o mesmo controlador de carrossel. O atributo opcional `data-fit-active` ajusta a altura ao card ativo em `menu-carousel.js` e `carousel.css`.
 
 ## Catálogo e extensão
 
@@ -27,6 +27,6 @@ Para adicionar um assunto, acrescente seus dados ao catálogo e um link no carro
 
 Execute `python3 tests/browser/math_practice.py` com Chrome/Chromium instalado. A suíte usa servidor e perfil temporários, percorre os 12 exercícios e verifica erros, acertos, dicas, resolução, navegação, teclado, menu e dimensões mobile/desktop. Capturas ficam em `/tmp/math-practice-*.png`.
 
-Limitação anterior identificada: `primeiro-grau.html` referencia `js/primeiro-grau.js`, ausente no repositório antes desta implementação. A página e seu link foram preservados, mas seu cálculo não pode ser confirmado funcional. As aplicações de funções dependem também do Chart.js externo.
+Fase 0: a página de Função do 1º Grau agora possui o script que o HTML esperava. As duas páginas de funções usam cópia local fixa do Chart.js 4.4.7 em `app/frontend/vendor/`; não dependem mais do CDN para carregar gráficos.
 
-Validação local: 12 exercícios em 320, 390, 768 e 1366 px; interação por teclado, dicas, resoluções, resumo e ausência de overflow. As suítes existentes de Desafio Relâmpago e Jogo dos Pares também foram executadas. A função de 2º grau manteve cálculo, gráfico e tabela. Testes em Chrome headless com viewport emulado; aparelhos físicos não foram usados.
+O teste browser percorre os 12 exercícios e verifica respostas, dicas, resoluções, navegação, teclado e overflow. Ele não representa a implementação dos quatro assuntos planejados acima; as dimensões e resultados efetivamente validados devem ser registrados por execução, não presumidos a partir deste texto.

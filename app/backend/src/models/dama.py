@@ -51,6 +51,7 @@ class Room:
     players: list[Player] = field(default_factory=list)
     created_at: datetime = field(default_factory=now)
     updated_at: datetime = field(default_factory=now)
+    ended_at: datetime | None = None
     revision: int = 0
     creator_id: str | None = None
     started: bool = False

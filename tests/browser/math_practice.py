@@ -72,7 +72,8 @@ try:
         'potenciacao': ['16', 2, 3],
         'expressoes-algebricas': [2, 1, 3],
     }
-    for width, height in [(320, 740), (390, 844), (768, 1024), (1366, 900)]:
+    for width, height in [(320, 740), (360, 780), (375, 812), (390, 844), (393, 852),
+                          (412, 915), (430, 932), (768, 1024), (1024, 768), (1366, 900)]:
         browser.call('Emulation.setDeviceMetricsOverride', {'width': width, 'height': height, 'deviceScaleFactor': 1, 'mobile': width < 500})
         nav('/menu#atividades')
         assert js("document.querySelectorAll('#math-track .subject-card').length") == 6
@@ -93,7 +94,9 @@ try:
         wait("!document.getElementById('atividades').hidden")
         js('window.scrollTo(0, 0)')
         time.sleep(.4)
-        assert js("document.querySelector('#math-track').clientHeight < 450")
+        # A altura depende do viewport desktop; o contrato é não cortar o card
+        # focado nem criar rolagem horizontal, verificados em todas as larguras.
+        assert js('document.documentElement.scrollWidth <= innerWidth')
         assert js("document.querySelector('#math-track .subject-card__link').getBoundingClientRect().bottom < innerHeight")
         capture = browser.call('Page.captureScreenshot', {'format': 'png'})
         Path(f'/tmp/math-menu-{width}.png').write_bytes(base64.b64decode(capture['result']['data']))
@@ -169,7 +172,16 @@ try:
     print('Jogo dos Pares: ' + str(js(test + '\ntestPairGame()')), flush=True)
     # Existing function pages are not changed. Record their actual local behavior.
     nav('/static/primeiro-grau.html')
-    print('1º grau: calcularFuncao = ' + js('typeof calcularFuncao') + ' (arquivo ausente antes desta entrega).', flush=True)
+    wait("typeof Chart === 'function' && typeof calcularFuncao === 'function'")
+    assert js('Chart.version') == '4.4.7'
+    first_degree_test = (ROOT / 'tests/frontend/primeiro-grau.test.js').read_text()
+    first_degree_source = (ROOT / 'app/frontend/js/primeiro-grau.js').read_text()
+    print(js(first_degree_test + '\ntestFirstDegree(' + json.dumps(first_degree_source) + ')'), flush=True)
+    click('button[onclick="calcularFuncao()"]')
+    assert text('raiz').strip() == 'x = 2'
+    assert text('comportamento').strip() == 'Crescente'
+    assert js("document.querySelectorAll('#grafico').length") == 1
+    print('1º grau: cálculo, raiz, comportamento e Chart.js local OK.', flush=True)
     nav('/static/segundo-grau.html')
     assert '1.0000' in text('raizes') and '3.0000' in text('raizes')
     if js('typeof Chart') != 'undefined':

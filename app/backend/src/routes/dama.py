@@ -5,8 +5,9 @@ Não enviar token em URL. Após autenticação, mensagens room_state/player_* co
 snapshot completo e revision. Move é validado pelo motor de regras no backend.
 """
 import asyncio
+import os
 
-from fastapi import APIRouter, Depends, HTTPException, Response, WebSocket, WebSocketDisconnect
+from fastapi import APIRouter, Depends, HTTPException, Request, Response, WebSocket, WebSocketDisconnect
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
 from pydantic import ValidationError
@@ -14,10 +15,14 @@ from pydantic import ValidationError
 from schemas.dama import RoomView, SessionView, MoveRequest
 from services.dama_game import InvalidMove
 from services.dama import RoomError, RoomService
+from services.rate_limit import limiter
 
 router = APIRouter()
 service = RoomService()
 bearer = HTTPBearer(auto_error=False)
+ALLOWED_ORIGINS = {item.strip().rstrip("/") for item in os.getenv(
+    "ALLOWED_ORIGINS", "http://localhost:8000,http://127.0.0.1:8000,https://equacionei.com.br,https://www.equacionei.com.br"
+).split(",") if item.strip()}
 
 
 async def session_token(credentials: HTTPAuthorizationCredentials | None = Depends(bearer)):
@@ -38,9 +43,17 @@ def no_cache(response: Response):
 
 
 @router.post("/api/dama/rooms", response_model=SessionView, status_code=201)
-async def create_room(response: Response):
+async def create_room(request: Request, response: Response):
     no_cache(response)
-    return service.create()
+    limited(request, 10, 60, "dama:create")
+    return call(service.create)
+
+
+def limited(request: Request, maximum: int, window: int, namespace: str):
+    ip = request.client.host if request.client else "unknown"
+    retry = limiter.check(f"{namespace}:{ip}", maximum, window)
+    if retry is not None:
+        raise HTTPException(429, "Muitas solicitações. Aguarde e tente novamente.", headers={"Retry-After": str(retry)})
 
 
 @router.post("/api/dama/rooms/{room_id}/join", response_model=SessionView, status_code=201)
@@ -83,6 +96,10 @@ async def start_room(room_id: str, response: Response, token: str = Depends(sess
 
 @router.websocket("/ws/dama/{room_id}")
 async def room_socket(websocket: WebSocket, room_id: str):
+    origin = websocket.headers.get("origin", "").rstrip("/")
+    if not origin or origin not in ALLOWED_ORIGINS:
+        await websocket.close(code=1008)
+        return
     await websocket.accept()
     player = None
     try:

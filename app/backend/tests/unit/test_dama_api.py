@@ -6,10 +6,12 @@ import unittest
 from fastapi import FastAPI
 from routes import dama
 from services.dama import RoomService
+from services.rate_limit import limiter
 
 
 class ApiTest(unittest.IsolatedAsyncioTestCase):
     def setUp(self):
+        limiter._events.clear()
         dama.service = RoomService()
         self.app = FastAPI()
         self.app.include_router(dama.router)
@@ -26,6 +28,7 @@ class ApiTest(unittest.IsolatedAsyncioTestCase):
                         "query_string": b"", "headers": headers, "server": ("test", 80),
                         "client": ("test", 1), "root_path": ""}, receive, send)
         body = b"".join(m.get("body", b"") for m in messages)
+        self.response_headers = dict(messages[0].get("headers", []))
         return messages[0]["status"], json.loads(body)
 
     async def test_http_session_and_capacity(self):
@@ -47,16 +50,33 @@ class ApiTest(unittest.IsolatedAsyncioTestCase):
         self.assertEqual((await self.http("POST", "/api/dama/rooms"))[0], 201)
         self.assertEqual((await self.http("GET", "/api/dama/rooms/missing", session["session_token"]))[0], 404)
 
-    async def socket(self, room_id, token):
+    async def test_room_creation_rate_limit(self):
+        for _ in range(10):
+            self.assertEqual((await self.http("POST", "/api/dama/rooms"))[0], 201)
+        status, _ = await self.http("POST", "/api/dama/rooms")
+        self.assertEqual(status, 429)
+        self.assertGreater(int(self.response_headers[b"retry-after"]), 0)
+
+    async def socket(self, room_id, token, origin=b"http://localhost:8000"):
         incoming, outgoing = asyncio.Queue(), asyncio.Queue()
         scope = {"type": "websocket", "asgi": {"version": "3.0"}, "scheme": "ws",
-                 "path": f"/ws/dama/{room_id}", "query_string": b"", "headers": [],
+                 "path": f"/ws/dama/{room_id}", "query_string": b"", "headers": [(b"origin", origin)],
                  "server": ("test", 80), "client": ("test", 1), "root_path": "", "subprotocols": []}
         task = asyncio.create_task(self.app(scope, incoming.get, outgoing.put))
         await incoming.put({"type": "websocket.connect"})
         self.assertEqual((await asyncio.wait_for(outgoing.get(), 1))["type"], "websocket.accept")
         await incoming.put({"type": "websocket.receive", "text": json.dumps({"type": "authenticate", "session_token": token})})
         return task, incoming, outgoing
+
+    async def test_websocket_rejects_unlisted_origin_before_accept(self):
+        session = dama.service.create()
+        incoming, outgoing = asyncio.Queue(), asyncio.Queue()
+        scope = {"type": "websocket", "asgi": {"version": "3.0"}, "scheme": "ws",
+                 "path": f"/ws/dama/{session.room.room_id}", "query_string": b"", "headers": [(b"origin", b"https://evil.example")],
+                 "server": ("test", 80), "client": ("test", 1), "root_path": "", "subprotocols": []}
+        await self.app(scope, incoming.get, outgoing.put)
+        self.assertEqual((await outgoing.get())["type"], "websocket.close")
+        self.assertFalse(dama.service.get(session.room.room_id).players[0].connected)
 
     async def test_websocket_auth_disconnect_reconnect(self):
         session = dama.service.create()

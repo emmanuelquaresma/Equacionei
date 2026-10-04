@@ -9,6 +9,7 @@ from schemas.ml import TrainRequest, PredictRequest, ReleaseRequest
 from services.ml.datasets import DEMOS
 from services.ml.errors import LabError
 from services.ml.service import LabService
+from services.rate_limit import limiter
 
 logger = logging.getLogger(__name__)
 service = LabService()
@@ -72,6 +73,11 @@ async def upload(request: Request, filename: str = ''):
 
 @router.post('/xgboost/train')
 async def train(request: Request):
+    ip = request.client.host if request.client else 'unknown'
+    retry = limiter.check(f'ml:train:{ip}', 20, 600)
+    if retry is not None:
+        raise HTTPException(429, 'Muitos treinamentos deste endereço. Aguarde e tente novamente.',
+                            headers={'Retry-After': str(retry)})
     return await call(service.train, await payload(request, TrainRequest))
 
 
