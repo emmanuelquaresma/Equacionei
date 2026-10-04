@@ -107,9 +107,23 @@ O frontend usa ping e reconexão progressiva para recuperar conexões interrompi
 ## Limites operacionais
 
 Memória de um processo, com um único worker. Reinício/reload perde as salas.
-Não há banco, expiração, limite global de salas ou rate limiting. Persistência e
-armazenamento compartilhado são necessários para sobreviver a reinícios e usar
-múltiplos workers. O Uvicorn precisa da dependência websockets de requirements.txt.
+O serviço limita o total a 200 salas (`DAMA_MAX_ROOMS`), por padrão, e remove
+salas em espera após 30 minutos, salas sem conexão ativa após 10 minutos e salas
+encerradas após 5 minutos. A limpeza roda periodicamente e também ocorre durante
+operações de acesso/criação. Os intervalos podem ser configurados por
+`DAMA_WAITING_TTL_SECONDS`, `DAMA_DISCONNECTED_TTL_SECONDS` e
+`DAMA_FINISHED_TTL_SECONDS`.
+
+A criação de salas tem limite em memória de 10 solicitações por IP por minuto;
+treinamentos ML têm limite de 20 por IP a cada 10 minutos. Esses limites são por
+processo e não substituem limitação distribuída. Atrás de proxy, configure a
+infraestrutura para que `request.client.host` represente o IP do cliente sem
+confiar em cabeçalhos arbitrários. A origem do WebSocket é validada pela
+allowlist `ALLOWED_ORIGINS`; configure-a com as origens exatas permitidas.
+
+Persistência e armazenamento compartilhado continuam necessários para sobreviver
+a reinícios e usar múltiplos workers. O Uvicorn precisa da dependência
+websockets de requirements.txt.
 
 ## Validação sem Docker
 

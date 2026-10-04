@@ -1,5 +1,7 @@
 import asyncio
 import unittest
+from datetime import timedelta
+from models.dama import RoomStatus, now
 
 from services.dama import RoomError, RoomService
 
@@ -39,6 +41,52 @@ class RoomsTest(unittest.IsolatedAsyncioTestCase):
                 self.service.authenticate(self.room_id, token)
         with self.assertRaises(RoomError):
             self.service.authenticate("missing", self.white.session_token)
+
+    def test_room_capacity_and_expiration(self):
+        service = RoomService(max_rooms=1, waiting_ttl=30, disconnected_ttl=10, finished_ttl=5)
+        first = service.create()
+        with self.assertRaises(RoomError) as error:
+            service.create()
+        self.assertEqual(error.exception.status_code, 429)
+        service.rooms[first.room.room_id].updated_at = now() - timedelta(seconds=31)
+        service.cleanup_expired()
+        self.assertEqual(service.rooms, {})
+
+    def test_disconnected_room_uses_shorter_expiration(self):
+        service = RoomService(waiting_ttl=1800, disconnected_ttl=10)
+        session = service.create()
+        service.rooms[session.room.room_id].started = True
+        service.rooms[session.room.room_id].status = RoomStatus.PAUSED
+        service.rooms[session.room.room_id].updated_at = now() - timedelta(seconds=11)
+        self.assertEqual(service.cleanup_expired(), [session.room.room_id])
+
+    async def test_finished_room_closes_sockets_when_reaped(self):
+        service = RoomService(finished_ttl=5)
+        white = service.create()
+        black = service.join(white.room.room_id)
+        socket = Socket()
+        service.connect(white.room.room_id, white.session_token, socket)
+        room = service.get(white.room.room_id)
+        room.status = "FINISHED"
+        room.updated_at = now() - timedelta(seconds=6)
+        self.assertEqual(await service.reap_expired(), [white.room.room_id])
+        self.assertTrue(socket.closed)
+        self.assertNotIn(white.room.room_id, service.rooms)
+
+    def test_disconnect_does_not_extend_finished_room_retention(self):
+        service = RoomService(finished_ttl=5)
+        session = service.create()
+        socket = Socket()
+        service.connect(session.room.room_id, session.session_token, socket)
+        room = service.get(session.room.room_id)
+        room.status = RoomStatus.FINISHED
+        service.touch(room)
+        ended_at = room.ended_at
+        room.ended_at = ended_at - timedelta(seconds=6)
+        service.disconnect(session.room.room_id, session.player_id, socket)
+        self.assertGreater(room.updated_at, ended_at)
+        self.assertTrue(service._is_expired(room, now()))
+        self.assertEqual(service.cleanup_expired(), [session.room.room_id])
 
     async def test_reconnect_multi_tab_and_leave(self):
         black = self.service.join(self.room_id)

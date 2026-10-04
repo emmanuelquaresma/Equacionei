@@ -13,10 +13,12 @@ from services.ml.errors import LabError
 from services.ml.service import LabService
 from services.ml.store import MemoryStore
 from services.ml.datasets import load_csv
+from services.rate_limit import limiter
 
 
 class MLApiTest(unittest.IsolatedAsyncioTestCase):
     def setUp(self):
+        limiter._events.clear()
         ml.service = LabService()
         self.app = FastAPI()
         self.app.include_router(ml.router)
@@ -33,6 +35,7 @@ class MLApiTest(unittest.IsolatedAsyncioTestCase):
                         'query_string': query, 'headers': [(b'content-type', b'application/json')],
                         'server': ('test',80), 'client': ('test',1), 'root_path': ''}, receive, send)
         data = json.loads(b''.join(m.get('body', b'') for m in messages))
+        self.response_headers = dict(messages[0].get('headers', []))
         return messages[0]['status'], data
 
     async def demo(self, name='iris'):
@@ -143,6 +146,13 @@ class MLApiTest(unittest.IsolatedAsyncioTestCase):
         for values in [{},{**valid,'extra':1},{**valid,next(iter(valid)):'abc'},{**valid,next(iter(valid)):'Infinity'}]:
             code,body=await self.http('POST','/xgboost/predict',{'model_id':trained['model_id'],'values':values})
             self.assertEqual(code,422,body)
+
+    async def test_training_rate_limit(self):
+        for _ in range(20):
+            self.assertEqual((await self.http('POST','/xgboost/train'))[0], 422)
+        status, _ = await self.http('POST','/xgboost/train')
+        self.assertEqual(status, 429)
+        self.assertGreater(int(self.response_headers[b'retry-after']), 0)
 
     async def test_capacity_expiry_busy_and_deadline(self):
         cache=MemoryStore(replace(LIMITS,max_entries=1,ttl_seconds=1))

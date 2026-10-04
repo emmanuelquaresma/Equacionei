@@ -5,6 +5,8 @@ Leave encerra a sessão; desconexão temporária mantém o token. Não atribui d
 ABANDONED encerra salas sem participantes vinculados; FINISHED indica vitória.
 """
 import asyncio
+import os
+import time
 import secrets
 from uuid import uuid4
 
@@ -21,12 +23,65 @@ class RoomError(Exception):
 
 
 class RoomService:
-    def __init__(self):
+    def __init__(self, max_rooms=None, waiting_ttl=None, disconnected_ttl=None, finished_ttl=None):
         self.rooms: dict[str, Room] = {}
         self.connections: dict[str, dict[str, set]] = {}
         self.broadcast_locks: dict[str, asyncio.Lock] = {}
+        self.max_rooms = max_rooms or int(os.getenv("DAMA_MAX_ROOMS", "200"))
+        self.waiting_ttl = waiting_ttl or int(os.getenv("DAMA_WAITING_TTL_SECONDS", "1800"))
+        self.disconnected_ttl = disconnected_ttl or int(os.getenv("DAMA_DISCONNECTED_TTL_SECONDS", "600"))
+        self.finished_ttl = finished_ttl or int(os.getenv("DAMA_FINISHED_TTL_SECONDS", "300"))
+
+    def cleanup_expired(self, current=None):
+        current = current or now()
+        removed = []
+        for room_id, room in list(self.rooms.items()):
+            age = (current - self._expiry_origin(room)).total_seconds()
+            waiting = room.status == RoomStatus.WAITING and sum(not p.left for p in room.players) < 2
+            ttl = self.finished_ttl if room.status in (RoomStatus.FINISHED, RoomStatus.ABANDONED) else (
+                self.waiting_ttl if waiting else self.disconnected_ttl)
+            if age >= ttl and not any(self.connections.get(room_id, {}).values()):
+                self._remove(room_id)
+                removed.append(room_id)
+        return removed
+
+    def _is_expired(self, room, current):
+        age = (current - self._expiry_origin(room)).total_seconds()
+        waiting = room.status == RoomStatus.WAITING and sum(not p.left for p in room.players) < 2
+        ttl = self.finished_ttl if room.status in (RoomStatus.FINISHED, RoomStatus.ABANDONED) else (
+            self.waiting_ttl if waiting else self.disconnected_ttl)
+        return age >= ttl
+
+    @staticmethod
+    def _expiry_origin(room):
+        if room.status in (RoomStatus.FINISHED, RoomStatus.ABANDONED):
+            return room.ended_at or room.updated_at
+        return room.updated_at
+
+    def _remove(self, room_id):
+        self.rooms.pop(room_id, None)
+        self.connections.pop(room_id, None)
+        self.broadcast_locks.pop(room_id, None)
+
+    async def reap_expired(self, current=None):
+        current = current or now()
+        removed = self.cleanup_expired(current)
+        for room_id, room in list(self.rooms.items()):
+            if not self._is_expired(room, current):
+                continue
+            sockets = [socket for players in self.connections.get(room_id, {}).values() for socket in tuple(players)]
+            for socket in sockets:
+                try:
+                    await asyncio.wait_for(socket.close(code=1000), timeout=2)
+                except Exception:
+                    pass
+            if room_id in self.rooms and self._is_expired(self.rooms[room_id], now()):
+                self._remove(room_id)
+                removed.append(room_id)
+        return removed
 
     def get(self, room_id):
+        self.cleanup_expired()
         if room_id not in self.rooms:
             raise RoomError(404, "Sala não encontrada")
         return self.rooms[room_id]
@@ -41,7 +96,8 @@ class RoomService:
         raise RoomError(401, "Sessão inválida")
 
     def touch(self, room):
-        room.updated_at = now()
+        current = now()
+        room.updated_at = current
         room.revision += 1
         linked = [p for p in room.players if not p.left]
         if len(room.players) == 2 and not linked:
@@ -52,6 +108,8 @@ class RoomService:
                                else RoomStatus.PAUSED)
             else:
                 room.status = RoomStatus.READY if len(linked) == 2 else RoomStatus.WAITING
+        if room.status in (RoomStatus.FINISHED, RoomStatus.ABANDONED) and room.ended_at is None:
+            room.ended_at = current
 
     def snapshot(self, room_id):
         room = self.get(room_id)
@@ -125,6 +183,9 @@ class RoomService:
         self.touch(room)
 
     def create(self):
+        self.cleanup_expired()
+        if len(self.rooms) >= self.max_rooms:
+            raise RoomError(429, "Limite de salas temporariamente atingido. Tente novamente mais tarde.")
         room = Room(uuid4().hex)
         self.rooms[room.room_id] = room
         self.connections[room.room_id] = {}
@@ -140,14 +201,17 @@ class RoomService:
         return player
 
     def disconnect(self, room_id, player_id, socket):
+        room = self.rooms.get(room_id)
+        if room is None:
+            return
         sockets = self.connections[room_id].get(player_id, set())
         if socket not in sockets:
             return
         sockets.remove(socket)
-        player = next(p for p in self.get(room_id).players if p.player_id == player_id)
+        player = next(p for p in room.players if p.player_id == player_id)
         player.connected = bool(sockets)
         player.last_seen = now()
-        self.touch(self.get(room_id))
+        self.touch(room)
 
     async def leave(self, room_id, token):
         player = self.authenticate(room_id, token)
@@ -167,6 +231,8 @@ class RoomService:
 
     async def broadcast(self, room_id, event="state"):
         # Serializa snapshots para evitar mensagens antigas após estados novos.
+        if room_id not in self.rooms or room_id not in self.broadcast_locks:
+            return
         async with self.broadcast_locks[room_id]:
             while True:
                 targets = [(pid, socket) for pid, sockets in self.connections[room_id].items()
