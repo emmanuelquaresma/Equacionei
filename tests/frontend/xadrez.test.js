@@ -46,6 +46,13 @@ function testChess(C) {
     return `${count} verificações do motor passaram, incluindo perft 20/400/8902.`;
 }
 
+// O fluxo de reinício agora exige confirmação quando há jogadas em andamento.
+function restartChessForTest() {
+    document.getElementById('chess-restart').click();
+    if(document.getElementById('chess-restart-dialog').open)
+        document.getElementById('chess-restart-confirm').click();
+}
+
 function testChessUI() {
     const board=document.getElementById('chess-board'),assert=(v,m)=>{if(!v)throw Error(m);};
     assert(board.children.length===64,'64 casas');
@@ -59,14 +66,14 @@ function testChessUI() {
     board.children[36].dispatchEvent(new KeyboardEvent('keydown',{key:'ArrowRight',bubbles:true}));
     assert(document.activeElement===board.children[37],'foco por teclado');
     const fixture=document.createElement('script');fixture.textContent="window.originalChessStart=Chess.restartGame;Chess.restartGame=()=>{const s=window.originalChessStart();s.board=Array.from({length:8},()=>Array(8).fill(null));s.board[7][4]={type:'k',color:'white'};s.board[0][4]={type:'k',color:'black'};s.board[1][0]={type:'p',color:'white'};return s;};";document.head.append(fixture);
-    document.getElementById('chess-restart').click();board.children[8].click();board.children[0].click();
+    restartChessForTest();board.children[8].click();board.children[0].click();
     assert(document.getElementById('promotion').open,'painel promoção');
     assert(document.getElementById('chess-turn').textContent==='Brancas','aguarda escolha antes de turno');
     document.querySelector('[data-promote="n"]').click();
     assert(board.children[0].getAttribute('aria-label').includes('cavalo branco'),'escolha cavalo');
     assert(!document.getElementById('promotion').open,'fecha promoção');
     const restore=document.createElement('script');restore.textContent='Chess.restartGame=window.originalChessStart;';document.head.append(restore);
-    document.getElementById('chess-restart').click();
+    restartChessForTest();
     assert(document.getElementById('chess-turn').textContent==='Brancas'&&board.querySelectorAll('.chess-piece').length===32,'reinício UI');
     return '64 casas, clique, turno, histórico, teclado, promoção e reinício OK';
 }
