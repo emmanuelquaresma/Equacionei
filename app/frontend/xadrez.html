@@ -23,6 +23,9 @@
 
 
 <main class="chess-page"><h1>Xadrez Matemático</h1>
+<div id="chess-learning"><div class="chess-mode-tabs" role="tablist" aria-label="Modos do Xadrez"><button id="chess-mode-play" type="button" role="tab" aria-controls="chess-play-panel" aria-selected="true" tabindex="0">Jogar</button><button id="chess-mode-learn" type="button" role="tab" aria-controls="chess-learn-panel" aria-selected="false" tabindex="-1">Aprender</button><button id="chess-mode-practice" type="button" role="tab" aria-controls="chess-practice-panel" aria-selected="false" tabindex="-1">Praticar</button></div>
+<section id="chess-course-progress" class="chess-course-progress" aria-label="Progresso do curso" hidden><p id="chess-course-summary" role="status" aria-live="polite"></p><progress id="chess-course-meter" value="0" max="30" aria-label="Exercícios resolvidos"></progress><p id="chess-course-finish" role="status" hidden></p></section>
+<section id="chess-play-panel" role="tabpanel" aria-labelledby="chess-mode-play">
 <div class="chess-layout"><section aria-label="Tabuleiro e avisos"><div class="game-context-status"><p>Turno: <strong id="chess-turn">Brancas</strong></p><p id="chess-status" role="status">Partida em andamento</p></div><div id="chess-board" class="chess-board" role="group" aria-label="Tabuleiro de xadrez" aria-describedby="chess-keyboard-help"></div><p id="chess-message" role="status"></p><p class="chess-board-legend"><span aria-hidden="true">✓</span> Peça selecionada · <span aria-hidden="true">●</span> Destino legal · <span aria-hidden="true">!</span> Rei em xeque</p><p id="chess-keyboard-help" class="chess-sr-only">Use as setas para navegar entre casas, Enter ou Espaço para selecionar uma peça ou destino e Escape para limpar a seleção. As setas respeitam as bordas do tabuleiro.</p></section>
 <aside class="chess-panel">
 <h2 id="captured-white-title">Capturadas pelas brancas</h2><ul id="captured-white" class="chess-captures" aria-labelledby="captured-white-title"><li>Nenhuma</li></ul><h2 id="captured-black-title">Capturadas pelas pretas</h2><ul id="captured-black" class="chess-captures" aria-labelledby="captured-black-title"><li>Nenhuma</li></ul>
@@ -37,9 +40,38 @@
 </section>
 <h2>Jogadas</h2><ol id="chess-history" aria-label="Histórico de jogadas"></ol>
 <details><summary>Regras desta versão</summary><p>Inclui xeque, xeque-mate, afogamento, promoção com escolha, roque e en passant. Três repetições e 50 lances sem mover peão nem capturar permitem reivindicar empate. Cinco repetições e 75 lances encerram automaticamente; xeque-mate tem precedência.</p><p>Posições mortas reconhecidas: apenas reis, reis e um único bispo ou cavalo, somente bispos em casas da mesma cor, e posições de reis com peões imóveis cuja impossibilidade de mate é comprovada por busca completa. Fortalezas com outras peças ainda não são detectadas. Não conseguir forçar mate não significa que o mate seja impossível.</p></details>
-</aside></div><details class="game-help"><summary>ⓘ Como jogar</summary><p>Dois jogadores no mesmo dispositivo. Brancas começam.</p><p>Selecione uma peça e uma casa destacada. Use as setas e Enter ou toque no tabuleiro.</p></details></main>
+</aside></div><details class="game-help"><summary>ⓘ Como jogar</summary><p>Dois jogadores no mesmo dispositivo. Brancas começam.</p><p>Selecione uma peça e uma casa destacada. Use as setas e Enter ou toque no tabuleiro.</p><button id="chess-open-learning" type="button">Abrir Como Jogar Xadrez</button></details></section>
+<section id="chess-learn-panel" role="tabpanel" aria-labelledby="chess-mode-learn" hidden>
+<div class="chess-learning-intro"><h2 id="chess-lesson-title"></h2></div>
+<div class="chess-learning-layout">
+<section aria-label="Demonstração da lição"><div id="chess-demo-board" class="chess-board" role="group" aria-label="Tabuleiro de demonstração" aria-describedby="chess-demo-help"></div>
+<p id="chess-demo-help">Use Avançar etapa e Voltar etapa para acompanhar. Bordas pontilhadas destacam exemplos; × indica um destino proibido. As setas percorrem as casas; este tabuleiro é demonstrativo.</p>
+<p id="chess-demo-progress"></p><p id="chess-demo-feedback" class="chess-learning-feedback" role="status" aria-live="polite">Demonstração pronta. Avance para observar a torre.</p>
+<div class="chess-learning-actions"><button id="chess-demo-previous" type="button">Voltar etapa</button><button id="chess-demo-next" type="button">Avançar etapa</button><button id="chess-demo-reset" type="button">Reiniciar demonstração</button></div></section>
+<aside class="chess-learning-card"><label for="chess-lesson-select">Lições de Xadrez</label><select id="chess-lesson-select"></select>
+<p>Escolha qualquer uma das 15 lições. Você pode aprender na sequência ou revisar um assunto.</p><p id="chess-lesson-completion" role="status" aria-live="polite"></p>
+<div class="chess-learning-actions"><button id="chess-lesson-previous" type="button">Lição anterior</button><button id="chess-lesson-next" type="button">Próxima lição</button></div>
+<div id="chess-lesson-explanation"></div>
+<button id="chess-go-practice" type="button">Praticar esta lição</button><button type="button" data-chess-return>Voltar à partida</button></aside></div></section>
+<section id="chess-practice-panel" role="tabpanel" aria-labelledby="chess-mode-practice" hidden>
+<div class="chess-learning-intro"><h2 id="chess-practice-title"></h2><p id="chess-practice-objective"></p></div>
+<div class="chess-learning-layout">
+<section aria-label="Tabuleiro e feedback do exercício"><div id="chess-practice-board" class="chess-board" role="group" aria-label="Tabuleiro do exercício" aria-describedby="chess-practice-objective chess-practice-help"></div>
+<p id="chess-practice-help">Selecione a peça e o destino com toque, clique, Enter ou Espaço. Use as setas para navegar e Escape para limpar a seleção. ◎ indica o objetivo.</p>
+<p id="chess-practice-feedback" class="chess-learning-feedback" role="status" aria-live="polite">Leia o objetivo e selecione uma peça.</p>
+<div id="chess-practice-promotion-control" hidden><label for="chess-practice-promotion">Peça para promoção neste exercício</label><select id="chess-practice-promotion"><option value="q">Dama</option><option value="r">Torre</option><option value="b">Bispo</option><option value="n">Cavalo</option></select></div></section>
+<aside class="chess-learning-card">
+<label for="chess-exercise-select">Atividades desta lição</label><select id="chess-exercise-select"></select>
+<div id="chess-practice-choices" class="chess-practice-choices" role="group" aria-label="Escolha uma resposta" hidden></div>
+<div class="chess-learning-actions"><button id="chess-practice-hint" type="button">Mostrar dica</button><button id="chess-practice-retry" type="button">Tentar novamente</button><button id="chess-practice-next" type="button">Próximo exercício</button></div>
+<button id="chess-practice-next-lesson" type="button">Próxima lição</button>
+<p id="chess-practice-finish" hidden>Exercício concluído! Este é o exercício disponível nesta etapa. Você pode tentar novamente ou voltar à partida.</p>
+<button type="button" data-chess-return>Voltar à partida</button></aside></div></section>
+</div></main>
 <dialog id="promotion" class="chess-dialog" aria-labelledby="promotion-title" aria-describedby="promotion-description" aria-modal="true"><h2 id="promotion-title">Escolha a promoção</h2><div class="promotion-options"><button type="button" data-promote="q" autofocus>Dama</button><button type="button" data-promote="r">Torre</button><button type="button" data-promote="b">Bispo</button><button type="button" data-promote="n">Cavalo</button></div><p id="promotion-description">Escolha dama, torre, bispo ou cavalo. Escape ou Cancelar promoção retorna ao peão sem executar a jogada.</p><button id="promotion-cancel" type="button">Cancelar promoção</button></dialog>
 <dialog id="chess-restart-dialog" class="chess-dialog" aria-labelledby="chess-restart-title" aria-describedby="chess-restart-description" aria-modal="true"><h2 id="chess-restart-title">Reiniciar esta partida?</h2><p id="chess-restart-description">As jogadas e as peças capturadas desta partida serão apagadas. Deseja continuar a partida ou reiniciar?</p><div class="chess-dialog-actions"><button id="chess-restart-cancel" type="button" autofocus>Continuar partida</button><button id="chess-restart-confirm" type="button">Confirmar reinício</button></div></dialog>
 <script src="/static/js/xadrez-rules.js"></script>
 <script src="/static/js/xadrez-board.js"></script>
-<script src="/static/js/xadrez.js"></script></body></html>
+<script src="/static/js/xadrez.js"></script>
+<script src="/static/data/xadrez-lessons.js"></script>
+<script src="/static/js/xadrez-learning.js"></script></body></html>

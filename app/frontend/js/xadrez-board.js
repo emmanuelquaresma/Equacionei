@@ -31,12 +31,20 @@ const ChessBoard = (() => {
             const selected=state.selectedPiece?.row===r&&state.selectedPiece?.col===c;
             const targetMove=state.legalMoves.find(m=>m.to.row===r&&m.to.col===c),target=Boolean(targetMove);
             const inCheck=king?.row===r&&king.col===c;
+            const goal=options.goal?.row===r&&options.goal?.col===c;
+            const study=(options.highlights??[]).some(p=>p.row===r&&p.col===c);
+            const forbidden=(options.forbidden??[]).some(p=>p.row===r&&p.col===c);
             button.type='button';button.className=`chess-square ${(r+c)%2?'chess-dark':'chess-light'}${selected?' chess-selected':''}${target?' chess-target':''}${king?.row===r&&king.col===c?' chess-check':''}`;
+            if(goal)button.classList.add('chess-goal');
+            if(study)button.classList.add('chess-study-highlight');
+            if(forbidden)button.classList.add('chess-study-forbidden');
             button.tabIndex=index===focusIndex?0:-1;
             const capture=targetMove?.enPassant?state.board[targetMove.from.row][c]:p;
-            button.setAttribute('aria-label',`Casa ${Chess.squareName({row:r,col:c})}: ${p?pieceLabel(p):'vazia'}. Casa ${(r+c)%2?'escura':'clara'}${target?', destino legal'+(capture?', captura de '+pieceLabel(capture):''):''}${selected?', peça selecionada':''}${inCheck?', rei em xeque':''}.`);
+            button.setAttribute('aria-label',`Casa ${Chess.squareName({row:r,col:c})}: ${p?pieceLabel(p):'vazia'}. Casa ${(r+c)%2?'escura':'clara'}${target?', destino legal'+(capture?', captura de '+pieceLabel(capture):''):''}${selected?', peça selecionada':''}${inCheck?', rei em xeque':''}${goal?', objetivo do exercício':''}${study?', casa destacada na lição':''}${forbidden?', destino proibido para a peça neste exemplo':''}.`);
             button.setAttribute('aria-pressed',String(selected));
             if(p){const token=document.createElement('span');token.className=`chess-piece chess-${p.color}`;token.textContent=glyphs[p.color][p.type];token.setAttribute('aria-hidden','true');button.append(token);}
+            if(goal){const marker=document.createElement('span');marker.className='chess-goal-mark';marker.textContent='◎';marker.setAttribute('aria-hidden','true');button.append(marker);}
+            if(forbidden){const mark=document.createElement('span');mark.className='chess-forbidden-mark';mark.textContent='×';mark.setAttribute('aria-hidden','true');button.append(mark);}
             if(vc===0)coordinate(button,String(8-r),'rank');
             if(vr===7)coordinate(button,'abcdefgh'[c],'file');
             if(selected) {
