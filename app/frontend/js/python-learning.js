@@ -7,7 +7,7 @@
   document.querySelector('.dev-page').prepend(back);
  }
  let storage;try{storage=localStorage;}catch{}
- const progress=PythonProgress.create(storage,()=>{$('storage').textContent='Não foi possível salvar neste navegador. Seu progresso permanece apenas nesta página.';});
+ const progress=PythonProgress.create(storage,()=>{$('storage').textContent='Não foi possível salvar ou recuperar todos os dados neste navegador. Os dados anteriores foram preservados; você pode continuar nesta página.';},()=>{$('storage').textContent='Alguns dados de progresso foram recuperados. Os registros válidos e o código salvo foram mantidos.';});
  const runner=PythonRunner.create();let current=exercises[0],busy=false,ready=false,lastTime=performance.now();
  const get=id=>exercises.find(e=>e.id===id);
  function accountTime(){const now=performance.now();if(!document.hidden)progress.time(current.id,(now-lastTime)/1000);lastTime=now;}
