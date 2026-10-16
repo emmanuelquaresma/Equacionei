@@ -21,7 +21,10 @@ router = APIRouter()
 service = RoomService()
 bearer = HTTPBearer(auto_error=False)
 ALLOWED_ORIGINS = {item.strip().rstrip("/") for item in os.getenv(
-    "ALLOWED_ORIGINS", "http://localhost:8000,http://127.0.0.1:8000,https://equacionei.com.br,https://www.equacionei.com.br"
+    "ALLOWED_ORIGINS", "http://localhost:8000,http://127.0.0.1:8000,"
+    "http://localhost:8001,http://127.0.0.1:8001,"
+    "http://localhost:8002,http://127.0.0.1:8002,"
+    "https://equacionei.com.br,https://www.equacionei.com.br"
 ).split(",") if item.strip()}
 
 

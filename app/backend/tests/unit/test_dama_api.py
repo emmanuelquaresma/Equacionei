@@ -69,14 +69,32 @@ class ApiTest(unittest.IsolatedAsyncioTestCase):
         return task, incoming, outgoing
 
     async def test_websocket_rejects_unlisted_origin_before_accept(self):
-        session = dama.service.create()
-        incoming, outgoing = asyncio.Queue(), asyncio.Queue()
-        scope = {"type": "websocket", "asgi": {"version": "3.0"}, "scheme": "ws",
-                 "path": f"/ws/dama/{session.room.room_id}", "query_string": b"", "headers": [(b"origin", b"https://evil.example")],
-                 "server": ("test", 80), "client": ("test", 1), "root_path": "", "subprotocols": []}
-        await self.app(scope, incoming.get, outgoing.put)
-        self.assertEqual((await outgoing.get())["type"], "websocket.close")
-        self.assertFalse(dama.service.get(session.room.room_id).players[0].connected)
+        for origin in (b"https://evil.example", b"http://127.0.0.1:8003", b"http://localhost:8003", b""):
+            with self.subTest(origin=origin):
+                session = dama.service.create()
+                incoming, outgoing = asyncio.Queue(), asyncio.Queue()
+                scope = {"type": "websocket", "asgi": {"version": "3.0"}, "scheme": "ws",
+                         "path": f"/ws/dama/{session.room.room_id}", "query_string": b"", "headers": [(b"origin", origin)],
+                         "server": ("test", 80), "client": ("test", 1), "root_path": "", "subprotocols": []}
+                await self.app(scope, incoming.get, outgoing.put)
+                self.assertEqual((await outgoing.get())["type"], "websocket.close")
+                self.assertFalse(dama.service.get(session.room.room_id).players[0].connected)
+
+    async def test_websocket_accepts_documented_local_environment_ports(self):
+        for host in ("localhost", "127.0.0.1"):
+            for port in (8000, 8001, 8002):
+                with self.subTest(host=host, port=port):
+                    session = dama.service.create()
+                    task, incoming, outgoing = await self.socket(
+                        session.room.room_id, session.session_token,
+                        origin=f"http://{host}:{port}".encode(),
+                    )
+                    try:
+                        state = json.loads((await asyncio.wait_for(outgoing.get(), 1))["text"])
+                        self.assertTrue(state["room"]["players"][0]["connected"])
+                    finally:
+                        await incoming.put({"type": "websocket.disconnect", "code": 1000})
+                        await asyncio.wait_for(task, 1)
 
     async def test_websocket_auth_disconnect_reconnect(self):
         session = dama.service.create()
