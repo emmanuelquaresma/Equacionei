@@ -9,7 +9,7 @@ Metodologia: inspeção de fonte/Git, hashes SHA-256, Docker e PostgreSQL soment
 | Prioridade | Problema e solução proposta | Arquivos envolvidos | Impacto / risco | Validação |
 |---|---|---|---|---|
 | A | Controles da Queda encobertos: preservar altura intrínseca do painel | css/game-layout.css | Desbloqueia pausa/reinício; risco médio de rolagem | Regressão 640×360/667×375, 16 perfis, rotação e toque |
-| B | Labirinto pequeno no desktop: experimentar painel lateral e medição por área disponível | css/labirinto-matematico.css; js/labirinto-ui.js e função resizeGameBoard | Aumenta mapa; risco alto de coordenadas e orientação | Canvas/DPR, teclado, swipe, 320–1366 e fases |
+| B | Labirinto pequeno no desktop: experimentar painel lateral e medição por área disponível | css/labirinto-matematico.css; js/labirinto-matematico.js e função resizeGameBoard | Aumenta mapa; risco alto de coordenadas e orientação | Canvas/DPR, teclado, swipe, 320–1366 e fases |
 | B | Controles distantes: recolher informação secundária e aproximar ações | HTML/CSS de Xadrez, Dama, Pares, Racha | Menos rolagem; risco médio de ordem de foco | Tab, hit testing, vitória, ajuda, modais |
 | C | Cores/espaçamentos repetidos: extrair tokens preservando valores da marca | css/site.css; css/game-layout.css; estilos específicos | Consistência; risco alto de cascata compartilhada | Comparação visual antes/depois em todos os módulos |
 | C | Carrossel de Aplicações ocupa tela com pouco conteúdo: avaliar densidade, cartões e próximos itens | css/carousel.css; css/menu.css; js/menu-carousel.js | Melhor orientação; risco médio de navegação | Toque, setas, teclado, foco, quantidade por viewport |

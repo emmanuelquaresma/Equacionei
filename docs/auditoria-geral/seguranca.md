@@ -10,7 +10,7 @@ A auditoria foi passiva/funcional com entradas sintéticas. Não foram tentados 
 
 ## Credenciais e exposição
 
-Varredura por padrões no código versionado encontrou apenas atribuições de tokens fictícios em testes, não credenciais reais confirmadas. A inspeção do histórico de arquivos .env encontrou exemplos versionados, sem chaves sensíveis detectadas. Essa varredura não prova ausência universal de segredos em todos os blobs/históricos/artefatos. `.env.dev.local` é ignorado e tem permissão 0600; valores não foram coletados para o relatório. O ambiente PostgreSQL possui chaves de credenciais, cujos valores foram omitidos.
+Varredura por padrões no código versionado encontrou apenas atribuições de tokens fictícios em testes, não credenciais reais confirmadas. A inspeção do histórico alcançou 19 commits e 275 blobs textuais; os três matches de padrões eram tokens fictícios de testes. Arquivos .env versionados eram exemplos, sem segredo real confirmado. Essa varredura não prova ausência universal de segredos em todos os blobs/históricos/artefatos. `.env.dev.local` é ignorado e tem permissão 0600; valores não foram coletados para o relatório. O ambiente PostgreSQL possui chaves de credenciais, cujos valores foram omitidos.
 
 Portas 8000/8001/8002 estão em loopback, uma proteção relevante. PostgreSQL 5432 está em 0.0.0.0 e [::], com ssl=off e autenticação host scram-sha-256; regras locais trust foram observadas. Não foi comprovada alcançabilidade externa, pois o firewall não pôde ser auditado pelas ferramentas disponíveis. Não se conclui bypass de senha. Revisar S001 com responsável pela infraestrutura; não alterar binds/roles nesta etapa.
 

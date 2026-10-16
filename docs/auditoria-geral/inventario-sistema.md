@@ -57,7 +57,7 @@ As dependências de runtime/build não estão integralmente fixadas por lock; os
 
 Refs locais e remotas verificadas por `git ls-remote` sem fetch: develop=staging=main=b0a2ef0. Nenhum commit exclusivo entre as três. A branch histórica fix/fase-0-preparatoria está 3 à frente/1 atrás de sua referência remota; não foi alterada. Outras branches de feature locais estão inventariadas em repository.json.
 
-Alterações versionadas já presentes: `app/backend/src/routes/dama.py`, `app/backend/tests/unit/test_dama_api.py`, `app/frontend/css/game-layout.css`. Não versionados: pastas de assets de branding, docs/branding-assets.md, docs/auditoria-inicio-jogos.md, tests/browser/branding_assets.py, dama_online_start.py, game_start_audit.py e queda_controls.py. Também existem arquivos ignorados de configuração local. Todos foram preservados; nenhum foi automaticamente aprovado, incluído em commit ou descartado.
+Alterações preexistentes em arquivos versionados (ainda não commitadas no momento da coleta): `app/backend/src/routes/dama.py`, `app/backend/tests/unit/test_dama_api.py`, `app/frontend/css/game-layout.css`. Não versionados: pastas de assets de branding, docs/branding-assets.md, docs/auditoria-inicio-jogos.md, tests/browser/branding_assets.py, dama_online_start.py, game_start_audit.py e queda_controls.py. Também existem arquivos ignorados de configuração local. Todos foram preservados; nenhum foi automaticamente aprovado, incluído em commit ou descartado.
 
 ## Código e publicação
 
