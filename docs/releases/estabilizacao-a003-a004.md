@@ -54,3 +54,31 @@ Depois: green-specific.json registra progresso 18/18, 117 verificações; quadr�
 Candidata deve passar testes específicos e regressão isolada antes de DEV. DEV deve passar antes de TESTE. Mesma imagem reproduzível, derivada da imagem anterior homologada e sem reinstalar dependências flutuantes. Snapshot independente de cada ambiente deve preservar a camada gravável e ser verificado sem rede antes de concluir a promoção. Compose permanece intacto; overrides de imagem são privados. Não publicar, reiniciar ou alterar PRODUÇÃO; não fazer push/merge de main.
 
 Resultados finais, revisão/imagem e rollbacks serão acrescentados após execução dos gates. Não há declaração antecipada de homologação.
+
+
+## Bloqueio operacional — promoção interrompida
+
+A regressão isolada terminou aprovada: 36 métodos de backend; dez grupos de navegador, incluindo os 33 cenários específicos A003/A004 e 70 cenários de início/interação dos jogos. Revisão funcional `bed64e895df7a07c5d6ec261da93c0f5a6e04bd7`; imagem reproduzível em dois builds independentes: `sha256:fe8438b6a8fb15a38fa5dbda6a745073eb7c202a759f9792196ffbaf454bb76b`.
+
+A atualização de DEV foi interrompida por conflito de containers do Compose, antes de publicar a candidata. Containers de verificação de rollback criados na etapa anterior herdaram os labels com.docker.compose.project/service das imagens snapshot. O Compose os considera instâncias do serviço backend, tenta recriá-los e encontra o nome equacionei-dev-backend-1 já ocupado. A tentativa automática de rollback pelo mesmo Compose reproduziu o conflito. Logs completos: dev-deploy.log e dev-rollback-execution.log no diretório privado desta etapa.
+
+A operação parou o container original de DEV. Sua disponibilidade foi restaurada por docker start do ID original, sem recriação, remoção ou mudança de imagem; /health voltou a 200. DEV, TESTE, PRODUÇÃO e PostgreSQL foram conferidos em execução com seus IDs e imagens originais, registrados em blocked-operational-state.json. A candidata não está publicada em DEV/TESTE; nenhuma branch remota foi promovida nesta etapa. Main/PRODUÇÃO não sofreram alteração. O snapshot de DEV desta etapa foi preservado em dev-snapshot.json, junto às imagens históricas.
+
+A candidata, os testes e as evidências permanecem disponíveis para revisão. Não há homologação antecipada de DEV/TESTE. O relatório está atualizado localmente; o commit bed64e8 contém o código e a versão inicial do relatório, e este adendo ainda não foi commitado.
+
+### Ação proposta para desbloqueio, ainda não autorizada
+
+Confirmar novamente IDs/estado/ausência de volumes e remover somente dois artefatos de verificação: o container parcial criado pela tentativa falha (`58eb2254e6e4_equacionei-dev-backend-1`, Created) e a verificação antiga de TESTE (`equacionei-rollback-verificacao-test-20261015`, Exited). Sem -f, sem -v, sem remover imagens, volumes ou containers dos serviços originais. A execução exige autorização específica devido à restrição de comandos destrutivos e à instrução de interromper diante de bloqueio técnico.
+
+Antes de retomar, corrigir o verificador de rollback para substituir os labels de projeto/serviço herdados por labels de auditoria próprios; isso não modifica Compose, infraestrutura ou a aplicação. Revalidar a equivalência do snapshot em container isolado, retomar DEV e só depois TESTE. Se os metadados ou volumes não corresponderem ao esperado, parar novamente. Não repetir o deploy antes desse saneamento controlado.
+
+
+## Retomada autorizada — saneamento concluído
+
+O usuário autorizou exclusivamente a remoção dos dois artefatos identificados. Antes da remoção, foram reconferidos os IDs completos 00ad1883ba26cc0390370ec8a76f39a0dde604c26571f3475131c264276f4c2b (Created) e a70c32779a5d8262885978c881beee49b5e1252596150e61bdc699bfae0d0de8 (Exited), nomes, imagens, labels, ausência de mounts/volumes e referências de containers ativos. Nenhuma divergência foi observada.
+
+Foram removidos somente esses dois IDs, sem force e sem opção de volumes. O inventário posterior confirmou preservação de todas as imagens/tags, redes, volumes e outros containers. A comparação inicial de IDs curtos/completos exigiu normalização no conferidor; não houve remoção adicional. Evidências: retomada-autorizada/before-removal.json, removal.log e after-removal.json.
+
+O novo procedimento versionado scripts/verify-rollback-image.py substitui todos os labels Compose herdados e identifica a verificação como projeto equacionei-rollback-audit, serviço verification e oneoff=True. Confere essa identidade e exclusão dos seletores dos projetos DEV/TESTE/PRODUÇÃO antes de iniciar o container. Usa --network none, raiz somente leitura, sem volumes, e mantém o container parado como evidência. Não remove recursos automaticamente. A publicação também exige exatamente um backend esperado no seletor Compose antes de prosseguir.
+
+O rollback anterior de DEV foi reconferido com esse procedimento: 124 arquivos idênticos à linha de base; verificador fora dos seletores dos ambientes ativos. O deploy verificará o snapshot antes de cada troca. Os registros anteriores de bloqueio permanecem acima como histórico; esta autorização resolve somente o saneamento operacional, sem antecipar homologação dos novos ambientes.
