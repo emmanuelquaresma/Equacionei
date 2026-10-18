@@ -1,6 +1,8 @@
 # Estabilização A003 e A004
 
-Data de fechamento: 16/10/2026 (America/Sao_Paulo). Coleta iniciada em 15/10. Base Git de develop/staging verificada: `e553e64a3a16f393502d750d88b3699ff1808ca1`, revisão funcional anterior `89a119f2f08d69735d8602ebd4c5d2a1edb540bf`, imagem `sha256:7c0f269b220b02eb84b1114aa5f68e97baa7de3c4f95dc2f20be1e273b46d0e2`. Main/PRODUÇÃO permanecem em `b0a2ef0` e imagem `sha256:061961c7c4ae243b9140ef5b6e972fcb95606c8aff278e4f95eae668e2ab6648`.
+**Estado final:** DEV e TESTE atualizados e homologados no escopo A003/A004; PRODUÇÃO preservada. O bloqueio operacional descrito neste documento é histórico e foi resolvido pela remoção específica autorizada e pelo novo verificador isolado.
+
+Fechamento da retomada: 17/10/2026 (America/Sao_Paulo). Implementação e primeira tentativa em 16/10; coleta iniciada em 15/10. Base Git de develop/staging verificada: `e553e64a3a16f393502d750d88b3699ff1808ca1`, revisão funcional anterior `89a119f2f08d69735d8602ebd4c5d2a1edb540bf`, imagem `sha256:7c0f269b220b02eb84b1114aa5f68e97baa7de3c4f95dc2f20be1e273b46d0e2`. Main/PRODUÇÃO permanecem em `b0a2ef0` e imagem `sha256:061961c7c4ae243b9140ef5b6e972fcb95606c8aff278e4f95eae668e2ab6648`.
 
 Relatórios anteriores foram consultados e preservados. Esta etapa não os substitui. Evidências privadas: `private/estabilizacao-a003-a004-20261015/`, ignorado pelo Git, fora do frontend e com permissão 0700. Implementação na worktree `/tmp/equacionei-estabilizacao-a003-a004`, branch `fix/estabilizacao-a003-a004`. A árvore principal em main e seus materiais não relacionados permanecem intactos.
 
@@ -40,6 +42,7 @@ Entradas inválidas mantêm o último gráfico/resultados válidos e apresentam 
 - tests/frontend/quadratic-bounds.test.js
 - tests/browser/stabilization_a003_a004.py
 - docs/releases/estabilizacao-a003-a004.md
+- scripts/verify-rollback-image.py (correção operacional autorizada na retomada)
 
 Não inclui branding, infraestrutura, novas atividades, padronização visual ou refatoração de outros módulos.
 
@@ -82,3 +85,60 @@ Foram removidos somente esses dois IDs, sem force e sem opção de volumes. O in
 O novo procedimento versionado scripts/verify-rollback-image.py substitui todos os labels Compose herdados e identifica a verificação como projeto equacionei-rollback-audit, serviço verification e oneoff=True. Confere essa identidade e exclusão dos seletores dos projetos DEV/TESTE/PRODUÇÃO antes de iniciar o container. Usa --network none, raiz somente leitura, sem volumes, e mantém o container parado como evidência. Não remove recursos automaticamente. A publicação também exige exatamente um backend esperado no seletor Compose antes de prosseguir.
 
 O rollback anterior de DEV foi reconferido com esse procedimento: 124 arquivos idênticos à linha de base; verificador fora dos seletores dos ambientes ativos. O deploy verificará o snapshot antes de cada troca. Os registros anteriores de bloqueio permanecem acima como histórico; esta autorização resolve somente o saneamento operacional, sem antecipar homologação dos novos ambientes.
+
+## Resultado final observado após a retomada autorizada
+
+Revisão funcional: `bed64e895df7a07c5d6ec261da93c0f5a6e04bd7`. Imagem: `sha256:fe8438b6a8fb15a38fa5dbda6a745073eb7c202a759f9792196ffbaf454bb76b`; tag local `equacionei-backend:candidata-bed64e8`. Dois builds sem cache, usando base imutável anterior e SOURCE_DATE_EPOCH/timestamps normalizados, produziram esse mesmo ID. Os 31 pacotes instalados são idênticos aos da imagem anterior; requirements e os 124 arquivos de aplicação foram conferidos por hash. A reprodução depende da base local identificada, não de uma nova resolução de dependências no índice.
+
+| Ambiente | Backend | Grupos navegador | A003/A004 | Resultado |
+|---|---|---|---|---|
+| isolated | 36 métodos, zero falhas/erros/ignorados | 10 executados | 33 cenários do executor | Aprovados no escopo |
+| dev | 36 métodos, zero falhas/erros/ignorados | 14 executados | 33 cenários do executor | Aprovados no escopo |
+| test | 36 métodos, zero falhas/erros/ignorados | 14 executados | 33 cenários do executor | Aprovados no escopo |
+
+Os 33 cenários específicos incluem 18 formatos/condições de persistência (117 verificações) e 23 cálculos em Workers limitados a 750 ms, 11 inicializações com armazenamento adverso na interface, nove execuções Python corretas/incorretas com rascunho/reload/troca de exercício, nove cenários de gráfico/entrada inválida/reload e testes adicionais de Chart.js e teclado nativo. Não somar as contagens de suítes, subcasos e asserções como testes distintos. Ctrl+Enter executa Python; Tab/Enter aciona o cálculo; mouse e toque CDP foram usados.
+
+Resoluções dos módulos corrigidos: 320×568, 360×640, 375×667, 390×844, 412×915, 430×932, 768×1024, 1024×768 e 1366×900. Ausência de overflow horizontal da página e hit testing dos controles foram verificados, inclusive após entradas extremas. A tabela pode ter rolagem local intencional para preservar valores completos. Mensagens de erro/reparo foram exercitadas. Recarregamento restaura parâmetros padrão da calculadora e conserva o rascunho Python.
+
+Chrome desktop headless com emulação móvel/toque CDP, não dispositivos físicos. Firefox desktop também foi exercitado na regressão: a largura solicitada de 375 é limitada pelo navegador a 500 px reais. Não há validação em Safari/WebKit, iPhone/Android físicos, teclado virtual real ou leitor de tela humano.
+
+## Regressão geral executada
+
+- dev: 70 cenários de início/interação de todos os modos representados; 152 combinações de jogos/menu em 19 perfis; 2 partidas Dama online com dois clientes e jogada sincronizada; 16 fluxos por navegação normal e conclusão de atividades; 21 cenários Firefox. Zero falhas nos gates.
+- test: 70 cenários de início/interação de todos os modos representados; 152 combinações de jogos/menu em 19 perfis; 2 partidas Dama online com dois clientes e jogada sincronizada; 16 fluxos por navegação normal e conclusão de atividades; 21 cenários Firefox. Zero falhas nos gates.
+
+Xadrez: 15 lições/30 exercícios, teclado, toque e motor. Dama local/IA/online, Labirinto, Queda, Relâmpago, Pares e Racha passaram. Fundamentos Matemáticos, 1º grau, Python, Hub/Fundamentos de DS e XGBoost passaram. XGBoost inclui treino/previsão, classificação/regressão/upload/erros; backend cobre HTTP e WebSocket em processo de teste isolado. Não houve treino/carga em PRODUÇÃO. Finais de partidas/campanhas de alguns jogos usam fixtures/relógio controlado conforme auditoria; isso não é campanha natural integral jogada por pessoa.
+
+Logs privados dos novos serviços: zero tracebacks, zero HTTP 5xx e zero linhas ERROR na janela coletada. Respostas 4xx intencionais dos testes inválidos não são indisponibilidade. Artefatos por fase em `{isolated,dev,test}/results.json`, logs e screenshots privados. Execuções de navegador têm timeout externo de 600 s; Workers numéricos têm limite de 750 ms e são terminados/revogados; saída do algoritmo é limitada a 101 pontos/201 linhas. Não foi teste de carga nem medição de Lighthouse/Core Web Vitals.
+
+## Estado final, Git e publicação
+
+DEV (8000) e TESTE (8002) executam a mesma imagem `sha256:fe8438b6a8fb15a38fa5dbda6a745073eb7c202a759f9792196ffbaf454bb76b` com revisão OCI `bed64e895df7a07c5d6ec261da93c0f5a6e04bd7`. A funcionalidade A003/A004 está homologada nos cenários registrados. Um commit documental posterior registra os resultados, sem diferença em app/tests; referências Git finais são registradas em git-sync.json após fast-forward de develop/staging. Main e PRODUÇÃO permanecem em b0a2ef0/061961c7c4ae.
+
+PRODUÇÃO mantém o mesmo ID de container/imagem, assim como PostgreSQL; portanto não houve recriação/reinício desses serviços nesta tarefa. Compose, Cloudflare, volumes, branding e branches históricas não foram modificados. A003/A004 continuam no artefato público anterior até autorização e publicação futuras.
+
+## Rollback independente
+
+- dev: `equacionei-dev-backend:rollback-estabilizacao-a003-a004-20261015` → `sha256:cbf74759a3f3b3295b5b2b4692a4e5c24068e439ebcc606d76533c045bb95e76`; snapshot da camada gravável anterior. Verificado em container isolado sem rede: 124 arquivos iguais à linha de base. Imagem original anterior `sha256:7c0f269b220b02eb84b1114aa5f68e97baa7de3c4f95dc2f20be1e273b46d0e2` também preservada.
+- test: `equacionei-test-backend:rollback-estabilizacao-a003-a004-20261015` → `sha256:7cad8f294763e60bd9ce1d77f30dc0748d7be130cf86462cf5fa49587c291945`; snapshot da camada gravável anterior. Verificado em container isolado sem rede: 124 arquivos iguais à linha de base. Imagem original anterior `sha256:7c0f269b220b02eb84b1114aa5f68e97baa7de3c4f95dc2f20be1e273b46d0e2` também preservada.
+
+Comandos documentados, não executados nos ambientes em uso, a partir da raiz do repositório:
+
+```bash
+docker compose -p equacionei-dev -f docker-compose.yml -f docker-compose.dev.yml -f private/estabilizacao-a003-a004-20261015/dev-rollback.json up -d --no-build --no-deps --pull never backend
+docker compose -p equacionei-test -f docker-compose.yml -f docker-compose.test.yml -f private/estabilizacao-a003-a004-20261015/test-rollback.json up -d --no-build --no-deps --pull never backend
+```
+
+Snapshots não preservam memória de partidas/modelos/conexões; recriar aplicativos encerra sessões voláteis. localStorage pertence ao navegador/origem e não é apagado pela troca de imagem. Rollbacks históricos e relatórios anteriores permanecem preservados. Na retomada autorizada não foi necessário reverter a candidata. O incidente inicial, a tentativa automática de rollback e a restauração do DEV original estão documentados na seção histórica do bloqueio.
+
+## Riscos e pendências restantes
+
+O cálculo usa Number/precisão dupla; não é matemática arbitrária. Há rejeição explícita quando resultados/representação não são seguros. A tabela de intervalos amplos é amostrada e sinalizada. Recuperação Python prioriza preservação do original e do backup; se persistência falhar ou o backup já guardar outro registro, continua em memória com aviso. Não há migração de schema futuro nem sincronização central de alunos.
+
+Persistem os outros achados da auditoria: configuração/exposição de PostgreSQL a revisar sem alteração nesta tarefa, backups/restauração não comprovados, CI, dependências, acessibilidade e propostas visuais. Isso não impede registrar a aprovação limitada a A003/A004, mas não equivale à homologação integral de toda a plataforma. Publicação em PRODUÇÃO exige autorização explícita posterior e revisão desses requisitos. Nenhuma autorização para PRODUÇÃO foi usada ou inferida.
+
+## Commits e saneamento operacional final
+
+Revisão funcional `bed64e895df7a07c5d6ec261da93c0f5a6e04bd7`; procedimento de rollback corrigido no commit `442a6c3` (sem diferença em app/tests). O commit documental de fechamento e as pontas remotas verificadas são registrados em git-sync.json. A imagem permanece a mesma testada em todos os ambientes; não houve rebuild para documentos ou procedimento externo ao runtime.
+
+A autorização de saneamento foi aplicada somente aos IDs previamente conferidos. Imagens/tags, redes e volumes originais foram preservados. Os backends DEV/TESTE foram recriados como parte da publicação autorizada; PRODUÇÃO/PostgreSQL mantiveram seus IDs originais. A conferência final registra exatamente um backend de cada projeto Compose e verifica que os containers temporários de rollback são one-off, sem rede, sem volumes e fora desses seletores. Evidências em retomada-autorizada/.
